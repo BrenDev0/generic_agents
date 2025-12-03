@@ -8,7 +8,7 @@ from sqlalchemy.orm import sessionmaker
 from typing import TypeVar, Generic, Type, List, Optional, Generator
 import uuid
 
-from src.app.setup.db import get_engine
+from src.app.setup.db.engine import get_engine
 from src.shared.domain.repositories.data_repository import DataRepository
 
 from sqlalchemy.orm import DeclarativeBase

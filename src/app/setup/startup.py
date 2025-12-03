@@ -1,5 +1,7 @@
 import os
 import logging
+from src.app.setup.db.tables import create_tables
+
 
 def startup_event():
     level = os.getenv("LOGGER_LEVEL", logging.INFO)
@@ -11,3 +13,5 @@ def startup_event():
 
     logging.getLogger("httpx").setLevel(logging.WARNING)
     logging.getLogger("httpcore").setLevel(logging.WARNING)
+
+    create_tables()
