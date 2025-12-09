@@ -1,24 +1,16 @@
 import os
-
 from abc import abstractmethod
 from contextlib import contextmanager
 from sqlalchemy.orm import Session
-from sqlalchemy import select, update, delete
+from sqlalchemy import select, update, delete, Engine, create_engine
 from sqlalchemy.orm import sessionmaker
 from typing import TypeVar, Generic, Type, List, Optional, Generator
 import uuid
-
-from src.app.setup.db.engine import get_engine
-from src.shared.domain.repositories.data_repository import DataRepository
-
 from sqlalchemy.orm import DeclarativeBase
+from src.shared.domain.repositories.data_repository import DataRepository
 
 class Base(DeclarativeBase):
     pass
-
-DB_URL = os.getenv("DATABASE_URL")
-engine = get_engine()  
-SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 
 # Two type variables: E = Entity, M = Model
 E = TypeVar("E")  # Domain Entity
@@ -27,15 +19,10 @@ M = TypeVar("M")  # SQLAlchemy Model
 class SqlAlchemyDataRepository(DataRepository[E], Generic[E, M]):
     def __init__(self, model: Type[M]):
         self.model = model
-
-    @staticmethod
-    def __get_db_session() -> Generator[Session, None, None]:
-        db = SessionLocal()
-        try:
-            yield db
-        finally:
-            db.close()
-        
+        self.__db_url = os.getenv("DATABASE_URL")
+        self.__engine = self.__get_engine()
+        self.__session_local = sessionmaker(bind=self.__engine, autocommit=False, autoflush=False)
+    
     @contextmanager
     def _get_session(self):
         """Context manager for database sessions"""
@@ -54,6 +41,21 @@ class SqlAlchemyDataRepository(DataRepository[E], Generic[E, M]):
     def _to_model(self, entity: E) -> M:
         """Convert domain entity to SQLAlchemy model"""
         raise NotImplementedError()
+
+    def __get_engine(self) -> Engine:
+        engine = create_engine(
+            self.__db_url, 
+            pool_pre_ping=True
+        )  
+
+        return engine
+    
+    def __get_db_session(self) -> Generator[Session, None, None]:
+        db = self.__session_local()
+        try:
+            yield db
+        finally:
+            db.close()
 
     def create(self, data: E) -> E:
         with self._get_session() as db:

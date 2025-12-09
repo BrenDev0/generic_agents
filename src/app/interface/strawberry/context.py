@@ -15,7 +15,7 @@ class Context(BaseContext):
         
         auth = self.request.headers.get("Authorization")
         if not auth or not auth.startswith("Bearer "):
-            raise GraphQlException("Missing token or auth header")
+            return None
         
         token = auth.split(" ")[1]
         logger.debug(f"token :::{token}")
