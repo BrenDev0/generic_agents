@@ -82,7 +82,7 @@ class UserMutation:
     def delete_user(
         self,
         info: strawberry.Info
-    ) -> None:
+    ) -> UserType:
         use_case = get_delete_user_use_case()
         try:
             user_id = info.context.get("user_id")
@@ -91,6 +91,10 @@ class UserMutation:
             )
 
             return
+        
+        except NotFoundException as e:
+            raise GraphQlException(str(e))
+        
         except Exception:
             raise GraphQlException()
 
