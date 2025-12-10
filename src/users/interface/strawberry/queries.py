@@ -23,5 +23,5 @@ class UserQuery:
                 value=user_id
             )
 
-        except Exception as e:
-            raise GraphQlException("Unable to process request at this time")
+        except Exception:
+            raise GraphQlException()
