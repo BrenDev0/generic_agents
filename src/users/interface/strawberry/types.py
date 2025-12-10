@@ -1,5 +1,5 @@
 import strawberry
-from src.users.domain.schemas import UserPublic, CreateUser
+from src.users.domain.schemas import UserPublic, CreateUser, Login
 
 @strawberry.experimental.pydantic.type(model=UserPublic, all_fields=True)
 class UserType:
@@ -12,5 +12,9 @@ class UserWithTokenType:
 
 @strawberry.experimental.pydantic.input(model=CreateUser, all_fields=True)
 class CreateUserInput:
+    pass
+
+@strawberry.experimental.pydantic.input(model=Login, all_fields=True)
+class LoginInput:
     pass
 

@@ -1,11 +1,10 @@
 import logging
 import strawberry
-from uuid import UUID
 from src.users.dependencies.use_cases import get_user_use_case
 from src.users.interface.strawberry.types import UserType
 from src.app.interface.strawberry.context import Context
 from src.shared.domain.exceptions.graphql import GraphQlException
-from src.app.middleware.auth import UserAuth
+from src.app.interface.strawberry.middleware.user_auth import UserAuth
 logger = logging.getLogger(__name__)
 
 @strawberry.type
@@ -16,7 +15,7 @@ class UserQuery:
         info: strawberry.Info[Context]
     ) -> UserType | None:
         try:
-            user_id = info.context[user_id]
+            user_id = info.context.get("user_id")
             logger.debug(f"USERID:::: {user_id}")
             use_case = get_user_use_case()
         
@@ -25,5 +24,5 @@ class UserQuery:
                 value=user_id
             )
 
-        except GraphQlException as e:
-            return e.to_dict()
+        except Exception as e:
+            raise GraphQlException("Unable to process request at this time")
