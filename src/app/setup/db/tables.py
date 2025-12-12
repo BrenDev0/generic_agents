@@ -1,0 +1,13 @@
+import logging
+from src.app.setup.db.engine import get_engine
+from src.users.infrastructure.sqlAlchemy.users_repository import User
+from src.shared.infrastructure.sqlAlchemy.data_repository import Base
+logger = logging.getLogger(__name__)
+
+def create_tables():
+    try:
+        engine = get_engine()
+        Base.metadata.create_all(bind=engine)
+    
+    except Exception as e:
+        logger.error(str(e))

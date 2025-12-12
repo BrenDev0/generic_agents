@@ -6,7 +6,7 @@ from datetime import datetime
 class User(BaseModel):
     user_id: Optional[UUID] = None
     name: str
-    email: EmailStr
+    email: str
     email_hash: str
     password: str
     created_at: Optional[datetime] = None

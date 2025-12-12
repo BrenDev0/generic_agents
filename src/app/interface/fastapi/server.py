@@ -1,19 +1,10 @@
 from fastapi import FastAPI
-from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
-
-from src.app.setup.startup import startup_event
-
 from src.app.interface.strawberry.router import get_strawberry_graphql_router
 
 
 def create_fastapi_app():
-    @asynccontextmanager
-    async def lifespan(app: FastAPI):
-        startup_event()
-        yield
-
-    app = FastAPI(lifespan=lifespan)
+    app = FastAPI()
 
     # CORS setup
     app.add_middleware(
