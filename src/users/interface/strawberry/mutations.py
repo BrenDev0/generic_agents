@@ -1,11 +1,24 @@
 import logging
 import strawberry
 from src.app.interface.strawberry.middleware.user_auth import UserAuth
-from src.users.interface.strawberry.types import UserType, CreateUserInput, UserWithTokenType, LoginInput, UpdateUserInput
+from src.users.interface.strawberry.types import (
+    UserType, 
+    CreateUserInput, 
+    UserWithTokenType, 
+    LoginInput, 
+    UpdateUserInput
+)
+from src.users.domain.schemas import UpdateUserSchema
 from src.shared.domain.exceptions.graphql import GraphQlException
 from src.shared.domain.exceptions.repositories import NotFoundException
 from src.security.domain.exceptions import IncorrectPassword
-from src.users.dependencies.use_cases import get_create_user_use_case, get_login_use_case, get_delete_user_use_case
+from src.users.dependencies.use_cases import (
+    get_create_user_use_case, 
+    get_login_use_case, 
+    get_delete_user_use_case, 
+    get_update_user_use_case
+)
+from src.users.dependencies.business_rules import get_update_password_rule
 from src.security.dependencies.services import get_web_token_service
 logger = logging.getLogger(__name__)
 
@@ -47,12 +60,44 @@ class UserMutation:
     @strawberry.field(permission_classes=[UserAuth])
     def update_user(
         self,
+        info: strawberry.Info,
         data: UpdateUserInput
-    ):
+    ) -> UserType:
+        use_case = get_update_user_use_case()
         try:
-            pass
+            user_id = info.context.get("user_id")
+            changes = {}
+            if data.password:
+                if not data.old_password:
+                    raise GraphQlException("Old password requiered to update password")
+            
+                rule = get_update_password_rule()
+                rule.validate(
+                    user_id=user_id,
+                    old_password=data.old_password
+                )
+
+                changes["password"] = data.password
+
+            if data.name is not None:
+                changes["name"] = data.name
+
+            return use_case.execute(
+                user_id=user_id,
+                changes=UpdateUserSchema(**changes)
+            )
+            
+        except NotFoundException as e:
+            raise GraphQlException(str(e))
+        
+        except IncorrectPassword as e:
+            raise GraphQlException(str(e))        
+
+        except GraphQlException:
+            raise
+
         except Exception as e:
-            pass
+            raise GraphQlException()
 
     @strawberry.field
     def login(
@@ -96,12 +141,11 @@ class UserMutation:
         use_case = get_delete_user_use_case()
         try:
             user_id = info.context.get("user_id")
-            use_case.execute(
+
+            return use_case.execute(
                 user_id=user_id
             )
 
-            return
-        
         except NotFoundException as e:
             raise GraphQlException(str(e))
         

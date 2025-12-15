@@ -37,7 +37,7 @@ class LoginRequest(UserShemaBase):
     email: str
     password: str
 
-class UpdateUserSchema(UserShemaBase):
+class UpdateUserSchema(BaseModel):
     name: Optional[str] = None
     email: Optional[str] = None
     email_hash: Optional[str] = None

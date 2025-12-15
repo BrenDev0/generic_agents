@@ -36,7 +36,7 @@ class UpdateUser:
         updated_user: User = self.__repository.update(
             key="user_id",
             value=user_id,
-            data=processed_changes
+            changes=processed_changes
         )
 
         if not updated_user:
