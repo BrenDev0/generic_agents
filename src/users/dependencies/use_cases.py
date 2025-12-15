@@ -5,6 +5,7 @@ from src.users.application.use_cases.get_user import GetUser
 from src.users.application.use_cases.create_user import CreateUser
 from src.users.application.use_cases.login import UserLogin
 from src.users.application.use_cases.delete_user import DeleteUser
+from src.users.application.use_cases.update_user import UpdateUser
 from src.users.dependencies.repositories import get_users_repository
 from src.security.dependencies.services import get_encrytpion_service, get_hashing_service
 logger = logging.getLogger(__name__)
@@ -65,6 +66,22 @@ def get_delete_user_use_case() -> DeleteUser:
     except DependencyNotRegistered:
         use_case =DeleteUser(
             repository=get_users_repository()
+        )
+        Container.register(instance_key, use_case)
+        logger.info(f"{instance_key} registered")
+
+    return use_case
+
+def get_update_user_use_case() -> UpdateUser:
+    try:
+        instance_key = "update_user_use_case"
+        use_case = Container.resolve(instance_key)
+    
+    except DependencyNotRegistered:
+        use_case =UpdateUser(
+            repository=get_users_repository(),
+            encryption=get_encrytpion_service(),
+            hashing=get_hashing_service()
         )
         Container.register(instance_key, use_case)
         logger.info(f"{instance_key} registered")

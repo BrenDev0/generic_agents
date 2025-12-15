@@ -19,20 +19,26 @@ class UserPublic(UserShemaBase):
     created_at: datetime
     last_login: datetime
 
-class CreateUser(UserShemaBase):
+class CreateUserRequest(UserShemaBase):
     name: str
     email: str
     password: str
 
-class VerifiedUserUpdate(UserShemaBase):
-    email: Optional[str]
-    password: Optional[str]
+class VerifiedUserUpdateRequest(UserShemaBase):
+    email: Optional[str] = None
+    password: Optional[str] = None
 
-class UpdateUser(UserShemaBase):
-    name: Optional[str]
-    password: Optional[str]
-    old_password: Optional[str]
+class UpdateUserRequest(UserShemaBase):
+    name: Optional[str] = None
+    password: Optional[str] = None
+    old_password: Optional[str] = None
 
-class Login(UserShemaBase):
+class LoginRequest(UserShemaBase):
     email: str
     password: str
+
+class UpdateUserSchema(UserShemaBase):
+    name: Optional[str] = None
+    email: Optional[str] = None
+    email_hash: Optional[str] = None
+    password: Optional[str] = None

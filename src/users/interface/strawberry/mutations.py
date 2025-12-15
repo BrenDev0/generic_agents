@@ -1,7 +1,7 @@
 import logging
 import strawberry
 from src.app.interface.strawberry.middleware.user_auth import UserAuth
-from src.users.interface.strawberry.types import UserType, CreateUserInput, UserWithTokenType, LoginInput
+from src.users.interface.strawberry.types import UserType, CreateUserInput, UserWithTokenType, LoginInput, UpdateUserInput
 from src.shared.domain.exceptions.graphql import GraphQlException
 from src.shared.domain.exceptions.repositories import NotFoundException
 from src.security.domain.exceptions import IncorrectPassword
@@ -42,8 +42,18 @@ class UserMutation:
 
         except Exception as e:
             logger.error(str(e))
-            raise GraphQlException("Unable to process request at this time")
+            raise GraphQlException()
     
+    @strawberry.field(permission_classes=[UserAuth])
+    def update_user(
+        self,
+        data: UpdateUserInput
+    ):
+        try:
+            pass
+        except Exception as e:
+            pass
+
     @strawberry.field
     def login(
         self,
