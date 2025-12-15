@@ -23,20 +23,20 @@ from src.security.dependencies.services import get_web_token_service
 logger = logging.getLogger(__name__)
 
 @strawberry.type
-class UserMutation:
-    @strawberry.field
+class UserMutations:
+    @strawberry.mutation
     def create_user(
         self,
-        data: CreateUserInput
+        input: CreateUserInput
     ) -> UserWithTokenType:
         use_case = get_create_user_use_case()
         web_token_service = get_web_token_service()
 
         try:
             new_user = use_case.execute(
-                name=data.name,
-                email=data.email,
-                password=data.password
+                name=input.name,
+                email=input.email,
+                password=input.password
             )
 
             token_payload = {
@@ -57,30 +57,30 @@ class UserMutation:
             logger.error(str(e))
             raise GraphQlException()
     
-    @strawberry.field(permission_classes=[UserAuth])
+    @strawberry.mutation(permission_classes=[UserAuth])
     def update_user(
         self,
         info: strawberry.Info,
-        data: UpdateUserInput
+        input: UpdateUserInput
     ) -> UserType:
         use_case = get_update_user_use_case()
         try:
             user_id = info.context.get("user_id")
             changes = {}
-            if data.password:
-                if not data.old_password:
+            if input.password:
+                if not input.old_password:
                     raise GraphQlException("Old password requiered to update password")
             
                 rule = get_update_password_rule()
                 rule.validate(
                     user_id=user_id,
-                    old_password=data.old_password
+                    old_password=input.old_password
                 )
 
-                changes["password"] = data.password
+                changes["password"] = input.password
 
-            if data.name is not None:
-                changes["name"] = data.name
+            if input.name is not None:
+                changes["name"] = input.name
 
             return use_case.execute(
                 user_id=user_id,
@@ -99,18 +99,18 @@ class UserMutation:
         except Exception as e:
             raise GraphQlException()
 
-    @strawberry.field
+    @strawberry.mutation
     def login(
         self,
-        data: LoginInput
+        input: LoginInput
     ) -> UserWithTokenType:
         use_case = get_login_use_case()
         web_token_service = get_web_token_service()
 
         try:
             user = use_case.execute(
-                email=data.email,
-                password=data.password
+                email=input.email,
+                password=input.password
             )
             token_payload = {
                 "user_id": str(user.user_id)
@@ -133,7 +133,7 @@ class UserMutation:
             raise GraphQlException()
         
 
-    @strawberry.field(permission_classes=[UserAuth])
+    @strawberry.mutation(permission_classes=[UserAuth])
     def delete_user(
         self,
         info: strawberry.Info

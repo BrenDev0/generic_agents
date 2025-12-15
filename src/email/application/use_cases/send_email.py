@@ -1,5 +1,6 @@
 import os
 import smtplib
+from email.message import EmailMessage
 from src.email.domain.entities import Email
 from src.email.domain.exceptions import EmailTransportException
 
@@ -16,11 +17,18 @@ class SendEmail:
         self,
         email: Email
     ):
-        msg = email.model_dump()
+        msg = EmailMessage()
+        msg["From"] = email.from_
+        msg["To"] = email.to
+        msg["Subject"] = email.subject
+        msg.set_content(email.html, subtype="html")
+        msg["X-Mailgun-Track"] = "no"
+
         try:
             with smtplib.SMTP(self.host, self.port) as server:
                 server.starttls()
                 server.login(self.user, self.password)
                 server.send_message(msg)
+                
         except Exception:
             raise EmailTransportException()
