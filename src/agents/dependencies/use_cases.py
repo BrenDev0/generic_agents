@@ -2,7 +2,7 @@ import logging
 from src.shared.domain.exceptions.dependencies import DependencyNotRegistered
 from src.shared.dependencies.container import Container
 from src.agents.application.use_cases.get_agent_by_id import GetAgentById
-from src.agents.application.use_cases.get_users_agents import GetUsersAgents
+from src.agents.application.use_cases.get_agents_by_user import GetAgentsByUser
 from src.agents.dependencies.repositories import get_agents_repository
 logger = logging.getLogger(__name__)
 
@@ -21,13 +21,13 @@ def get_agent_by_id_use_case() -> GetAgentById:
     return use_case
 
 
-def get_agents_by_user_use_case() -> GetUsersAgents:
+def get_agents_by_user_use_case() -> GetAgentsByUser:
     try:
         instance_key = "get_agents_by_user_use_case"
         use_case = Container.resolve(instance_key)
     
     except DependencyNotRegistered:
-        use_case  = GetUsersAgents(
+        use_case  = GetAgentsByUser(
             repository=get_agents_repository()
         )
         Container.register(instance_key, use_case)

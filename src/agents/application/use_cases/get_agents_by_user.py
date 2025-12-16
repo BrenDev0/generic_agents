@@ -2,7 +2,7 @@ from uuid import UUID
 from src.shared.domain.repositories.data_repository import DataRepository
 from src.agents.domain.schemas import AgentPublic
 
-class GetUsersAgents:
+class GetAgentsByUser:
     def __init__(
         self,
         repository: DataRepository
@@ -23,4 +23,3 @@ class GetUsersAgents:
             AgentPublic.model_validate(agent, from_attributes=True) for agent in agents
         ] if agents else []
     
-        
