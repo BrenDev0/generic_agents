@@ -1,18 +1,17 @@
 import strawberry
-from src.users.interface.strawberry.queries import UserQuery
+from src.users.interface.strawberry.queries import UserQueries
 from src.users.interface.strawberry.mutations import UserMutations
 from src.email.interface.strawberry.mutations import EmailMutations
 
 @strawberry.type
-class Query(
-    UserQuery
-):
-    pass
+class Query():
+    @strawberry.field
+    def users(self) -> UserQueries:
+        return UserQueries()
 
 
 @strawberry.type
-class Mutation(
-):
+class Mutation():
     @strawberry.field
     def email(self) -> EmailMutations:
         return EmailMutations()
