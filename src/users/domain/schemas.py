@@ -20,6 +20,7 @@ class UserPublic(UserShemaBase):
     last_login: datetime
 
 class CreateUserRequest(UserShemaBase):
+    code: int
     name: str
     email: str
     password: str

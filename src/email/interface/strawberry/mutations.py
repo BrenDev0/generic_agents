@@ -1,3 +1,4 @@
+import logging
 import strawberry
 from src.email.interface.strawberry.types import VerificationTokenType, VerifyEmailType
 from src.email.dependencies.use_cases import get_verification_email_use_case
@@ -6,10 +7,14 @@ from src.security.dependencies.services import get_web_token_service
 from src.users.domain.exceptions import EmailInUseException
 from src.security.utils.random_code_generator import get_random_code
 from src.shared.domain.exceptions.graphql import GraphQlException
+logger = logging.getLogger(__name__)
+
 
 @strawberry.type
 class EmailMutations:
-    @strawberry.mutation
+    @strawberry.mutation(
+        description="Send verification code to users email. Will receive a token that can be used for verified requests."
+    )
     def verify_email(
         self,
         input: VerifyEmailType
@@ -42,5 +47,6 @@ class EmailMutations:
         except EmailInUseException as e:
             raise GraphQlException(str(e))
         
-        except Exception:
+        except Exception as e:
+            logger.error(str(e))
             raise GraphQlException()
