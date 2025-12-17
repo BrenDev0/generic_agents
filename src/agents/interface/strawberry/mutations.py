@@ -29,10 +29,9 @@ class AgentMutations:
         user_id = info.context.get("user_id")
 
         try:
-            profile = CreateAgentProfileRequest(**input)
             return use_case.execute(
                 user_id=user_id,
-                profile=profile
+                profile=input.to_pydantic()
             )
 
         except Exception as e:
