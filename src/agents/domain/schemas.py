@@ -17,14 +17,13 @@ class AgentPublic(AgentBase):
     agent_id: UUID
     user_id: UUID
     name: str
-    description = Optional[str] = None
+    description: Optional[str] = None
     created_at: datetime
 
-class CreateAgentRequest(AgentBase):
-    user_id: UUID
+class CreateAgentProfileRequest(AgentBase):
     name: str
     description: Optional[str] = None
 
-class UpdatAgentRequest(AgentBase):
+class UpdatAgentProfileRequest(AgentBase):
     name: Optional[str] = None
     description: Optional[str] = None

@@ -2,13 +2,12 @@ import logging
 import strawberry
 from src.app.interface.strawberry.middleware.user_auth import UserAuth
 from src.app.interface.strawberry.middleware.user_verification import UserVerification
-from src.users.interface.strawberry.types import (
-    UserType, 
-    CreateUserInput, 
-    UserWithTokenType, 
+from src.users.interface.strawberry.inputs import (
+    CreateUserInput,
     LoginInput, 
     UpdateUserInput
 )
+from src.users.interface.strawberry.types import UserType, UserWithTokenType
 from src.users.domain.schemas import UpdateUserSchema
 from src.shared.domain.exceptions.graphql import GraphQlException
 from src.shared.domain.exceptions.repositories import NotFoundException

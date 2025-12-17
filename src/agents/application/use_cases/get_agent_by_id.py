@@ -3,7 +3,7 @@ from src.shared.domain.repositories.data_repository import DataRepository
 from src.agents.domain.entities import Agent
 from src.agents.domain.schemas import AgentPublic
 from src.shared.domain.exceptions.repositories import NotFoundException
-from src.shared.domain.exceptions.permissions import PermissionsError
+from src.shared.domain.exceptions.permissions import PermissionsException
 
 class GetAgentById:
     def __init__(
@@ -27,7 +27,7 @@ class GetAgentById:
             raise NotFoundException("Agent not found")
 
         if str(agent.user_id) != str(user_id):
-            raise PermissionsError()
+            raise PermissionsException()
 
         
         return AgentPublic.model_validate(agent, from_attributes=True)

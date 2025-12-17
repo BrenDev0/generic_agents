@@ -1,7 +1,7 @@
 import logging
 import strawberry
 from src.users.dependencies.use_cases import get_user_use_case
-from src.users.interface.strawberry.types import UserType
+from src.users.interface.strawberry.inputs import UserType
 from src.shared.domain.exceptions.graphql import GraphQlException
 from src.app.interface.strawberry.middleware.user_auth import UserAuth
 logger = logging.getLogger(__name__)

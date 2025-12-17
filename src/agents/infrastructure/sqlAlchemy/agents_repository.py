@@ -5,6 +5,7 @@ from src.shared.infrastructure.sqlAlchemy.data_repository import SqlAlchemyDataR
 from src.agents.domain.entities import Agent
 
 class SqlAlchemyAgent(Base):
+    __tablename__ ="agents"
     agent_id=Column(UUID(as_uuid=True), primary_key=True, default=uuid4, nullable=False)
     user_id=Column(UUID(as_uuid=True), ForeignKey("users.user_id", ondelete="CASCADE"), nullable=False)
     name=Column(String, nullable=False)
