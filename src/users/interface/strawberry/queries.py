@@ -26,5 +26,6 @@ class UserQueries:
                 value=user_id
             )
 
-        except Exception:
+        except Exception as e:
+            logger.error(str(e))
             raise GraphQlException()

@@ -3,6 +3,7 @@ from src.users.interface.strawberry.queries import UserQueries
 from src.users.interface.strawberry.mutations import UserMutations
 from src.email.interface.strawberry.mutations import EmailMutations
 from src.agents.interface.strawberry.queries import AgentQueries
+from src.agents.interface.strawberry.mutations import AgentMutations
 
 @strawberry.type
 class Query():
@@ -24,6 +25,10 @@ class Mutation():
     @strawberry.field
     def users(self) -> UserMutations:
         return UserMutations()
+    
+    @strawberry.field
+    def agents(self) -> AgentMutations:
+        return AgentMutations()
 
 
 schema = strawberry.Schema(query=Query, mutation=Mutation)
