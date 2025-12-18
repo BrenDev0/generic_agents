@@ -5,6 +5,7 @@ from src.agents.application.use_cases.get_agent_by_id import GetAgentById
 from src.agents.application.use_cases.get_agents_by_user import GetAgentsByUser
 from src.agents.application.use_cases.create_agent_profile import CreateAgentProfile
 from src.agents.application.use_cases.delete_agent_profile import DeleteAgentProfile
+from src.agents.application.use_cases.update_agent_profile import UpdateAgentProfile
 from src.agents.dependencies.repositories import get_agents_repository
 logger = logging.getLogger(__name__)
 
@@ -60,6 +61,20 @@ def get_create_agent_profile_use_case() -> CreateAgentProfile:
     
     except DependencyNotRegistered:
         use_case  = CreateAgentProfile(
+            repository=get_agents_repository()
+        )
+        Container.register(instance_key, use_case)
+        logger.info(f"{instance_key} registered")
+    
+    return use_case
+
+def get_update_agent_profile_use_case() -> UpdateAgentProfile:
+    try:
+        instance_key = "update_agent_profile_use_case"
+        use_case = Container.resolve(instance_key)
+    
+    except DependencyNotRegistered:
+        use_case  = UpdateAgentProfile(
             repository=get_agents_repository()
         )
         Container.register(instance_key, use_case)

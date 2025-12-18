@@ -7,8 +7,11 @@ from src.agents.interface.strawberry.inputs import (
     UpdateAgentProfileInput
 )
 from src.agents.interface.strawberry.types import AgentType
-from src.agents.domain.schemas import CreateAgentProfileRequest
-from src.agents.dependencies.use_cases import get_create_agent_profile_use_case, get_delete_agent_profile_use_case
+from src.agents.dependencies.use_cases import (
+    get_create_agent_profile_use_case, 
+    get_delete_agent_profile_use_case,
+    get_update_agent_profile_use_case
+)
 from src.shared.domain.exceptions.graphql import GraphQlException
 from src.shared.domain.exceptions.permissions import PermissionsException
 from src.shared.domain.exceptions.repositories import NotFoundException
@@ -63,6 +66,37 @@ class AgentMutations:
         except PermissionsException as e:
             raise GraphQlException(str(e))
 
+        except Exception as e:
+            logger.error(str(e))
+            raise GraphQlException()
+        
+    
+    @strawberry.mutation(
+        permission_classes=[UserAuth],
+        description="Update agent profile"
+    )
+    def update_agent(
+        self,
+        info: strawberry.Info,
+        input: UpdateAgentProfileInput,
+        agent_id: UUID
+    ):
+        use_case = get_update_agent_profile_use_case()
+        user_id = info.context.get("user_id")
+
+        try:
+            return use_case.execute(
+                user_id=user_id,
+                agent_id=agent_id,
+                changes=input.to_pydantic()
+            )
+        
+        except NotFoundException as e:
+            raise GraphQlException(str(e))
+        
+        except PermissionError as e:
+            raise GraphQlException(str(e))
+        
         except Exception as e:
             logger.error(str(e))
             raise GraphQlException()
