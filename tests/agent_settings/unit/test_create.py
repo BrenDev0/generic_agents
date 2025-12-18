@@ -1,0 +1,76 @@
+import pytest
+from unittest.mock import Mock
+from datetime import datetime
+from uuid import uuid4
+from src.agent_settings.application.create import CreateAgentSetting
+from src.agent_settings.domain.entities import AgentSetting
+from src.agents.domain.entities import Agent
+from src.agent_settings.domain.schemas import CreateSettingsRequest
+
+@pytest.fixture
+def mock_settings_repository():
+    return Mock()
+
+@pytest.fixture
+def mock_agents_repository():
+    return Mock()
+
+@pytest.fixture
+def use_case(
+    mock_agents_repository,
+    mock_settings_repository
+):
+    return CreateAgentSetting(
+        agents_repository=mock_agents_repository,
+        settings_repository=mock_settings_repository
+    )
+
+
+def test_success(
+    mock_agents_repository,
+    mock_settings_repository,
+    use_case: CreateAgentSetting
+):
+    user_id = uuid4()
+    agent_id = uuid4()
+
+    fake_agent = Agent(
+        agent_id=agent_id,
+        user_id=user_id,
+        name="fake",
+        description="desc..",
+        created_at=datetime.now()
+    )
+
+    fake_settings = AgentSetting(
+        setting_id=uuid4(),
+        agent_id=agent_id,
+        system_prompt="system promt",
+        temperature=0.5,
+        transcripts=True
+    )
+
+    req_data = CreateSettingsRequest(
+        system_prompt="system prompt",
+        temperature=0.5,
+        transcripts=True
+    )
+
+    mock_agents_repository.get_one.return_value = fake_agent
+    mock_settings_repository.create.return_value = fake_settings
+
+    result = use_case.execute(
+        user_id=user_id,
+        agent_id=agent_id,
+        settings=req_data
+    )
+
+    mock_agents_repository.get_one.assert_called_once_with(
+        key="agent_id",
+        value=agent_id
+    )
+
+    mock_settings_repository.create.assert_called_once()
+
+    assert result.setting_id == fake_settings.setting_id
+

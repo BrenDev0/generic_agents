@@ -4,6 +4,7 @@ from typing import Optional
 
 class AgentSetting(BaseModel):
     setting_id: Optional[UUID] = None
+    agent_id: UUID
     system_prompt: str
-    tempurature: float
+    temperature: float
     transcripts: bool = False
