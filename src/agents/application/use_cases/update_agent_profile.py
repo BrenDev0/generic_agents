@@ -34,7 +34,7 @@ class UpdateAgentProfile:
         updated_agent: Agent = self.__repository.update(
             key="agent_id",
             value=agent_id,
-            changes=changes.model_dump(exclude_unset=True)
+            changes=changes.model_dump(exclude_none=True)
         )
 
         return AgentPublic.model_validate(updated_agent, from_attributes=True)

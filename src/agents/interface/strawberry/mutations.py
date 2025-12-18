@@ -80,7 +80,7 @@ class AgentMutations:
         info: strawberry.Info,
         input: UpdateAgentProfileInput,
         agent_id: UUID
-    ):
+    ) -> AgentType:
         use_case = get_update_agent_profile_use_case()
         user_id = info.context.get("user_id")
 
