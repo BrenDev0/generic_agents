@@ -1,11 +1,11 @@
 import logging
 from src.shared.domain.exceptions.dependencies import DependencyNotRegistered
 from src.shared.dependencies.container import Container
-from src.users.application.use_cases.get_user import GetUser
-from src.users.application.use_cases.create_user import CreateUser
+from src.users.application.use_cases.resource import GetUser
+from src.users.application.use_cases.create import CreateUser
 from src.users.application.use_cases.login import UserLogin
-from src.users.application.use_cases.delete_user import DeleteUser
-from src.users.application.use_cases.update_user import UpdateUser
+from src.users.application.use_cases.delete import DeleteUser
+from src.users.application.use_cases.update import UpdateUser
 from src.users.dependencies.repositories import get_users_repository
 from src.security.dependencies.services import get_encrytpion_service, get_hashing_service
 logger = logging.getLogger(__name__)

@@ -1,11 +1,11 @@
 import logging
 from src.shared.domain.exceptions.dependencies import DependencyNotRegistered
 from src.shared.dependencies.container import Container
-from src.agents.application.use_cases.get_agent_by_id import GetAgentById
-from src.agents.application.use_cases.get_agents_by_user import GetAgentsByUser
-from src.agents.application.use_cases.create_agent_profile import CreateAgentProfile
-from src.agents.application.use_cases.delete_agent_profile import DeleteAgentProfile
-from src.agents.application.use_cases.update_agent_profile import UpdateAgentProfile
+from src.agents.application.use_cases.resource import GetAgentById
+from src.agents.application.use_cases.collection import GetAgentsByUser
+from src.agents.application.use_cases.create import CreateAgentProfile
+from src.agents.application.use_cases.delete import DeleteAgentProfile
+from src.agents.application.use_cases.update import UpdateAgentProfile
 from src.agents.dependencies.repositories import get_agents_repository
 logger = logging.getLogger(__name__)
 

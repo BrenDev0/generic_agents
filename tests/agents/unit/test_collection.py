@@ -2,7 +2,7 @@ import pytest
 from uuid import uuid4
 from datetime import datetime
 from unittest.mock import Mock
-from src.agents.application.use_cases.get_agents_by_user import GetAgentsByUser
+from src.agents.application.use_cases.collection import GetAgentsByUser
 from src.agents.domain.entities import Agent
 
 @pytest.fixture

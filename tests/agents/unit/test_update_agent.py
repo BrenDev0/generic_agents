@@ -2,7 +2,7 @@ import pytest
 from uuid import uuid4
 from unittest.mock import Mock
 from datetime import datetime
-from src.agents.application.use_cases.update_agent_profile import UpdateAgentProfile
+from src.agents.application.use_cases.update import UpdateAgentProfile
 from src.agents.domain.entities import Agent
 from src.shared.domain.exceptions.permissions import PermissionsException
 from src.shared.domain.exceptions.repositories import NotFoundException

@@ -4,7 +4,7 @@ from unittest.mock import Mock
 from datetime import datetime
 from src.shared.domain.exceptions.repositories import NotFoundException
 from src.shared.domain.exceptions.permissions import PermissionsException
-from src.agents.application.use_cases.delete_agent_profile import DeleteAgentProfile
+from src.agents.application.use_cases.delete import DeleteAgentProfile
 from src.agents.domain.entities import Agent
 
 @pytest.fixture

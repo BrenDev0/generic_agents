@@ -2,7 +2,7 @@ import pytest
 from uuid import uuid4
 from datetime import datetime
 from unittest.mock import Mock, call
-from src.users.application.use_cases.delete_user import DeleteUser
+from src.users.application.use_cases.delete import DeleteUser
 from src.shared.domain.exceptions.repositories import NotFoundException
 from src.users.domain.entities import User
 

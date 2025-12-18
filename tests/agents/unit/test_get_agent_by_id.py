@@ -5,7 +5,7 @@ from datetime import datetime
 from src.shared.domain.exceptions.repositories import NotFoundException
 from src.shared.domain.exceptions.permissions import PermissionsException
 from src.agents.domain.entities import Agent
-from src.agents.application.use_cases.get_agent_by_id import GetAgentById
+from src.agents.application.use_cases.resource import GetAgentById
 
 
 @pytest.fixture
