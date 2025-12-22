@@ -1,6 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from src.app.interface.strawberry.router import get_strawberry_graphql_router
+from src.app.interface.fastapi.middleware.hmac import verify_hmac
 
 
 def create_fastapi_app():
@@ -14,7 +15,6 @@ def create_fastapi_app():
         allow_methods=["*"],
         allow_headers=["*"],
     )
-    
 
     @app.get("/health", tags=["Internal"])
     async def health():
@@ -22,11 +22,11 @@ def create_fastapi_app():
         ## Health check 
         This endpoints verifies server status.
         """
-        return {"status": "ok"}
+        return {"status": "ConvertIA ok"}
     
 
     graphql_router = get_strawberry_graphql_router()
-    app.include_router(graphql_router)
+    app.include_router(graphql_router, dependencies=[Depends(verify_hmac)])
 
     return app
     
