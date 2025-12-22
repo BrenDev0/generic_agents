@@ -2,11 +2,11 @@ from uuid import UUID
 from src.shared.domain.repositories.data_repository import DataRepository
 from src.agent_settings.domain.schemas import CreateSettingsRequest, AgentSettingsPublic
 from src.agents.domain.entities import Agent
-from src.agent_settings.domain.entities import AgentSetting
+from src.agent_settings.domain.entities import AgentSettings
 from src.shared.domain.exceptions.repositories import NotFoundException
 from src.shared.domain.exceptions.permissions import PermissionsException
 
-class CreateAgentSetting:
+class CreateAgentSettings:
     def __init__(
         self,
         settings_repository: DataRepository,
@@ -32,7 +32,7 @@ class CreateAgentSetting:
         if str(agent.user_id) != str(user_id):
             raise PermissionsException()
         
-        data = AgentSetting(
+        data = AgentSettings(
             agent_id=agent.agent_id,
             **settings.model_dump(by_alias=False)
         )

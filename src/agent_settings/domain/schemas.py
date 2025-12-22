@@ -3,7 +3,7 @@ from pydantic.alias_generators import to_camel
 from typing import Optional
 from uuid import UUID
 
-class AgentSettingBase(BaseModel):
+class AgentSettingsBase(BaseModel):
     model_config = ConfigDict(
         populate_by_name=True,
         serialize_by_alias=True,
@@ -13,7 +13,7 @@ class AgentSettingBase(BaseModel):
     )
 
 
-class CreateSettingsRequest(AgentSettingBase):
+class CreateSettingsRequest(AgentSettingsBase):
     system_prompt: str
     temperature: float
     transcripts: bool
@@ -22,7 +22,7 @@ class AgentSettingsPublic(CreateSettingsRequest):
     setting_id: UUID
 
 
-class UpdateSettingsRequest(AgentSettingBase):
+class UpdateSettingsRequest(AgentSettingsBase):
     system_prompt: Optional[str] = None
     temperature: Optional[str] = None
     transcripts: Optional[bool] = None

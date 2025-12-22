@@ -1,11 +1,11 @@
 from uuid import UUID
 from src.shared.domain.repositories.data_repository import DataRepository
-from src.agent_settings.domain.entities import AgentSetting
+from src.agent_settings.domain.entities import AgentSettings
 from src.agent_settings.domain.schemas import AgentSettingsPublic
 from src.shared.domain.exceptions.permissions import PermissionsException
 from src.shared.domain.exceptions.repositories import NotFoundException
 
-class DeleteAgentSetting:
+class DeleteAgentSettings:
     def __init__(
         self,
         settings_repository: DataRepository
@@ -17,7 +17,7 @@ class DeleteAgentSetting:
         user_id: UUID,
         setting_id: UUID
     ): 
-        setting: AgentSetting = self.__settings_repository.get_one(
+        setting: AgentSettings = self.__settings_repository.get_one(
             key="setting_id",
             value=setting_id
         )

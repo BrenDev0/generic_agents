@@ -2,8 +2,8 @@ import pytest
 from unittest.mock import Mock
 from datetime import datetime
 from uuid import uuid4
-from src.agent_settings.application.use_cases.create import CreateAgentSetting
-from src.agent_settings.domain.entities import AgentSetting
+from src.agent_settings.application.use_cases.create import CreateAgentSettings
+from src.agent_settings.domain.entities import AgentSettings
 from src.agents.domain.entities import Agent
 from src.agent_settings.domain.schemas import CreateSettingsRequest
 from src.shared.domain.exceptions.repositories import NotFoundException
@@ -22,7 +22,7 @@ def use_case(
     mock_agents_repository,
     mock_settings_repository
 ):
-    return CreateAgentSetting(
+    return CreateAgentSettings(
         agents_repository=mock_agents_repository,
         settings_repository=mock_settings_repository
     )
@@ -30,7 +30,7 @@ def use_case(
 def test_success(
     mock_agents_repository,
     mock_settings_repository,
-    use_case: CreateAgentSetting
+    use_case: CreateAgentSettings
 ):
     user_id = uuid4()
     agent_id = uuid4()
@@ -43,7 +43,7 @@ def test_success(
         created_at=datetime.now()
     )
 
-    fake_settings = AgentSetting(
+    fake_settings = AgentSettings(
         setting_id=uuid4(),
         agent_id=agent_id,
         system_prompt="system promt",
@@ -79,7 +79,7 @@ def test_success(
 def test_agent_not_found(
     mock_agents_repository,
     mock_settings_repository,
-    use_case: CreateAgentSetting
+    use_case: CreateAgentSettings
 ):
     user_id = uuid4()
     agent_id = uuid4()
@@ -112,7 +112,7 @@ def test_agent_not_found(
 def test_permission_error(
     mock_agents_repository,
     mock_settings_repository,
-    use_case: CreateAgentSetting
+    use_case: CreateAgentSettings
 ):
     user_id = uuid4()
     agent_id = uuid4()

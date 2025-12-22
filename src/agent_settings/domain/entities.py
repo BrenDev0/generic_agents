@@ -3,7 +3,7 @@ from uuid import UUID
 from typing import Optional
 from src.agents.domain.entities import Agent
 
-class AgentSetting(BaseModel):
+class AgentSettings(BaseModel):
     setting_id: Optional[UUID] = None
     agent_id: UUID
     system_prompt: str

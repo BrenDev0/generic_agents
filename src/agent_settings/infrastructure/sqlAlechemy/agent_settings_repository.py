@@ -3,12 +3,12 @@ from uuid import uuid4
 from typing import Optional
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
-from src.agent_settings.domain.entities import AgentSetting
+from src.agent_settings.domain.entities import AgentSettings
 from src.agents.domain.entities import Agent
 from src.shared.infrastructure.sqlAlchemy.data_repository import Base, SqlAlchemyDataRepository
 from src.agents.infrastructure.sqlAlchemy.agents_repository import SqlAlchemyAgent
 
-class SqlAlchemyAgentSetting(Base):
+class SqlAlchemyAgentSettings(Base):
     __tablename__ = "agent_settings"
 
     setting_id=Column(UUID(as_uuid=True), primary_key=True, defualt=uuid4, nullable=False)
@@ -19,13 +19,13 @@ class SqlAlchemyAgentSetting(Base):
     
     agent = relationship(SqlAlchemyAgent)
 
-class SqlAlchemyAgentSettingsRepository(SqlAlchemyDataRepository[AgentSetting, SqlAlchemyAgentSetting]):
+class SqlAlchemyAgentSettingsRepository(SqlAlchemyDataRepository[AgentSettings, SqlAlchemyAgentSettings]):
     def __init__(self):
-        super().__init__(SqlAlchemyAgentSetting)
+        super().__init__(SqlAlchemyAgentSettings)
 
     
-    def _to_entity(self, model: SqlAlchemyAgentSetting) -> AgentSetting:
-        return AgentSetting(
+    def _to_entity(self, model: SqlAlchemyAgentSettings) -> AgentSettings:
+        return AgentSettings(
             setting_id=model.setting_id,
             agent_id=model.agent_id,
             system_prompt=model.system_prompt,
@@ -46,6 +46,6 @@ class SqlAlchemyAgentSettingsRepository(SqlAlchemyDataRepository[AgentSetting, S
             created_at=agent_model.created_at
         )
     
-    def _to_model(self, entity: AgentSetting):
+    def _to_model(self, entity: AgentSettings):
         data = entity.model_dump(exclude={"setting_id"} if not entity.agent_id else set())
-        return SqlAlchemyAgentSetting(**data)
+        return SqlAlchemyAgentSettings(**data)

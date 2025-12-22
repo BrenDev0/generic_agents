@@ -1,6 +1,6 @@
 from uuid import UUID
 from src.shared.domain.repositories.data_repository import DataRepository
-from src.agent_settings.domain.entities import AgentSetting
+from src.agent_settings.domain.entities import AgentSettings
 from src.agent_settings.domain.schemas import AgentSettingsPublic, UpdateSettingsRequest
 from src.shared.domain.exceptions.permissions import PermissionsException
 from src.shared.domain.exceptions.repositories import NotFoundException
@@ -19,7 +19,7 @@ class UpdateAgentSettings:
         setting_id: UUID,
         changes: UpdateSettingsRequest
     ):
-        setting: AgentSetting = self.__repository.get_one(
+        setting: AgentSettings = self.__repository.get_one(
             key="setting_id",
             value=setting_id
         )
@@ -28,7 +28,7 @@ class UpdateAgentSettings:
             raise NotFoundException("Settings not found")
         
         if str(setting.agent.user_id) != str(user_id):
-            raise PermissionError()
+            raise PermissionsException()
         
 
         updated_setting = self.__repository.update(
@@ -36,7 +36,7 @@ class UpdateAgentSettings:
             value=setting.setting_id,
             changes=changes.model_dump(exclude_none=True)
         )
-        
+
         return AgentSettingsPublic.model_validate(updated_setting, from_attributes=True)
     
 

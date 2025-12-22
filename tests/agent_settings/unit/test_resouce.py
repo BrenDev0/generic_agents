@@ -2,7 +2,7 @@ import pytest
 from datetime import datetime
 from  uuid import uuid4
 from unittest.mock import Mock
-from src.agent_settings.domain.entities import AgentSetting
+from src.agent_settings.domain.entities import AgentSettings
 from src.agents.domain.entities import Agent
 from src.agent_settings.application.use_cases.resource import GetSettingById
 from src.shared.domain.exceptions.permissions import PermissionsException
@@ -31,7 +31,7 @@ def test_success(
     agent_id = uuid4()
     setting_id = uuid4()
     
-    fake_setting = AgentSetting(
+    fake_setting = AgentSettings(
         setting_id=setting_id,
         agent_id=agent_id,
         system_prompt="...",
@@ -87,7 +87,7 @@ def test_permissions_error(
     agent_id = uuid4()
     setting_id = uuid4()
 
-    fake_setting = AgentSetting(
+    fake_setting = AgentSettings(
         setting_id=setting_id,
         agent_id=agent_id,
         system_prompt="...",

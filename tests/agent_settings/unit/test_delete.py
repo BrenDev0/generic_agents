@@ -2,9 +2,9 @@ import pytest
 from unittest.mock import Mock
 from uuid import uuid4
 from datetime import datetime
-from src.agent_settings.domain.entities import AgentSetting
+from src.agent_settings.domain.entities import AgentSettings
 from src.agents.domain.entities import Agent
-from src.agent_settings.application.use_cases.delete import DeleteAgentSetting
+from src.agent_settings.application.use_cases.delete import DeleteAgentSettings
 from src.shared.domain.exceptions.permissions import PermissionsException
 from src.shared.domain.exceptions.repositories import NotFoundException
 
@@ -17,18 +17,18 @@ def mock_repository():
 def use_case(
     mock_repository
 ):
-    return DeleteAgentSetting(
+    return DeleteAgentSettings(
         settings_repository=mock_repository
     )
 
 def test_success(
     mock_repository,
-    use_case: DeleteAgentSetting
+    use_case: DeleteAgentSettings
 ):
     setting_id = uuid4()
     agent_id = uuid4()
     user_id = uuid4()
-    fake_setting = AgentSetting(
+    fake_setting = AgentSettings(
         setting_id=setting_id,
         agent_id=agent_id,
         system_prompt="...",
@@ -67,7 +67,7 @@ def test_success(
 
 def test_not_found(
     mock_repository,
-    use_case: DeleteAgentSetting
+    use_case: DeleteAgentSettings
 ):
     user_id = uuid4()
     setting_id = uuid4()
@@ -88,12 +88,12 @@ def test_not_found(
 
 def test_permissions_error(
     mock_repository,
-    use_case: DeleteAgentSetting
+    use_case: DeleteAgentSettings
 ):
     user_id = uuid4()
     setting_id = uuid4()
     agent_id = uuid4()
-    fake_setting = AgentSetting(
+    fake_setting = AgentSettings(
         setting_id=setting_id,
         agent_id=agent_id,
         system_prompt="...",
