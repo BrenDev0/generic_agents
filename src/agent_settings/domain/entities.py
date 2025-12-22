@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from uuid import UUID
 from typing import Optional
+from src.agents.domain.entities import Agent
 
 class AgentSetting(BaseModel):
     setting_id: Optional[UUID] = None
@@ -8,3 +9,4 @@ class AgentSetting(BaseModel):
     system_prompt: str
     temperature: float
     transcripts: bool = False
+    agent: Optional[Agent] = None
