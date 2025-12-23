@@ -8,20 +8,20 @@ from src.shared.domain.exceptions.repositories import NotFoundException
 class UpdateAgentSettings:
     def __init__(
         self,
-        repository: DataRepository
+        settings_repository: DataRepository
     ):
-        self.__repository = repository
+        self.__repository = settings_repository
 
     
     def execute(
         self,
         user_id: UUID,
-        setting_id: UUID,
+        settings_id: UUID,
         changes: UpdateSettingsRequest
     ):
         setting: AgentSettings = self.__repository.get_one(
             key="setting_id",
-            value=setting_id
+            value=settings_id
         )
 
         if not setting:
@@ -34,7 +34,7 @@ class UpdateAgentSettings:
         updated_setting = self.__repository.update(
             key="setting_id",
             value=setting.setting_id,
-            changes=changes.model_dump(exclude_none=True)
+            changes=changes.model_dump(exclude_none=True, by_alias=False)
         )
 
         return AgentSettingsPublic.model_validate(updated_setting, from_attributes=True)

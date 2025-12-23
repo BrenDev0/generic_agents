@@ -6,22 +6,21 @@ from src.shared.domain.exceptions.repositories import NotFoundException
 from src.agent_settings.domain.schemas import AgentSettingsPublic
 
 
-class GetSettingById:
+class GetSettingsById:
     def __init__(
         self,
-        repository: DataRepository
+        settings_repository: DataRepository
     ):
-        self.__repository = repository
-
+        self.__repository = settings_repository
     
     def execute(
         self,
         user_id: UUID,
-        setting_id: UUID
+        agent_id: UUID
     ):
         setting: AgentSettings = self.__repository.get_one(
-            key="setting_id",
-            value=setting_id
+            key="agent_id",
+            value=agent_id
         )
 
         if not setting:

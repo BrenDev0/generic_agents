@@ -60,10 +60,7 @@ class AgentMutations:
                 agent_id=agent_id
             )
         
-        except NotFoundException as e:
-            raise GraphQlException(str(e))
-        
-        except PermissionsException as e:
+        except (NotFoundException, PermissionsException) as e:
             raise GraphQlException(str(e))
 
         except Exception as e:
@@ -91,10 +88,7 @@ class AgentMutations:
                 changes=input.to_pydantic()
             )
         
-        except NotFoundException as e:
-            raise GraphQlException(str(e))
-        
-        except PermissionError as e:
+        except (NotFoundException, PermissionsException) as e:
             raise GraphQlException(str(e))
         
         except Exception as e:

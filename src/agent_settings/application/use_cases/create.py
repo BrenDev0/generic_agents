@@ -5,15 +5,18 @@ from src.agents.domain.entities import Agent
 from src.agent_settings.domain.entities import AgentSettings
 from src.shared.domain.exceptions.repositories import NotFoundException
 from src.shared.domain.exceptions.permissions import PermissionsException
+from src.agent_settings.application.rules.no_multi_settings import NoMultiSettings
 
 class CreateAgentSettings:
     def __init__(
         self,
         settings_repository: DataRepository,
-        agents_repository: DataRepository
+        agents_repository: DataRepository,
+        multi_settings_rule: NoMultiSettings
     ):
         self.__settings_repository = settings_repository
         self.__agents_repository = agents_repository
+        self.__multi_settings_rule = multi_settings_rule
 
     def execute(
         self,
@@ -21,6 +24,9 @@ class CreateAgentSettings:
         agent_id: UUID,
         settings: CreateSettingsRequest
     ):
+        self.__multi_settings_rule.validate(
+            agent_id=agent_id
+        )
         agent: Agent = self.__agents_repository.get_one(
             key="agent_id",
             value=agent_id

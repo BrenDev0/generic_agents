@@ -11,7 +11,7 @@ from src.agents.infrastructure.sqlAlchemy.agents_repository import SqlAlchemyAge
 class SqlAlchemyAgentSettings(Base):
     __tablename__ = "agent_settings"
 
-    setting_id=Column(UUID(as_uuid=True), primary_key=True, defualt=uuid4, nullable=False)
+    setting_id=Column(UUID(as_uuid=True), primary_key=True, default=uuid4, nullable=False)
     agent_id=Column(UUID(as_uuid=True), ForeignKey("agents.agent_id", ondelete="CASCADE"), nullable=False)
     system_prompt=Column(String, nullable=False)
     temperature=Column(Float, nullable=False)
@@ -47,5 +47,5 @@ class SqlAlchemyAgentSettingsRepository(SqlAlchemyDataRepository[AgentSettings, 
         )
     
     def _to_model(self, entity: AgentSettings):
-        data = entity.model_dump(exclude={"setting_id"} if not entity.agent_id else set())
+        data = entity.model_dump(exclude={"setting_id", "agent"} if not entity.setting_id else set())
         return SqlAlchemyAgentSettings(**data)

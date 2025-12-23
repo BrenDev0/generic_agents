@@ -30,10 +30,7 @@ class AgentQueries:
                 agent_id=agent_id
             )
         
-        except NotFoundException as e:
-            raise GraphQlException(str(e))
-
-        except PermissionsException:
+        except (NotFoundException, PermissionsException) as e:
             raise GraphQlException(str(e))
         
         except Exception as e:
