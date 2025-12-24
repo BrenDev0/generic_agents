@@ -18,7 +18,7 @@ def use_case(
     mock_repository
 ):
     return UpdateAgentSettings(
-        repository=mock_repository
+        settings_repository=mock_repository
     )
 
 
@@ -68,7 +68,7 @@ def test_success(
     mock_repository.update.return_value = fake_updated_settings
 
     result = use_case.execute(
-        setting_id=setting_id,
+        settings_id=setting_id,
         user_id=user_id,
         changes=changes
     )
@@ -81,7 +81,7 @@ def test_success(
     mock_repository.update.assert_called_once_with(
         key="setting_id",
         value=setting_id,
-        changes=changes.model_dump(exclude_none=True)
+        changes=changes.model_dump(exclude_none=True, by_alias=False)
     )
 
     assert result.system_prompt == "updated"
@@ -102,7 +102,7 @@ def test_not_found(
 
     with pytest.raises(NotFoundException) as exc_info:
         use_case.execute(
-            setting_id=setting_id,
+            settings_id=setting_id,
             user_id=user_id,
             changes=changes
         )
@@ -142,7 +142,7 @@ def test_permissions_error(
     with pytest.raises(PermissionsException) as exc_info:
         use_case.execute(
             user_id=user_id,
-            setting_id=setting_id,
+            settings_id=setting_id,
             changes=changes
         )
     

@@ -18,13 +18,19 @@ def mock_agents_repository():
     return Mock()
 
 @pytest.fixture
+def mock_rule():
+    return Mock()
+
+@pytest.fixture
 def use_case(
     mock_agents_repository,
-    mock_settings_repository
+    mock_settings_repository,
+    mock_rule
 ):
     return CreateAgentSettings(
         agents_repository=mock_agents_repository,
-        settings_repository=mock_settings_repository
+        settings_repository=mock_settings_repository,
+        multi_settings_rule=mock_rule
     )
 
 def test_success(

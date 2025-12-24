@@ -4,7 +4,7 @@ from  uuid import uuid4
 from unittest.mock import Mock
 from src.agent_settings.domain.entities import AgentSettings
 from src.agents.domain.entities import Agent
-from src.agent_settings.application.use_cases.resource import GetSettingById
+from src.agent_settings.application.use_cases.resource import GetSettingsById
 from src.shared.domain.exceptions.permissions import PermissionsException
 from src.shared.domain.exceptions.repositories import NotFoundException
 
@@ -18,13 +18,13 @@ def mock_repository():
 def use_case(
     mock_repository
 ):
-    return GetSettingById(
-        repository=mock_repository
+    return GetSettingsById(
+        settings_repository=mock_repository
     )
 
 def test_success(
     mock_repository,
-    use_case: GetSettingById
+    use_case: GetSettingsById
 ):
     
     user_id = uuid4()
@@ -50,12 +50,12 @@ def test_success(
 
     result = use_case.execute(
         user_id=user_id,
-        setting_id=setting_id
+        agent_id=agent_id
     )
 
     mock_repository.get_one.assert_called_once_with(
-        key="setting_id",
-        value=setting_id
+        key="agent_id",
+        value=agent_id
     )
 
     assert result.setting_id == setting_id
@@ -63,16 +63,16 @@ def test_success(
 
 def test_not_found(
     mock_repository,
-    use_case: GetSettingById
+    use_case: GetSettingsById
 ):
     user_id = uuid4()
-    setting_id = uuid4()
+    agent_id = uuid4()
     mock_repository.get_one.return_value = None
 
     with pytest.raises(NotFoundException) as exc_info:
         use_case.execute(
             user_id=user_id,
-            setting_id=setting_id
+            agent_id=agent_id
         )
 
     
@@ -81,7 +81,7 @@ def test_not_found(
 
 def test_permissions_error(
     mock_repository,
-    use_case: GetSettingById
+    use_case: GetSettingsById
 ):
     user_id = uuid4()
     agent_id = uuid4()
@@ -108,7 +108,7 @@ def test_permissions_error(
     with pytest.raises(PermissionsException) as exc_info:
         use_case.execute(
             user_id=user_id,
-            setting_id=setting_id
+            agent_id=agent_id
         )
 
     assert "Forbidden" in str(exc_info)
