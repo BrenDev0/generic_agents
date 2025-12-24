@@ -27,10 +27,10 @@ class CreateAgentSettings:
         self.__multi_settings_rule.validate(
             agent_id=agent_id
         )
-        agent: Agent = self.__agents_repository.get_one(
+        agent: Agent = self.__agents_repository.get_one( 
             key="agent_id",
             value=agent_id
-        )
+        ) ## Will raise exception if settings found 
 
         if not agent: 
             raise NotFoundException("Agent not found")
