@@ -7,9 +7,12 @@ from src.app.interface.strawberry.middleware.user_auth import UserAuth
 logger = logging.getLogger(__name__)
 
 @strawberry.type
-class UserQuery:
-    @strawberry.field(permission_classes=[UserAuth])
-    def user(
+class UserQueries:
+    @strawberry.field(
+        permission_classes=[UserAuth],
+        description="Get User from id in Auth token"
+    )
+    def get_me(
         self,
         info: strawberry.Info
     ) -> UserType | None:
@@ -23,5 +26,6 @@ class UserQuery:
                 value=user_id
             )
 
-        except Exception:
+        except Exception as e:
+            logger.error(str(e))
             raise GraphQlException()

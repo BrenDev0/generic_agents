@@ -2,7 +2,7 @@ import pytest
 from uuid import uuid4
 from unittest.mock import Mock, call
 from datetime import datetime
-from src.users.application.use_cases.create_user import CreateUser
+from src.users.application.use_cases.create import CreateUser
 from src.users.domain.entities import User
 
 @pytest.fixture

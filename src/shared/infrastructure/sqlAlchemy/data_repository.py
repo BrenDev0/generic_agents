@@ -120,7 +120,7 @@ class SqlAlchemyDataRepository(DataRepository[E], Generic[E, M]):
             updated_model = self.model(**updated_rows[0]._mapping)
             return self._to_entity(updated_model)
 
-    def delete(self, key: str, value: str | uuid.UUID) -> List[E] | E | None:
+    def delete(self, key: str, value: str | uuid.UUID) ->  E | None:
         stmt = delete(self.model).where(getattr(self.model, key) == value).returning(*self.model.__table__.c)
 
         with self._get_session() as db:
@@ -132,9 +132,5 @@ class SqlAlchemyDataRepository(DataRepository[E], Generic[E, M]):
             if not deleted_rows:
                 return None 
             
-            if len(deleted_rows) == 1:
-                deleted_model = self.model(**deleted_rows[0]._mapping)
-                return self._to_entity(deleted_model)
-            else:
-                deleted_models = [self.model(**row._mapping) for row in deleted_rows]
-                return [self._to_entity(model) for model in deleted_models]
+            deleted_model = self.model(**deleted_rows[0]._mapping)
+            return self._to_entity(deleted_model)

@@ -42,6 +42,7 @@ class UpdateUser:
         if not updated_user:
             raise NotFoundException("User not found")
         
+        
         return UserPublic(
             user_id=updated_user.user_id,
             email=self.__encryption.decrypt(updated_user.email),

@@ -3,7 +3,7 @@ class ExpiredToken(Exception):
         super().__init__(detail)
 
 class InvalidToken(Exception):
-    def __init__(self, detail: str = "Ivalid token"):
+    def __init__(self, detail: str = "Invalid token"):
         super().__init__(detail)
 
 class IncorrectPassword(Exception):
