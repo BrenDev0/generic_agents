@@ -1,6 +1,6 @@
 import logging
-from src.shared.domain.exceptions.dependencies import DependencyNotRegistered
-from src.shared.dependencies.container import Container
+from src.di.domain.exceptions import DependencyNotRegistered
+from src.di.container import Container
 from src.users.application.use_cases.resource import GetUser
 from src.users.application.use_cases.create import CreateUser
 from src.users.application.use_cases.login import UserLogin

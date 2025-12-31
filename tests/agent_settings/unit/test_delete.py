@@ -5,8 +5,8 @@ from datetime import datetime
 from src.agent_settings.domain.entities import AgentSettings
 from src.agents.domain.entities import Agent
 from src.agent_settings.application.use_cases.delete import DeleteAgentSettings
-from src.shared.domain.exceptions.permissions import PermissionsException
-from src.shared.domain.exceptions.repositories import NotFoundException
+from src.security.domain.exceptions import PermissionsException
+from src.persistence.domain.exceptions import NotFoundException
 
 
 @pytest.fixture

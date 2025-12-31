@@ -1,6 +1,6 @@
 import logging
-from src.shared.domain.exceptions.dependencies import DependencyNotRegistered
-from src.shared.dependencies.container import Container
+from src.di.domain.exceptions import DependencyNotRegistered
+from src.di.container import Container
 from src.email.application.use_cases.send_email import SendEmail
 from src.email.application.use_cases.verification_email import VerificationEmail
 logger = logging.getLogger(__name__)

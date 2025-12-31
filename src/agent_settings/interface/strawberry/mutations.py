@@ -12,9 +12,9 @@ from src.agent_settings.interface.strawberry.inputs import (
     UpdateAgentSettingsInput
 )
 from src.agent_settings.interface.strawberry.types import AgentSettingsType
-from src.shared.domain.exceptions.repositories import NotFoundException
-from src.shared.domain.exceptions.permissions import PermissionsException
-from src.shared.domain.exceptions.graphql import GraphQlException
+from src.persistence.domain.exceptions import NotFoundException
+from src.security.domain.exceptions import PermissionsException
+from src.app.domain.exceptions import GraphQlException
 from src.agent_settings.domain.exceptions import ExistingSettingsException
 
 logger = logging.getLogger(__name__)

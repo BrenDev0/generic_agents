@@ -1,5 +1,5 @@
 from typing import TypeVar, Dict, cast, List
-from src.shared.domain.exceptions.dependencies import DependencyNotRegistered
+from src.di.domain.exceptions import DependencyNotRegistered
 
 T = TypeVar('T')
 class Container:

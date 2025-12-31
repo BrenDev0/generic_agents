@@ -9,3 +9,7 @@ class InvalidToken(Exception):
 class IncorrectPassword(Exception):
     def __init__(self, detail: str):
         super().__init__(detail)
+
+class PermissionsException(Exception):
+    def __init__(self, detail: str = "Forbidden"):
+        super().__init__(detail)

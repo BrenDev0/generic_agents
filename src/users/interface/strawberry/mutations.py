@@ -9,8 +9,8 @@ from src.users.interface.strawberry.inputs import (
 )
 from src.users.interface.strawberry.types import UserType, UserWithTokenType
 from src.users.domain.schemas import UpdateUserSchema
-from src.shared.domain.exceptions.graphql import GraphQlException
-from src.shared.domain.exceptions.repositories import NotFoundException
+from src.app.domain.exceptions import GraphQlException
+from src.persistence.domain.exceptions import NotFoundException
 from src.security.domain.exceptions import IncorrectPassword
 from src.users.dependencies.use_cases import (
     get_create_user_use_case, 

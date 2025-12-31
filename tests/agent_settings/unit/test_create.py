@@ -6,8 +6,8 @@ from src.agent_settings.application.use_cases.create import CreateAgentSettings
 from src.agent_settings.domain.entities import AgentSettings
 from src.agents.domain.entities import Agent
 from src.agent_settings.domain.schemas import CreateSettingsRequest
-from src.shared.domain.exceptions.repositories import NotFoundException
-from src.shared.domain.exceptions.permissions import PermissionsException
+from src.persistence.domain.exceptions import NotFoundException
+from src.security.domain.exceptions import PermissionsException
 
 @pytest.fixture
 def mock_settings_repository():

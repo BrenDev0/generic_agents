@@ -6,9 +6,9 @@ from src.agents.interface.strawberry.types import AgentType
 
 from src.app.interface.strawberry.middleware.user_auth import UserAuth
 from src.agents.dependencies.use_cases import get_agent_by_id_use_case, get_agents_by_user_use_case
-from src.shared.domain.exceptions.graphql import GraphQlException
-from src.shared.domain.exceptions.permissions import PermissionsException
-from src.shared.domain.exceptions.repositories import NotFoundException
+from src.app.domain.exceptions import GraphQlException
+from src.security.domain.exceptions import PermissionsException
+from src.persistence.domain.exceptions import NotFoundException
 logger = logging.getLogger(__name__)
 
 @strawberry.type

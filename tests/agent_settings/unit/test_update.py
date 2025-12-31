@@ -2,8 +2,8 @@ import pytest
 from unittest.mock import Mock
 from uuid import uuid4
 from  datetime import datetime
-from src.shared.domain.exceptions.permissions import PermissionsException
-from src.shared.domain.exceptions.repositories import NotFoundException
+from src.security.domain.exceptions import PermissionsException
+from src.persistence.domain.exceptions import NotFoundException
 from src.agent_settings.application.use_cases.update import UpdateAgentSettings
 from src.agent_settings.domain.entities import AgentSettings
 from src.agents.domain.entities import Agent

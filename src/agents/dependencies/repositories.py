@@ -1,7 +1,7 @@
 import logging
-from src.shared.domain.exceptions.dependencies import DependencyNotRegistered
-from src.shared.dependencies.container import Container
-from src.shared.domain.repositories.data_repository import DataRepository
+from src.di.domain.exceptions import DependencyNotRegistered
+from src.di.container import Container
+from src.persistence.domain.data_repository import DataRepository
 from src.agents.infrastructure.sqlAlchemy.agents_repository import SqlAlchemyAgentsRepository
 logger = logging.getLogger(__name__)
 

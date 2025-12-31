@@ -1,6 +1,6 @@
 import logging
-from src.shared.domain.exceptions.dependencies import DependencyNotRegistered
-from src.shared.dependencies.container import Container
+from src.di.domain.exceptions import DependencyNotRegistered
+from src.di.container import Container
 from src.agent_settings.application.use_cases.create import CreateAgentSettings
 from src.agent_settings.application.use_cases.delete import DeleteAgentSettings
 from src.agent_settings.application.use_cases.resource import GetSettingsById

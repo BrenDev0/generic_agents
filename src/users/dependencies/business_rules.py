@@ -1,6 +1,6 @@
 import logging
-from src.shared.domain.exceptions.dependencies import DependencyNotRegistered
-from src.shared.dependencies.container import Container
+from src.di.domain.exceptions import DependencyNotRegistered
+from src.di.container import Container
 from src.users.application.rules.update_password import UpdatePasswordRule
 from src.users.application.rules.unique_email import UniqueEmailRule
 from src.users.dependencies.repositories import get_users_repository

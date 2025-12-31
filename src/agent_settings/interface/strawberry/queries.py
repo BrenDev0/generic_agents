@@ -2,9 +2,9 @@ import strawberry
 import logging
 from uuid import UUID
 from src.agent_settings.dependencies.use_cases import get_settings_by_id_use_case
-from src.shared.domain.exceptions.graphql import GraphQlException 
-from src.shared.domain.exceptions.permissions import PermissionsException
-from src.shared.domain.exceptions.repositories import NotFoundException
+from src.app.domain.exceptions import GraphQlException 
+from src.security.domain.exceptions import PermissionsException
+from src.persistence.domain.exceptions import NotFoundException
 from src.app.interface.strawberry.middleware.user_auth import UserAuth
 from src.agent_settings.interface.strawberry.types import AgentSettingsType
 logger = logging.getLogger(__name__)
