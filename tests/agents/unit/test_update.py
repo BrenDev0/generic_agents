@@ -4,8 +4,8 @@ from unittest.mock import Mock
 from datetime import datetime
 from src.agents.application.use_cases.update import UpdateAgentProfile
 from src.agents.domain.entities import Agent
-from src.shared.domain.exceptions.permissions import PermissionsException
-from src.shared.domain.exceptions.repositories import NotFoundException
+from src.security.domain.exceptions import PermissionsException
+from src.persistence.domain.exceptions import NotFoundException
 from src.agents.domain.schemas import AgentPublic, UpdatAgentProfileRequest
 
 @pytest.fixture

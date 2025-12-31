@@ -12,9 +12,9 @@ from src.agents.dependencies.use_cases import (
     get_delete_agent_profile_use_case,
     get_update_agent_profile_use_case
 )
-from src.shared.domain.exceptions.graphql import GraphQlException
-from src.shared.domain.exceptions.permissions import PermissionsException
-from src.shared.domain.exceptions.repositories import NotFoundException
+from src.app.domain.exceptions import GraphQlException
+from src.security.domain.exceptions import PermissionsException
+from src.persistence.domain.exceptions import NotFoundException
 logger = logging.getLogger(__name__)
 
 @strawberry.type

@@ -6,7 +6,7 @@ from src.users.dependencies.business_rules import get_unique_email_rule
 from src.security.dependencies.services import get_web_token_service
 from src.users.domain.exceptions import EmailInUseException
 from src.security.utils.random_code_generator import get_random_code
-from src.shared.domain.exceptions.graphql import GraphQlException
+from src.app.domain.exceptions import GraphQlException
 logger = logging.getLogger(__name__)
 
 

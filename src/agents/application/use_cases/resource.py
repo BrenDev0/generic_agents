@@ -1,9 +1,9 @@
 from uuid import UUID
-from src.shared.domain.repositories.data_repository import DataRepository
+from src.persistence.domain.data_repository import DataRepository
 from src.agents.domain.entities import Agent
 from src.agents.domain.schemas import AgentPublic
-from src.shared.domain.exceptions.repositories import NotFoundException
-from src.shared.domain.exceptions.permissions import PermissionsException
+from src.persistence.domain.exceptions import NotFoundException
+from src.security.domain.exceptions import PermissionsException
 
 class GetAgentById:
     def __init__(

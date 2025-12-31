@@ -4,7 +4,7 @@ import uuid
 from typing import List
 
 from src.users.domain.entities import User
-from src.shared.infrastructure.sqlAlchemy.data_repository import SqlAlchemyDataRepository, Base
+from src.persistence.infrastructure.sqlAlchemy.data_repository import SqlAlchemyDataRepository, Base
 
 class SqlAlchemyUser(Base):
     __tablename__ = "users"

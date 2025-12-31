@@ -3,7 +3,7 @@ from src.app.setup.db.engine import get_engine
 from src.users.infrastructure.sqlAlchemy.users_repository import SqlAlchemyUser
 from src.agents.infrastructure.sqlAlchemy.agents_repository import SqlAlchemyAgent
 from src.agent_settings.infrastructure.sqlAlechemy.agent_settings_repository import SqlAlchemyAgentSettings
-from src.shared.infrastructure.sqlAlchemy.data_repository import Base
+from src.persistence.infrastructure.sqlAlchemy.data_repository import Base
 logger = logging.getLogger(__name__)
 
 def create_tables():

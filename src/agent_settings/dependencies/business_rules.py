@@ -1,6 +1,6 @@
 import logging
-from src.shared.domain.exceptions.dependencies import DependencyNotRegistered
-from src.shared.dependencies.container import Container
+from src.di.domain.exceptions import DependencyNotRegistered
+from src.di.container import Container
 from src.agent_settings.application.rules.no_multi_settings import NoMultiSettings
 from src.agent_settings.dependencies.repositories import get_agent_settings_repository
 logger = logging.getLogger(__name__)

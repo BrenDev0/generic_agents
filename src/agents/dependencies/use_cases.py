@@ -1,6 +1,6 @@
 import logging
-from src.shared.domain.exceptions.dependencies import DependencyNotRegistered
-from src.shared.dependencies.container import Container
+from src.di.domain.exceptions import DependencyNotRegistered
+from src.di.container import Container
 from src.agents.application.use_cases.resource import GetAgentById
 from src.agents.application.use_cases.collection import GetAgentsByUser
 from src.agents.application.use_cases.create import CreateAgentProfile

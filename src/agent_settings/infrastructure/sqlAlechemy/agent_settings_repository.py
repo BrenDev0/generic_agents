@@ -5,7 +5,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from src.agent_settings.domain.entities import AgentSettings
 from src.agents.domain.entities import Agent
-from src.shared.infrastructure.sqlAlchemy.data_repository import Base, SqlAlchemyDataRepository
+from src.persistence.infrastructure.sqlAlchemy.data_repository import Base, SqlAlchemyDataRepository
 from src.agents.infrastructure.sqlAlchemy.agents_repository import SqlAlchemyAgent
 
 class SqlAlchemyAgentSettings(Base):

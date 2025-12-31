@@ -1,5 +1,5 @@
 from uuid import UUID
-from src.shared.domain.repositories.data_repository import DataRepository
+from src.persistence.domain.data_repository import DataRepository
 from src.agents.domain.schemas import AgentPublic
 
 class GetAgentsByUser:

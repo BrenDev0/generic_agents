@@ -1,9 +1,10 @@
-from src.shared.domain.repositories.data_repository import DataRepository
+from src.persistence.domain.data_repository import DataRepository
 from src.security.domain.services.hashing_service import HashingService
 from src.security.domain.services.encryption_service import EncryptionService
 from src.users.domain.schemas import UserPublic
-from src.shared.domain.exceptions.repositories import NotFoundException
+from src.persistence.domain.exceptions import NotFoundException
 from src.users.domain.entities import User
+from datetime import datetime, timezone
 
 class UserLogin:
     def __init__(
@@ -40,12 +41,23 @@ class UserLogin:
             throw_error=True
         )
 
+        ## Update last login
+        changes = {
+            "last_login": datetime.now(timezone.utc)
+        }
+
+        updated_user: User = self.__repository.update(
+            key="user_id",
+            value=user_exists.user_id,
+            changes=changes
+        )
+
         user_public = UserPublic(
             user_id=user_exists.user_id,
-            email=self.__encrytpion.decrypt(user_exists.email),
-            name=self.__encrytpion.decrypt(user_exists.name),
-            last_login=user_exists.last_login,
-            created_at=user_exists.created_at
+            email=self.__encrytpion.decrypt(updated_user.email),
+            name=self.__encrytpion.decrypt(updated_user.name),
+            last_login=updated_user.last_login,
+            created_at=updated_user.created_at
         )
 
         return user_public

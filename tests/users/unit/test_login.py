@@ -4,7 +4,7 @@ from unittest.mock import Mock, call
 from datetime import datetime
 from src.users.application.use_cases.login import UserLogin
 from src.users.domain.entities import User
-from src.shared.domain.exceptions.repositories import NotFoundException
+from src.persistence.domain.exceptions import NotFoundException
 from src.security.domain.services.encryption_service import EncryptionService
 from src.security.domain.services.hashing_service import HashingService
 from src.security.domain.exceptions import IncorrectPassword
@@ -51,8 +51,20 @@ def test_login_success(
         last_login=datetime.now()
     )
 
+    fake_updated_user = User(
+        user_id=user_id,
+        name="name",
+        email="email",
+        email_hash="hashed_email",
+        password="hashed_password",
+        created_at=datetime.now(),
+        last_login=datetime.now()
+    )
+
+
     mock_hashing.hash_for_search.return_value = "hashed_email"
     mock_repository.get_one.return_value = fake_user
+    mock_repository.update.return_value = fake_updated_user
 
     mock_hashing.compare_password.return_value = True
     mock_encryption.decrypt.return_value = "decrypted"
@@ -67,6 +79,8 @@ def test_login_success(
         key="email_hash",
         value="hashed_email"
     )
+
+    mock_repository.update.assert_called_once()
     assert mock_encryption.decrypt.call_count == 2
     mock_encryption.decrypt.assert_has_calls([
         call("email"),

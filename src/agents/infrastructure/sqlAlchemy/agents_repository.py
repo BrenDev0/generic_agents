@@ -1,7 +1,7 @@
 from sqlalchemy import Column, ForeignKey, String, DateTime, func
 from uuid import uuid4
 from sqlalchemy.dialects.postgresql import UUID
-from src.shared.infrastructure.sqlAlchemy.data_repository import SqlAlchemyDataRepository, Base
+from src.persistence.infrastructure.sqlAlchemy.data_repository import SqlAlchemyDataRepository, Base
 from src.agents.domain.entities import Agent
 
 class SqlAlchemyAgent(Base):

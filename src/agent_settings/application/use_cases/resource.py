@@ -1,8 +1,8 @@
 from uuid import UUID 
-from src.shared.domain.repositories.data_repository import DataRepository
+from src.persistence.domain.data_repository import DataRepository
 from src.agent_settings.domain.entities import AgentSettings
-from src.shared.domain.exceptions.permissions import PermissionsException
-from src.shared.domain.exceptions.repositories import NotFoundException
+from src.security.domain.exceptions import PermissionsException
+from src.persistence.domain.exceptions import NotFoundException
 from src.agent_settings.domain.schemas import AgentSettingsPublic
 
 
