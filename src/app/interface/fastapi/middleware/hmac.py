@@ -32,6 +32,7 @@ async def verify_hmac(request: Request) -> bool:
     if request.url.path == "/graphql" and request.method == "GET":
         return True
     
+    logger.debug(f"Headers: {request.headers}")
     signature = request.headers.get('x-signature')
     payload = request.headers.get('x-payload')
     
