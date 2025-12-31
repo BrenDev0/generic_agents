@@ -3,6 +3,7 @@ from strawberry.permission import BasePermission
 from strawberry.types import Info
 from src.security.dependencies.services import get_web_token_service
 from src.security.domain.exceptions import ExpiredToken, InvalidToken
+from src.app.domain.exceptions import GraphQlException
 
 class UserVerification(BasePermission):
      message = "Unverified"
@@ -28,6 +29,6 @@ class UserVerification(BasePermission):
                 self.message = str(e)
 
             except Exception:
-                return False
+                raise GraphQlException()
             
-        return False
+        raise GraphQlException(self.message)
