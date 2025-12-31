@@ -13,6 +13,6 @@ def get_agents_repository() -> DataRepository:
     except DependencyNotRegistered:
         repository =SqlAlchemyAgentsRepository()
         Container.register(instance_key, repository)
-        logger.info(f"{instance_key} registered")
+        logger.debug(f"{instance_key} registered")
 
     return repository

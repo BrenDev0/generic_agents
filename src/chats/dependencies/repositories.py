@@ -14,6 +14,6 @@ def get_chats_repository() -> DataRepository:
     except DependencyNotRegistered:
         repository = SqlAlchemyChatsRepository()
         Container.register(instance_key, repository)
-        logger.info(f"{instance_key} registered")
+        logger.debug(f"{instance_key} registered")
 
     return repository

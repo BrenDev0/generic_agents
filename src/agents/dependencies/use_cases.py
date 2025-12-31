@@ -19,7 +19,7 @@ def get_agent_by_id_use_case() -> GetAgentById:
             repository=get_agents_repository()
         )
         Container.register(instance_key, use_case)
-        logger.info(f"{instance_key} registered")
+        logger.debug(f"{instance_key} registered")
     
     return use_case
 
@@ -34,7 +34,7 @@ def get_agents_by_user_use_case() -> GetAgentsByUser:
             repository=get_agents_repository()
         )
         Container.register(instance_key, use_case)
-        logger.info(f"{instance_key} registered")
+        logger.debug(f"{instance_key} registered")
     
     return use_case
 
@@ -49,7 +49,7 @@ def get_delete_agent_profile_use_case() -> DeleteAgentProfile:
             repository=get_agents_repository()
         )
         Container.register(instance_key, use_case)
-        logger.info(f"{instance_key} registered")
+        logger.debug(f"{instance_key} registered")
     
     return use_case
 
@@ -64,7 +64,7 @@ def get_create_agent_profile_use_case() -> CreateAgentProfile:
             repository=get_agents_repository()
         )
         Container.register(instance_key, use_case)
-        logger.info(f"{instance_key} registered")
+        logger.debug(f"{instance_key} registered")
     
     return use_case
 
@@ -78,6 +78,6 @@ def get_update_agent_profile_use_case() -> UpdateAgentProfile:
             repository=get_agents_repository()
         )
         Container.register(instance_key, use_case)
-        logger.info(f"{instance_key} registered")
+        logger.debug(f"{instance_key} registered")
     
     return use_case
