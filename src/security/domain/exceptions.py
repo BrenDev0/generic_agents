@@ -13,3 +13,8 @@ class IncorrectPassword(Exception):
 class PermissionsException(Exception):
     def __init__(self, detail: str = "Forbidden"):
         super().__init__(detail)
+
+class HMACException(Exception):
+    def __init__(self, detail: str = "HMAC verification failed"):
+        self.detail = detail
+        super().__init__(detail)

@@ -1,7 +1,9 @@
 from fastapi import FastAPI, Depends
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from src.app.interface.strawberry.router import get_strawberry_graphql_router
 from src.app.interface.fastapi.middleware.hmac import verify_hmac
+from src.security.domain.exceptions import HMACException
 
 
 def create_fastapi_app():
@@ -15,6 +17,13 @@ def create_fastapi_app():
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
+    @app.exception_handler(HMACException)
+    async def hmac_exception_handler(request, exc: HMACException):
+        return JSONResponse(
+            status_code=401,
+            content={"errors": [exc.detail]}
+        )
 
     @app.get("/", tags=["Internal"])
     async def health():

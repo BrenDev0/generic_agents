@@ -2,7 +2,11 @@ import os
 import hmac
 import hashlib
 import time
-from fastapi import Request, HTTPException, status
+from fastapi import Request
+from src.security.domain.exceptions import HMACException
+EXCLUDED_PATHS = [
+    "/graphql",  # GraphQL IDE/playground
+]
 
 async def verify_hmac(request: Request) -> bool:
     """
@@ -21,32 +25,27 @@ async def verify_hmac(request: Request) -> bool:
     if not secret:
         raise ValueError("Missing HMAC_SECRET environment variable")
     
+    ## Skip HMAC for GET requests to /graphql (GraphQL IDE)
+    if request.url.path == "/graphql" and request.method == "GET":
+        return True
+    
     signature = request.headers.get('x-signature')
     payload = request.headers.get('x-payload')
     
     if not signature or not payload:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="HMAC verification failed"
-        )
+        raise HMACException(detail="HMAC verification failed")
     
     # Validate timestamp
     try:
         timestamp = int(payload)
     except ValueError:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="HMAC verification failed"
-        )
+        raise HMACException(detail="HMAC verification failed")
     
     current_time = int(time.time() * 1000)  # Current time in milliseconds
     allowed_drift = 60_000  # 60 seconds
     
     if abs(current_time - timestamp) > allowed_drift:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="HMAC verification failed"
-        )
+        raise HMACException(detail="HMAC verification failed")
     
     # Generate expected signature
     expected = hmac.new(
@@ -57,9 +56,6 @@ async def verify_hmac(request: Request) -> bool:
     
     # Compare signatures using constant-time comparison
     if not hmac.compare_digest(signature, expected):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="HMAC verification failed"
-        )
+        raise HMACException(detail="HMAC verification failed")
     
     return True
