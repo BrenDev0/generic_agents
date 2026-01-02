@@ -16,6 +16,6 @@ def get_multi_settings_rule() -> NoMultiSettings:
             settings_repository=get_agent_settings_repository()
         )
         Container.register(instance_key, rule)
-        logger.info(f"{instance_key} registered")
+        logger.debug(f"{instance_key} registered")
 
     return rule

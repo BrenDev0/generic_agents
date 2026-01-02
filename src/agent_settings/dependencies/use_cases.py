@@ -22,7 +22,7 @@ def get_agent_settings_create_use_case() -> CreateAgentSettings:
             multi_settings_rule=get_multi_settings_rule()
         )
         Container.register(instance_key, use_case)
-        logger.info(f"{instance_key} registered")
+        logger.debug(f"{instance_key} registered")
 
     return use_case
 
@@ -36,7 +36,7 @@ def get_agent_settings_delete_use_case() -> DeleteAgentSettings:
             settings_repository=get_agent_settings_repository()
         )
         Container.register(instance_key, use_case)
-        logger.info(f"{instance_key} registered")
+        logger.debug(f"{instance_key} registered")
 
     return use_case
 
@@ -51,7 +51,7 @@ def get_settings_by_id_use_case() -> GetSettingsById:
         )
 
         Container.register(instance_key, use_case)
-        logger.info(f"{instance_key} registered")
+        logger.debug(f"{instance_key} registered")
     
     return use_case
 
@@ -65,6 +65,6 @@ def get_agent_settings_update_use_case() -> UpdateAgentSettings:
             settings_repository=get_agent_settings_repository()
         )
         Container.register(instance_key, use_case)
-        logger.info(f"{instance_key} registered")
+        logger.debug(f"{instance_key} registered")
 
     return use_case

@@ -18,7 +18,7 @@ def get_web_token_service() -> WebTokenService:
     except DependencyNotRegistered:
         service = JwtWebTokenService()
         Container.register(instance_key, service)
-        logger.info(f"{instance_key} registered")
+        logger.debug(f"{instance_key} registered")
 
     return service
 
@@ -30,7 +30,7 @@ def get_hashing_service() -> HashingService:
     except DependencyNotRegistered:
         service = BcryptHashingService()
         Container.register(instance_key, service)
-        logger.info(f"{instance_key} registered")
+        logger.debug(f"{instance_key} registered")
 
     return service
 
@@ -42,6 +42,6 @@ def get_encrytpion_service() -> EncryptionService:
     except DependencyNotRegistered:
         service = FernetEncryptionService()
         Container.register(instance_key, service)
-        logger.info(f"{instance_key} registered")
+        logger.debug(f"{instance_key} registered")
 
     return service

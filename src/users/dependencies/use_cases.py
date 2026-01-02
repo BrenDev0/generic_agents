@@ -21,7 +21,7 @@ def get_user_use_case() -> GetUser:
             encryption=get_encrytpion_service()
         )
         Container.register(instance_key, use_case)
-        logger.info(f"{instance_key} registered")
+        logger.debug(f"{instance_key} registered")
 
     return use_case
 
@@ -38,7 +38,7 @@ def get_create_user_use_case() -> CreateUser:
             encryption=get_encrytpion_service()
         )
         Container.register(instance_key, use_case)
-        logger.info(f"{instance_key} registered")
+        logger.debug(f"{instance_key} registered")
 
     return use_case
 
@@ -54,7 +54,7 @@ def get_login_use_case() -> UserLogin:
             encryption=get_encrytpion_service()
         )
         Container.register(instance_key, use_case)
-        logger.info(f"{instance_key} registered")
+        logger.debug(f"{instance_key} registered")
 
     return use_case
 
@@ -68,7 +68,7 @@ def get_delete_user_use_case() -> DeleteUser:
             repository=get_users_repository()
         )
         Container.register(instance_key, use_case)
-        logger.info(f"{instance_key} registered")
+        logger.debug(f"{instance_key} registered")
 
     return use_case
 
@@ -84,6 +84,6 @@ def get_update_user_use_case() -> UpdateUser:
             hashing=get_hashing_service()
         )
         Container.register(instance_key, use_case)
-        logger.info(f"{instance_key} registered")
+        logger.debug(f"{instance_key} registered")
 
     return use_case

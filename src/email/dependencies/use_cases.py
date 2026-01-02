@@ -14,7 +14,7 @@ def get_sender_use_case() -> SendEmail:
     except DependencyNotRegistered:
         use_case = SendEmail()
         Container.register(instance_key, use_case)
-        logger.info(f"{instance_key} registered")
+        logger.debug(f"{instance_key} registered")
     
     return use_case
 
@@ -28,7 +28,7 @@ def get_verification_email_use_case() -> VerificationEmail:
             sender=get_sender_use_case()
         )
         Container.register(instance_key, use_case)
-        logger.info(f"{instance_key} registered")
+        logger.debug(f"{instance_key} registered")
     
     return use_case
 

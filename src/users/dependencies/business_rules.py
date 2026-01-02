@@ -19,7 +19,7 @@ def get_update_password_rule() -> UpdatePasswordRule:
         )
 
         Container.register(instance_key, business_rule)
-        logger.info(f"{instance_key} registered")
+        logger.debug(f"{instance_key} registered")
 
     return business_rule
 
@@ -35,7 +35,7 @@ def get_unique_email_rule() -> UniqueEmailRule:
         )
 
         Container.register(instance_key, business_rule)
-        logger.info(f"{instance_key} registered")
+        logger.debug(f"{instance_key} registered")
 
     return business_rule
 
