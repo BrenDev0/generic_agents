@@ -1,11 +1,11 @@
 import strawberry
-from src.users.interface.strawberry.queries import UserQueries
-from src.users.interface.strawberry.mutations import UserMutations
-from src.email.interface.strawberry.mutations import EmailMutations
-from src.agents.interface.strawberry.queries import AgentQueries
-from src.agents.interface.strawberry.mutations import AgentMutations
-from src.agent_settings.interface.strawberry.queries import AgentSettingsQueries
-from src.agent_settings.interface.strawberry.mutations import AgentSettingsMutations
+from src.features.users.interface.strawberry.queries import UserQueries
+from src.features.users.interface.strawberry.mutations import UserMutations
+from src.features.email.interface.strawberry.mutations import EmailMutations
+from src.features.agents.interface.strawberry.queries import AgentQueries
+from src.features.agents.interface.strawberry.mutations import AgentMutations
+from src.features.agent_settings.interface.strawberry.queries import AgentSettingsQueries
+from src.features.agent_settings.interface.strawberry.mutations import AgentSettingsMutations
 
 @strawberry.type
 class Query():

@@ -2,9 +2,9 @@ import pytest
 from datetime import datetime
 from  uuid import uuid4
 from unittest.mock import Mock
-from src.agent_settings.domain.entities import AgentSettings
-from src.agents.domain.entities import Agent
-from src.agent_settings.application.use_cases.resource import GetSettingsById
+from src.features.agent_settings.domain.entities import AgentSettings
+from src.features.agents.domain.entities import Agent
+from src.features.agent_settings.application.use_cases.resource import GetSettingsById
 from src.security.domain.exceptions import PermissionsException
 from src.persistence.domain.exceptions import NotFoundException
 

@@ -2,13 +2,13 @@ import pytest
 from uuid import uuid4
 from unittest.mock import Mock, call
 from datetime import datetime
-from src.users.application.use_cases.update import UpdateUser
-from src.users.domain.entities import User
+from src.features.users.application.use_cases.update import UpdateUser
+from src.features.users.domain.entities import User
 from src.security.domain.services.encryption_service import EncryptionService
 from src.security.domain.services.hashing_service import HashingService
 from src.persistence.domain.data_repository import DataRepository
 from src.persistence.domain.exceptions import NotFoundException
-from src.users.domain.schemas import UpdateUserSchema
+from src.features.users.domain.schemas import UpdateUserSchema
 
 
 @pytest.fixture
