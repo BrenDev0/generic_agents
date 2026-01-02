@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import Mock
 from uuid import uuid4
-from src.features.chats.application.use_cases.create import CreateChat
+from src.features.chats.application.use_cases.chat_create import CreateChat
 from src.features.chats.domain.entities import Chat
 from datetime import datetime
 

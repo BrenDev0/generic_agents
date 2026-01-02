@@ -1,7 +1,7 @@
 import logging
 from src.di.container import Container
 from src.di.domain.exceptions import DependencyNotRegistered
-from src.features.chats.application.use_cases.create import CreateChat
+from src.features.chats.application.use_cases.chat_create import CreateChat
 from src.features.chats.dependencies.repositories import get_chats_repository
 logger = logging.getLogger(__name__)
 
