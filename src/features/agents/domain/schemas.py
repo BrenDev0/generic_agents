@@ -18,6 +18,7 @@ class AgentPublic(AgentBase):
     user_id: UUID
     name: str
     description: Optional[str] = None
+    agent_state: bool
     created_at: datetime
 
 class CreateAgentProfileRequest(AgentBase):
@@ -27,3 +28,4 @@ class CreateAgentProfileRequest(AgentBase):
 class UpdatAgentProfileRequest(AgentBase):
     name: Optional[str] = None
     description: Optional[str] = None
+    agent_state: Optional[bool] = None

@@ -29,6 +29,7 @@ def test_success(
         agent_id=agent_id,
         user_id=user_id,
         name="name",
+        agent_state=True,
         description="description",
         created_at=datetime.now()
     )

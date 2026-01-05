@@ -28,6 +28,7 @@ def test_create_agent_success(
         user_id=user_id,
         name="test_name",
         description="test_description", 
+        agent_state=True,
         created_at=datetime.now()
     )
 

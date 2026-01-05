@@ -8,4 +8,5 @@ class Agent(BaseModel):
     user_id: UUID
     name: str
     description: Optional[str] = None
+    agent_state: Optional[bool] = True
     created_at: Optional[datetime] = None
