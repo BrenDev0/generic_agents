@@ -24,6 +24,6 @@ class AgentSettingsPublic(CreateSettingsRequest):
 
 class UpdateSettingsRequest(AgentSettingsBase):
     system_prompt: Optional[str] = None
-    temperature: Optional[str] = None
+    temperature: Optional[float] = None
     transcripts: Optional[bool] = None
 
