@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, String, DateTime, func
+from sqlalchemy import Column, ForeignKey, String, DateTime, func, Boolean
 from uuid import uuid4
 from sqlalchemy.dialects.postgresql import UUID
 from src.persistence.infrastructure.sqlAlchemy.data_repository import SqlAlchemyDataRepository, Base
@@ -10,7 +10,7 @@ class SqlAlchemyAgent(Base):
     user_id=Column(UUID(as_uuid=True), ForeignKey("users.user_id", ondelete="CASCADE"), nullable=False)
     name=Column(String, nullable=False)
     description=Column(String, nullable=True)
-    agent_state=Column(String, nullable=False, default=True)
+    agent_state=Column(Boolean, nullable=False, default=True)
     created_at=Column(DateTime(timezone=True), nullable=True, server_default=func.now())
 
 
