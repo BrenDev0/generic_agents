@@ -27,6 +27,7 @@ def test_success(
             user_id=user_id,
             name="agent_1",
             description="...",
+            agent_state=True,
             created_at=datetime.now()
         ),
         Agent(
@@ -34,6 +35,7 @@ def test_success(
             user_id=user_id,
             name="agent_2",
             description="...",
+            agent_state=True,
             created_at=datetime.now()
         )
     ]

@@ -37,6 +37,7 @@ def test_success(
         agent_id=agent_id,
         user_id=user_id,
         name="name",
+        agent_state=True,
         description="description",
         created_at=datetime.now()
     )
@@ -45,6 +46,7 @@ def test_success(
         agent_id=agent_id,
         user_id=user_id,
         name="updated_name",
+        agent_state=True,
         description="updated_description",
         created_at=datetime.now()
     )
@@ -66,7 +68,7 @@ def test_success(
     mock_repository.update.assert_called_once_with(
         key="agent_id",
         value=agent_id,
-        changes=changes.model_dump()
+        changes=changes.model_dump(exclude_none=True)
     )
 
     assert result.name == "updated_name"
