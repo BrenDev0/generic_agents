@@ -2,8 +2,8 @@ from dotenv import load_dotenv
 load_dotenv()
 import pytest
 from unittest.mock import Mock
-from src.email.application.use_cases.verification_email import VerificationEmail
-from src.email.domain.entities import Email
+from src.features.email.application.use_cases.verification_email import VerificationEmail
+from src.features.email.domain.entities import Email
 
 @pytest.fixture
 def mock_sender():

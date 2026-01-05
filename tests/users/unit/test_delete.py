@@ -2,9 +2,9 @@ import pytest
 from uuid import uuid4
 from datetime import datetime
 from unittest.mock import Mock, call
-from src.users.application.use_cases.delete import DeleteUser
+from src.features.users.application.use_cases.delete import DeleteUser
 from src.persistence.domain.exceptions import NotFoundException
-from src.users.domain.entities import User
+from src.features.users.domain.entities import User
 
 
 @pytest.fixture

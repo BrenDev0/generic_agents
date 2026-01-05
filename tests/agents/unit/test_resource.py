@@ -4,8 +4,8 @@ from uuid import uuid4
 from datetime import datetime
 from src.persistence.domain.exceptions import NotFoundException
 from src.security.domain.exceptions import PermissionsException
-from src.agents.domain.entities import Agent
-from src.agents.application.use_cases.resource import GetAgentById
+from src.features.agents.domain.entities import Agent
+from src.features.agents.application.use_cases.resource import GetAgentById
 
 
 @pytest.fixture

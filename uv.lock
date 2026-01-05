@@ -288,6 +288,7 @@ source = { virtual = "." }
 dependencies = [
     { name = "bcrypt" },
     { name = "cryptography" },
+    { name = "dotenv" },
     { name = "fastapi" },
     { name = "psycopg2-binary" },
     { name = "pydantic", extra = ["email"] },
@@ -299,7 +300,6 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
-    { name = "dotenv" },
     { name = "pytest" },
 ]
 
@@ -307,6 +307,7 @@ dev = [
 requires-dist = [
     { name = "bcrypt", specifier = ">=5.0.0" },
     { name = "cryptography", specifier = ">=46.0.3" },
+    { name = "dotenv", specifier = ">=0.9.9" },
     { name = "fastapi", specifier = ">=0.123.4" },
     { name = "psycopg2-binary", specifier = ">=2.9.11" },
     { name = "pydantic", extras = ["email"], specifier = ">=2.12.5" },
@@ -317,10 +318,7 @@ requires-dist = [
 ]
 
 [package.metadata.requires-dev]
-dev = [
-    { name = "dotenv", specifier = ">=0.9.9" },
-    { name = "pytest", specifier = ">=9.0.2" },
-]
+dev = [{ name = "pytest", specifier = ">=9.0.2" }]
 
 [[package]]
 name = "graphql-core"

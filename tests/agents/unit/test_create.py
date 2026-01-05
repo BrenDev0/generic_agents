@@ -2,9 +2,9 @@ import pytest
 from uuid import uuid4
 from datetime import datetime
 from unittest.mock import Mock
-from src.agents.application.use_cases.create import CreateAgentProfile
-from src.agents.domain.entities import Agent
-from src.agents.domain.schemas import CreateAgentProfileRequest
+from src.features.agents.application.use_cases.create import CreateAgentProfile
+from src.features.agents.domain.entities import Agent
+from src.features.agents.domain.schemas import CreateAgentProfileRequest
 
 @pytest.fixture
 def mock_repository():

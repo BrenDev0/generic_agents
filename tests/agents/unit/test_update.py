@@ -2,11 +2,11 @@ import pytest
 from uuid import uuid4
 from unittest.mock import Mock
 from datetime import datetime
-from src.agents.application.use_cases.update import UpdateAgentProfile
-from src.agents.domain.entities import Agent
+from src.features.agents.application.use_cases.update import UpdateAgentProfile
+from src.features.agents.domain.entities import Agent
 from src.security.domain.exceptions import PermissionsException
 from src.persistence.domain.exceptions import NotFoundException
-from src.agents.domain.schemas import AgentPublic, UpdatAgentProfileRequest
+from src.features.agents.domain.schemas import AgentPublic, UpdatAgentProfileRequest
 
 @pytest.fixture
 def mock_repository():

@@ -4,10 +4,10 @@ from uuid import uuid4
 from  datetime import datetime
 from src.security.domain.exceptions import PermissionsException
 from src.persistence.domain.exceptions import NotFoundException
-from src.agent_settings.application.use_cases.update import UpdateAgentSettings
-from src.agent_settings.domain.entities import AgentSettings
-from src.agents.domain.entities import Agent
-from src.agent_settings.domain.schemas import UpdateSettingsRequest
+from src.features.agent_settings.application.use_cases.update import UpdateAgentSettings
+from src.features.agent_settings.domain.entities import AgentSettings
+from src.features.agents.domain.entities import Agent
+from src.features.agent_settings.domain.schemas import UpdateSettingsRequest
 
 @pytest.fixture
 def mock_repository():
