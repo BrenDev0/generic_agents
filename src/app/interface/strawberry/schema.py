@@ -6,6 +6,7 @@ from src.features.agents.interface.strawberry.queries import AgentQueries
 from src.features.agents.interface.strawberry.mutations import AgentMutations
 from src.features.agent_settings.interface.strawberry.queries import AgentSettingsQueries
 from src.features.agent_settings.interface.strawberry.mutations import AgentSettingsMutations
+from src.features.knowledge_base.interface.strawberry.mutations import KnowledgeBaseMutaions
 
 @strawberry.type
 class Query():
@@ -39,5 +40,9 @@ class Mutation():
     @strawberry.field
     def agent_settings(self) -> AgentSettingsMutations:
         return AgentSettingsMutations()
+    
+    @strawberry.field
+    def knowledge_base(self) -> KnowledgeBaseMutaions:
+        return KnowledgeBaseMutaions()
 
 schema = strawberry.Schema(query=Query, mutation=Mutation)
