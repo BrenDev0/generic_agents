@@ -40,6 +40,7 @@ def test_success(
         name="test",
         description="menu",
         url=None,
+        is_embedded=True,
         created_at=datetime.now()
     )
     fake_url = "url"
@@ -50,6 +51,7 @@ def test_success(
         type="file",
         description="menu",
         url=fake_url,
+        is_embedded=True,
         created_at=datetime.now()
     )
     fake_req = CreateKnowledgeRequest(description="menu")
@@ -64,6 +66,7 @@ def test_success(
         agent_id=agent_id,
         user_id=user_id,
         filename="test",
+        file_type="...",
         file_bytes=file_bytes
     )
 
@@ -102,6 +105,7 @@ def test_upload_error(
         name="test",
         description="menu",
         url=None,
+        is_embedded=True,
         created_at=datetime.now()
     )
     
@@ -117,6 +121,7 @@ def test_upload_error(
             agent_id=agent_id,
             user_id=user_id,
             filename="test",
+            file_type="...",
             file_bytes=file_bytes
         )
 
@@ -148,18 +153,11 @@ def test_update_error(
         name="test",
         description="menu",
         url=None,
+        is_embedded=True,
         created_at=datetime.now()
     )
     fake_url = "url"
 
-    fake_updated_knowledge = Knowledge(
-        knowledge_id=knowledge_id,
-        agent_id=agent_id,
-        type="file",
-        description="menu",
-        url=fake_url,
-        created_at=datetime.now()
-    )
     fake_req = CreateKnowledgeRequest(description="menu")
     file_bytes = b"fake file content"
     
@@ -173,6 +171,7 @@ def test_update_error(
             agent_id=agent_id,
             user_id=user_id,
             filename="test",
+            file_type="...",
             file_bytes=file_bytes
         )
 
