@@ -24,7 +24,7 @@ class KnowledgeBaseMutaions:
         info: strawberry.Info,
         agent_id: UUID,
         input: inputs.CreateKnowledgeInput,
-        file: Upload # type: ignore
+        file: Upload 
     ) -> types.KnowledgeType:
         user_id = info.context.get("user_id")
         is_supported_file_type = business_rules.get_supported_file_type_rule()
