@@ -2,6 +2,7 @@ import logging
 import strawberry
 from uuid import UUID
 from strawberry.file_uploads import Upload
+from src.app.interface.strawberry.decorators.req_validation import validate_input_to_model
 from src.app.domain.exceptions import GraphQlException
 from src.app.interface.strawberry.middleware.user_auth import UserAuth
 from src.persistence.domain.exceptions import NotFoundException
@@ -17,6 +18,7 @@ class KnowledgeBaseMutaions:
         permission_classes=[UserAuth],
         description="Upload a document for an agents knowledgebase"
     )
+    @validate_input_to_model
     async def upload_knowledge(
         self, 
         info: strawberry.Info,
@@ -44,7 +46,7 @@ class KnowledgeBaseMutaions:
             data = await file.read()
             
             return use_case.execute(
-                req_data=input.to_pydantic(),
+                req_data=input,
                 user_id=user_id,
                 agent_id=agent_id,
                 filename=filename,
@@ -63,6 +65,7 @@ class KnowledgeBaseMutaions:
         permission_classes=[UserAuth],
         description="Update Knowledge resource"
     )
+    @validate_input_to_model
     def update_knowledge(
         self,
         knowledge_id: UUID,
@@ -76,7 +79,7 @@ class KnowledgeBaseMutaions:
             return use_case.execute(
                 user_id=user_id,
                 knowledge_id=knowledge_id,
-                changes=input.to_pydantic()
+                changes=input
             )
 
         except (NotFoundException, PermissionsException) as e:

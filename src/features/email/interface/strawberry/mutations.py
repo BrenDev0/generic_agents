@@ -1,5 +1,6 @@
 import logging
 import strawberry
+from src.app.interface.strawberry.decorators.req_validation import validate_input_to_model
 from src.features.email.interface.strawberry.types import VerificationTokenType, VerifyEmailType
 from src.features.email.dependencies.use_cases import get_verification_email_use_case
 from src.features.users.dependencies.business_rules import get_unique_email_rule
@@ -15,6 +16,7 @@ class EmailMutations:
     @strawberry.mutation(
         description="Send verification code to users email. Will receive a token that can be used for verified requests."
     )
+    @validate_input_to_model
     def verify_email(
         self,
         input: VerifyEmailType

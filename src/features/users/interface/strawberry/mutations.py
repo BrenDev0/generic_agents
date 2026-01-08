@@ -2,6 +2,7 @@ import logging
 import strawberry
 from src.app.interface.strawberry.middleware import user_auth, user_verification
 from src.app.domain.exceptions import GraphQlException
+from src.app.interface.strawberry.decorators.req_validation import validate_input_to_model
 from src.persistence.domain.exceptions import NotFoundException
 from src.security.domain.exceptions import IncorrectPassword
 from src.security.dependencies.services import get_web_token_service
@@ -17,6 +18,7 @@ class UserMutations:
         permission_classes=[user_verification.UserVerification],
         description="Verification token from verify email must be used as Auth Bearer."
     )
+    @validate_input_to_model
     def create_user(
         self,
         info: strawberry.Info,
@@ -58,6 +60,7 @@ class UserMutations:
         permission_classes=[user_auth.UserAuth],
         description="Update user by user id in auth token"
     )
+    @validate_input_to_model
     def update_user(
         self,
         info: strawberry.Info,
@@ -104,6 +107,7 @@ class UserMutations:
     @strawberry.mutation(
         description="User login"
     )
+    @validate_input_to_model
     def login(
         self,
         input: inputs.LoginInput
