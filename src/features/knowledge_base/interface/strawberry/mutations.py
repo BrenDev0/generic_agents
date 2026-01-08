@@ -77,7 +77,7 @@ class KnowledgeBaseMutaions:
         knowledge_id: UUID,
         info: strawberry.Info,
         input: UpdateKnowledgeInput
-    ):
+    ) -> KnowledgeType:
         user_id = info.context.get("user_id")
         use_case = get_update_knowledge_use_case()
 
@@ -104,7 +104,7 @@ class KnowledgeBaseMutaions:
         self,
         knowledge_id: UUID,
         info: strawberry.Info
-    ):
+    ) ->KnowledgeType:
         user_id = info.context.get(user_id)
         use_case = get_delete_knowledge_use_case()
 
