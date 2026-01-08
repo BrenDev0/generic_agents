@@ -1,17 +1,15 @@
 from uuid import UUID 
-from src.persistence.domain.data_repository import DataRepository
-from src.features.agent_settings.domain.schemas import CreateSettingsRequest, AgentSettingsPublic
-from src.features.agents.domain.entities import Agent
-from src.features.agent_settings.domain.entities import AgentSettings
-from src.persistence.domain.exceptions import NotFoundException
+from src.persistence.domain import data_repository, exceptions
 from src.security.domain.exceptions import PermissionsException
+from src.features.agent_settings.domain import schemas, entities
 from src.features.agent_settings.application.rules.no_multi_settings import NoMultiSettings
+from src.features.agents.domain.entities import Agent
 
 class CreateAgentSettings:
     def __init__(
         self,
-        settings_repository: DataRepository,
-        agents_repository: DataRepository,
+        settings_repository: data_repository.DataRepository,
+        agents_repository: data_repository.DataRepository,
         multi_settings_rule: NoMultiSettings
     ):
         self.__settings_repository = settings_repository
@@ -22,7 +20,7 @@ class CreateAgentSettings:
         self,
         user_id: UUID,
         agent_id: UUID,
-        settings: CreateSettingsRequest
+        settings: schemas.CreateSettingsRequest
     ):
         self.__multi_settings_rule.validate(
             agent_id=agent_id
@@ -34,12 +32,12 @@ class CreateAgentSettings:
         ) 
 
         if not agent: 
-            raise NotFoundException("Agent not found")
+            raise exceptions.NotFoundException("Agent not found")
         
         if str(agent.user_id) != str(user_id):
             raise PermissionsException()
         
-        data = AgentSettings(
+        data = entities.AgentSettings(
             agent_id=agent.agent_id,
             **settings.model_dump(by_alias=False)
         )
@@ -48,4 +46,4 @@ class CreateAgentSettings:
             data=data
         )
 
-        return AgentSettingsPublic.model_validate(new_settings, from_attributes=True)
+        return schemas.AgentSettingsPublic.model_validate(new_settings, from_attributes=True)

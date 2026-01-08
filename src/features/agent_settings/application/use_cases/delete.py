@@ -1,14 +1,12 @@
 from uuid import UUID
-from src.persistence.domain.data_repository import DataRepository
-from src.features.agent_settings.domain.entities import AgentSettings
-from src.features.agent_settings.domain.schemas import AgentSettingsPublic
+from src.persistence.domain import data_repository, exceptions
+from src.features.agent_settings.domain import entities, schemas
 from src.security.domain.exceptions import PermissionsException
-from src.persistence.domain.exceptions import NotFoundException
 
 class DeleteAgentSettings:
     def __init__(
         self,
-        settings_repository: DataRepository
+        settings_repository: data_repository.DataRepository
     ):
         self.__settings_repository = settings_repository
     
@@ -17,13 +15,13 @@ class DeleteAgentSettings:
         user_id: UUID,
         setting_id: UUID
     ): 
-        setting: AgentSettings = self.__settings_repository.get_one(
+        setting: entities.AgentSettings = self.__settings_repository.get_one(
             key="setting_id",
             value=setting_id
         )
 
         if not setting:
-            raise NotFoundException("Settings not found")
+            raise exceptions.NotFoundException("Settings not found")
 
         if str(setting.agent.user_id) != str(user_id):
             raise PermissionsException()
@@ -33,4 +31,4 @@ class DeleteAgentSettings:
             value=setting_id
         )
 
-        return AgentSettingsPublic.model_validate(deleted_settings, from_attributes=True)
+        return schemas.AgentSettingsPublic.model_validate(deleted_settings, from_attributes=True)

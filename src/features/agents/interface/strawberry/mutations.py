@@ -1,17 +1,13 @@
 import logging
 import strawberry
 from uuid import UUID
-from src.app.interface.strawberry.middleware.user_auth import UserAuth
-from src.features.agents.interface.strawberry.inputs import (
-    CreateAgentProfileInput,
-    UpdateAgentProfileInput
-)
-from src.features.agents.interface.strawberry.types import AgentType
+from src.features.agents.interface.strawberry import types, inputs
 from src.features.agents.dependencies.use_cases import (
     get_create_agent_profile_use_case, 
     get_delete_agent_profile_use_case,
     get_update_agent_profile_use_case
 )
+from src.app.interface.strawberry.middleware.user_auth import UserAuth
 from src.app.domain.exceptions import GraphQlException
 from src.security.domain.exceptions import PermissionsException
 from src.persistence.domain.exceptions import NotFoundException
@@ -26,8 +22,8 @@ class AgentMutations:
     def agent_create(
         self,
         info: strawberry.Info,
-        input: CreateAgentProfileInput
-    ) -> AgentType: 
+        input: inputs.CreateAgentProfileInput
+    ) -> types.AgentType: 
         use_case = get_create_agent_profile_use_case()
         user_id = info.context.get("user_id")
 
@@ -50,7 +46,7 @@ class AgentMutations:
         self,
         info: strawberry.Info,
         agent_id: UUID
-    ) -> AgentType: 
+    ) -> types.AgentType: 
         use_case = get_delete_agent_profile_use_case()
         user_id = info.context.get("user_id")
 
@@ -75,9 +71,9 @@ class AgentMutations:
     def update_agent(
         self,
         info: strawberry.Info,
-        input: UpdateAgentProfileInput,
+        input: inputs.UpdateAgentProfileInput,
         agent_id: UUID
-    ) -> AgentType:
+    ) -> types.AgentType:
         use_case = get_update_agent_profile_use_case()
         user_id = info.context.get("user_id")
 

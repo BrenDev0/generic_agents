@@ -1,21 +1,17 @@
 import logging
 import strawberry
 from uuid import UUID
+from src.persistence.domain.exceptions import NotFoundException
+from src.security.domain.exceptions import PermissionsException
+from src.app.domain.exceptions import GraphQlException
 from src.app.interface.strawberry.middleware.user_auth import UserAuth
+from src.features.agent_settings.interface.strawberry import inputs, types
+from src.features.agent_settings.domain.exceptions import ExistingSettingsException
 from src.features.agent_settings.dependencies.use_cases import (
     get_agent_settings_create_use_case,
     get_agent_settings_delete_use_case,
     get_agent_settings_update_use_case
 )
-from src.features.agent_settings.interface.strawberry.inputs import (
-    CreateAgentSettingsInput,
-    UpdateAgentSettingsInput
-)
-from src.features.agent_settings.interface.strawberry.types import AgentSettingsType
-from src.persistence.domain.exceptions import NotFoundException
-from src.security.domain.exceptions import PermissionsException
-from src.app.domain.exceptions import GraphQlException
-from src.features.agent_settings.domain.exceptions import ExistingSettingsException
 
 logger = logging.getLogger(__name__)
 
@@ -29,8 +25,8 @@ class AgentSettingsMutations:
         self,
         info: strawberry.Info,
         agent_id: UUID,
-        input: CreateAgentSettingsInput
-    )-> AgentSettingsType:
+        input: inputs.CreateAgentSettingsInput
+    )-> types.AgentSettingsType:
         user_id = info.context.get("user_id")
         use_case = get_agent_settings_create_use_case()
 
@@ -57,8 +53,8 @@ class AgentSettingsMutations:
         self,
         info: strawberry.Info,
         settings_id: UUID,
-        input: UpdateAgentSettingsInput
-    )-> AgentSettingsType:
+        input: inputs.UpdateAgentSettingsInput
+    )-> types.AgentSettingsType:
         user_id = info.context.get("user_id")
         use_case = get_agent_settings_update_use_case()
 
@@ -85,7 +81,7 @@ class AgentSettingsMutations:
         self,
         info: strawberry.Info,
         setting_id: UUID
-    )-> AgentSettingsType:
+    )-> types.AgentSettingsType:
         user_id = info.context.get("user_id")
         use_case = get_agent_settings_delete_use_case()
 

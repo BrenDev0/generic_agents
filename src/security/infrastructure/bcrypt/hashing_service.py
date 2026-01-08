@@ -1,6 +1,6 @@
 import bcrypt
 import hashlib
-from src.security.domain.services.hashing_service import HashingService
+from src.security.domain.services.hashing import HashingService
 from src.security.domain.exceptions import IncorrectPassword
 
 class BcryptHashingService(HashingService):

@@ -2,10 +2,9 @@ import logging
 import strawberry
 from typing import List
 from uuid import UUID
-from src.features.agents.interface.strawberry.types import AgentType
-
-from src.app.interface.strawberry.middleware.user_auth import UserAuth
 from src.features.agents.dependencies.use_cases import get_agent_by_id_use_case, get_agents_by_user_use_case
+from src.features.agents.interface.strawberry.types import AgentType
+from src.app.interface.strawberry.middleware.user_auth import UserAuth
 from src.app.domain.exceptions import GraphQlException
 from src.security.domain.exceptions import PermissionsException
 from src.persistence.domain.exceptions import NotFoundException

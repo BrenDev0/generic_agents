@@ -1,14 +1,12 @@
 from uuid import UUID
-from src.persistence.domain.data_repository import DataRepository
-from src.security.domain.services.hashing_service import HashingService
+from src.persistence.domain import data_repository, exceptions
+from src.security.domain.services.hashing import HashingService
 from src.features.users.domain.entities import User
-from src.persistence.domain.exceptions import NotFoundException
-
 
 class UpdatePasswordRule:
     def __init__(
         self,
-        repository: DataRepository,
+        repository: data_repository.DataRepository,
         hashing: HashingService
     ):
         self.__repository = repository
@@ -26,7 +24,7 @@ class UpdatePasswordRule:
         )
 
         if not user:
-            raise NotFoundException("User not found")
+            raise exceptions.NotFoundException("User not found")
         
         self.__hashing.compare_password(
             password=old_password,

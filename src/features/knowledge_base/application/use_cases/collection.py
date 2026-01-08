@@ -1,7 +1,6 @@
 from uuid import UUID
 from typing import List
-from src.features.knowledge_base.domain.entities import Knowledge
-from src.features.knowledge_base.domain.schemas import KnowledgePublic
+from src.features.knowledge_base.domain import entities, schemas
 from src.persistence.domain.data_repository import DataRepository
 from src.security.domain.exceptions import PermissionsException
 
@@ -17,7 +16,7 @@ class GetKnowledgeCollection:
         user_id: UUID,
         agent_id: UUID
     ): 
-        collection: List[Knowledge] = self.__data_repository.get_many(
+        collection: List[entities.Knowledge] = self.__data_repository.get_many(
             key="agent_id",
             value=agent_id
         )
@@ -29,7 +28,7 @@ class GetKnowledgeCollection:
             raise PermissionsException()
         
         return [
-            KnowledgePublic.model_validate(knowledge, from_attributes=True) for knowledge in collection
+            schemas.KnowledgePublic.model_validate(knowledge, from_attributes=True) for knowledge in collection
         ]
     
     

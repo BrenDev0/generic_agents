@@ -2,13 +2,12 @@ import logging
 import os
 from src.di.container import Container
 from src.di.domain.exceptions import DependencyNotRegistered
-from src.persistence.domain.data_repository import DataRepository
-from src.persistence.domain.file_repository import FileRepository
 from src.features.knowledge_base.infrastructure.sqlalchemy.knowledge_repository import SqlAlchemyKnowledgeRepository
+from src.persistence.domain import data_repository, file_repository
 from src.persistence.infrastructure.boto3.file_repository import Boto3FileRepository
 logger = logging.getLogger(__name__)
 
-def get_knowledge_data_repository() -> DataRepository:
+def get_knowledge_data_repository() -> data_repository.DataRepository:
     try:
         instance_key = "knowledge_data_repository",
         repository = Container.resolve(instance_key)
@@ -20,7 +19,7 @@ def get_knowledge_data_repository() -> DataRepository:
     
     return repository
 
-def get_knowledge_file_repository() -> FileRepository:
+def get_knowledge_file_repository() -> file_repository.FileRepository:
     try:
         instance_key = "knowledge_file_repository",
         repository = Container.resolve(instance_key)

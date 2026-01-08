@@ -1,35 +1,32 @@
 from uuid import UUID
-from src.persistence.domain.data_repository import DataRepository
-from src.persistence.domain.file_repository import FileRepository
-from src.features.knowledge_base.domain.entities import Knowledge
-from src.features.knowledge_base.domain.schemas import KnowledgePublic, CreateKnowledgeRequest
-
+from src.persistence.domain import data_repository, file_repository
+from src.features.knowledge_base.domain import entities, schemas
 class UploadKnowledge:
     def __init__(
         self,
-        data_repository: DataRepository,
-        file_repository: FileRepository
+        data_repository: data_repository.DataRepository,
+        file_repository: file_repository.FileRepository
     ):
         self.__data_repository = data_repository
         self.__file_repository = file_repository
 
     def execute(
         self,
-        req_data: CreateKnowledgeRequest,
+        req_data: schemas.CreateKnowledgeRequest,
         user_id: UUID,
         agent_id: UUID,
         filename: str,
         file_type: str,
         file_bytes: bytes
     ): 
-        data = Knowledge(
+        data = entities.Knowledge(
             **req_data.model_dump(),
             name=filename,
             agent_id=agent_id,
             type=file_type
         )
 
-        new_knowledge: Knowledge = self.__data_repository.create(
+        new_knowledge: entities.Knowledge = self.__data_repository.create(
             data=data
         ) 
 
@@ -53,7 +50,7 @@ class UploadKnowledge:
         }
 
         try:
-            updated_knowledge: Knowledge = self.__data_repository.update(
+            updated_knowledge: entities.Knowledge = self.__data_repository.update(
                 key="knowledge_id",
                 value=new_knowledge.knowledge_id,
                 changes=changes
@@ -70,4 +67,4 @@ class UploadKnowledge:
             )
             raise
 
-        return KnowledgePublic.model_validate(updated_knowledge, from_attributes=True)
+        return schemas.KnowledgePublic.model_validate(updated_knowledge, from_attributes=True)

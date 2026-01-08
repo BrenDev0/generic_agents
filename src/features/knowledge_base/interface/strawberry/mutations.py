@@ -3,21 +3,12 @@ import strawberry
 from uuid import UUID
 from strawberry.file_uploads import Upload
 from src.app.domain.exceptions import GraphQlException
+from src.app.interface.strawberry.middleware.user_auth import UserAuth
 from src.persistence.domain.exceptions import NotFoundException
 from src.security.domain.exceptions import PermissionsException
 from src.features.knowledge_base.domain.exceptions import UnsupportedFileType
-from src.app.interface.strawberry.middleware.user_auth import UserAuth
-from src.features.knowledge_base.dependencies.use_cases import (
-    get_upload_knowledge_use_case,
-    get_delete_knowledge_use_case,
-    get_update_knowledge_use_case
-)
-from src.features.knowledge_base.dependencies.business_rules import get_supported_file_type_rule
-from src.features.knowledge_base.interface.strawberry.inputs import (
-    CreateKnowledgeInput,
-    UpdateKnowledgeInput
-)
-from src.features.knowledge_base.interface.strawberry.types import KnowledgeType
+from src.features.knowledge_base.dependencies import business_rules, use_cases
+from src.features.knowledge_base.interface.strawberry import types, inputs
 logger = logging.getLogger(__name__)
 
 @strawberry.type
@@ -30,12 +21,12 @@ class KnowledgeBaseMutaions:
         self, 
         info: strawberry.Info,
         agent_id: UUID,
-        input: CreateKnowledgeInput,
+        input: inputs.CreateKnowledgeInput,
         file: Upload # type: ignore
-    ) -> KnowledgeType:
+    ) -> types.KnowledgeType:
         user_id = info.context.get("user_id")
-        is_supported_file_type = get_supported_file_type_rule()
-        use_case = get_upload_knowledge_use_case()
+        is_supported_file_type = business_rules.get_supported_file_type_rule()
+        use_case = use_cases.get_upload_knowledge_use_case()
 
         try:
             filename = file.filename
@@ -76,10 +67,10 @@ class KnowledgeBaseMutaions:
         self,
         knowledge_id: UUID,
         info: strawberry.Info,
-        input: UpdateKnowledgeInput
-    ) -> KnowledgeType:
+        input: inputs.UpdateKnowledgeInput
+    ) -> types.KnowledgeType:
         user_id = info.context.get("user_id")
-        use_case = get_update_knowledge_use_case()
+        use_case = use_cases.get_update_knowledge_use_case()
 
         try: 
             return use_case.execute(
@@ -104,9 +95,9 @@ class KnowledgeBaseMutaions:
         self,
         knowledge_id: UUID,
         info: strawberry.Info
-    ) ->KnowledgeType:
+    ) -> types.KnowledgeType:
         user_id = info.context.get(user_id)
-        use_case = get_delete_knowledge_use_case()
+        use_case = use_cases.get_delete_knowledge_use_case()
 
         try:
             return use_case.execute(

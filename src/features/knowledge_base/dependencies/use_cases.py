@@ -1,20 +1,22 @@
 import logging
 from src.di.container import Container
 from src.di.domain.exceptions import DependencyNotRegistered
-from src.features.knowledge_base.application.use_cases.upload import UploadKnowledge
-from src.features.knowledge_base.application.use_cases.delete import DeleteKnowledge
-from src.features.knowledge_base.application.use_cases.collection import GetKnowledgeCollection
-from src.features.knowledge_base.application.use_cases.update import UpdateKnowledge
+from src.features.knowledge_base.application.use_cases import (
+    upload,
+    delete,
+    update,
+    collection
+)
 from src.features.knowledge_base.dependencies.repositories import get_knowledge_data_repository, get_knowledge_file_repository
 logger = logging.getLogger(__name__)
 
-def get_upload_knowledge_use_case() -> UploadKnowledge:
+def get_upload_knowledge_use_case() -> upload.UploadKnowledge:
     try:
         instance_key = "upload_knowledge_use_case",
         use_case = Container.resolve(instance_key)
     
     except DependencyNotRegistered:
-        use_case = UploadKnowledge(
+        use_case = upload.UploadKnowledge(
             data_repository=get_knowledge_data_repository(),
             file_repository=get_knowledge_file_repository()
         )
@@ -24,13 +26,13 @@ def get_upload_knowledge_use_case() -> UploadKnowledge:
     return use_case
 
 
-def get_delete_knowledge_use_case() -> DeleteKnowledge:
+def get_delete_knowledge_use_case() -> delete.DeleteKnowledge:
     try:
         instance_key = "delete_knowledge_use_case",
         use_case = Container.resolve(instance_key)
     
     except DependencyNotRegistered:
-        use_case = DeleteKnowledge(
+        use_case = delete.DeleteKnowledge(
             data_repository=get_knowledge_data_repository(),
             file_repository=get_knowledge_file_repository()
         )
@@ -39,13 +41,13 @@ def get_delete_knowledge_use_case() -> DeleteKnowledge:
     
     return use_case
 
-def get_update_knowledge_use_case() -> UpdateKnowledge:
+def get_update_knowledge_use_case() -> update.UpdateKnowledge:
     try:
         instance_key = "update_knowledge_use_case",
         use_case = Container.resolve(instance_key)
     
     except DependencyNotRegistered:
-        use_case = UpdateKnowledge(
+        use_case = update.UpdateKnowledge(
             data_repository=get_knowledge_data_repository()
         )
         Container.register(instance_key, use_case)
@@ -53,13 +55,13 @@ def get_update_knowledge_use_case() -> UpdateKnowledge:
     
     return use_case
 
-def get_knowledge_collection_use_case() -> GetKnowledgeCollection:
+def get_knowledge_collection_use_case() -> collection.GetKnowledgeCollection:
     try:
         instance_key = "knowledge_collection_use_case",
         use_case = Container.resolve(instance_key)
     
     except DependencyNotRegistered:
-        use_case = GetKnowledgeCollection(
+        use_case = collection.GetKnowledgeCollection(
             data_repository=get_knowledge_data_repository()
         )
         Container.register(instance_key, use_case)
