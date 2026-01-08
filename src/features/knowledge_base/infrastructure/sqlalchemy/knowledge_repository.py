@@ -1,8 +1,12 @@
 from sqlalchemy import Column, String, DateTime, func, ForeignKey, Boolean
 from sqlalchemy.dialects.postgresql import UUID
+from typing import Optional
+from sqlalchemy.orm import relationship
 from uuid import uuid4
 from src.persistence.infrastructure.sqlAlchemy.data_repository import SqlAlchemyDataRepository, Base
 from src.features.knowledge_base.domain.entities import Knowledge
+from src.features.agents.infrastructure.sqlAlchemy.agents_repository import SqlAlchemyAgent
+from src.features.agents.domain.entities import Agent
 
 class SqlAlchemyKnowledge(Base):
     __tablename__ = "knowledge"
@@ -15,6 +19,8 @@ class SqlAlchemyKnowledge(Base):
     url = Column(String, nullable=True)
     is_embedded = Column(Boolean, nullable=False, default=False)
     created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    
+    agent = relationship("SqlAlchemyAgent")
 
 class SqlAlchemyKnowledgeRepository(SqlAlchemyDataRepository[Knowledge, SqlAlchemyKnowledge]):
     def __init__(self):
@@ -31,7 +37,19 @@ class SqlAlchemyKnowledgeRepository(SqlAlchemyDataRepository[Knowledge, SqlAlche
             is_embedded=model.is_embedded,
             created_at=model.created_at
         )
+
+    def _agent_to_entity(self, agent_model: SqlAlchemyAgent) -> Optional[Agent]:
+        if not agent_model:
+            return None
+
+        return Agent(
+            agent_id=agent_model.agent_id,
+            user_id=agent_model.user_id,
+            name=agent_model.name,
+            description=agent_model.description,
+            created_at=agent_model.created_at
+        )
     
     def _to_model(self, entity: Knowledge):
-        data = entity.model_dump(exclude={"knowledge_id", "created_at"} if not entity.knowledge_id else set())
+        data = entity.model_dump(exclude={"knowledge_id", "created_at"} if not entity.knowledge_id else {"agent"})
         return SqlAlchemyKnowledge(**data)
