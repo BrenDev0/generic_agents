@@ -5,8 +5,8 @@ from datetime import datetime
 from src.features.users.application.use_cases.login import UserLogin
 from src.features.users.domain.entities import User
 from src.persistence.domain.exceptions import NotFoundException
-from src.security.domain.services.encryption_service import EncryptionService
-from src.security.domain.services.hashing_service import HashingService
+from src.security.domain.services.encryption import EncryptionService
+from src.security.domain.services.hashing import HashingService
 from src.security.domain.exceptions import IncorrectPassword
 
 @pytest.fixture

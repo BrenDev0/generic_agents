@@ -1,18 +1,16 @@
-from src.persistence.domain.data_repository import DataRepository
-from src.security.domain.services.hashing_service import HashingService
-from src.security.domain.services.encryption_service import EncryptionService
-from src.features.users.domain.schemas import UserPublic
-from src.persistence.domain.exceptions import NotFoundException
-from src.features.users.domain.entities import User
 from datetime import datetime, timezone
+from src.persistence.domain import data_repository, exceptions
+from src.security.domain.services import hashing, encryption
+from src.features.users.domain import entities, schemas
+
 
 class UserLogin:
     def __init__(
         self,
-        repository: DataRepository,
-        hashing: HashingService,
-        encryption: EncryptionService
-    ) -> UserPublic:
+        repository: data_repository.DataRepository,
+        hashing: hashing.HashingService,
+        encryption: encryption.EncryptionService
+    ) -> schemas.UserPublic:
         self.__repository = repository
         self.__hashing = hashing
         self.__encrytpion = encryption
@@ -26,13 +24,13 @@ class UserLogin:
         
         hashed_email = self.__hashing.hash_for_search(email)
 
-        user_exists: User = self.__repository.get_one(
+        user_exists: entities.User = self.__repository.get_one(
             key="email_hash",
             value=hashed_email
         )
 
         if not user_exists:
-            raise NotFoundException("User not found")
+            raise exceptions.NotFoundException("User not found")
 
         self.__hashing.compare_password(
             password=password,
@@ -46,13 +44,13 @@ class UserLogin:
             "last_login": datetime.now(timezone.utc)
         }
 
-        updated_user: User = self.__repository.update(
+        updated_user: entities.User = self.__repository.update(
             key="user_id",
             value=user_exists.user_id,
             changes=changes
         )
 
-        user_public = UserPublic(
+        user_public = schemas.UserPublic(
             user_id=user_exists.user_id,
             email=self.__encrytpion.decrypt(updated_user.email),
             name=self.__encrytpion.decrypt(updated_user.name),

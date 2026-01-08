@@ -1,8 +1,7 @@
 from uuid import UUID
 from src.persistence.domain.data_repository import DataRepository
 from src.features.agents.domain.schemas import CreateAgentProfileRequest
-from src.features.agents.domain.entities import Agent
-from src.features.agents.domain.schemas import AgentPublic
+from src.features.agents.domain import entities, schemas
 
 
 class CreateAgentProfile:
@@ -17,7 +16,7 @@ class CreateAgentProfile:
         user_id: UUID,
         profile: CreateAgentProfileRequest
     ):
-        data = Agent(
+        data = entities.Agent(
             user_id=user_id,
             **profile.model_dump()
         )
@@ -26,4 +25,4 @@ class CreateAgentProfile:
             data=data
         ) 
 
-        return AgentPublic.model_validate(new_agent, from_attributes=True)
+        return schemas.AgentPublic.model_validate(new_agent, from_attributes=True)

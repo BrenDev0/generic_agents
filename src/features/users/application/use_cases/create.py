@@ -1,15 +1,13 @@
 from src.persistence.domain.data_repository import DataRepository
-from src.security.domain.services.hashing_service import HashingService
-from src.security.domain.services.encryption_service import EncryptionService
-from src.features.users.domain.schemas import UserPublic
-from src.features.users.domain.entities import User
+from src.security.domain.services import encryption, hashing
+from src.features.users.domain import entities, schemas
 
 class CreateUser:
     def __init__(
         self,
         repository: DataRepository,
-        hashing: HashingService,
-        encryption: EncryptionService
+        hashing: hashing.HashingService,
+        encryption: encryption.EncryptionService
     ):
         self.__repository = repository
         self.__hashing = hashing
@@ -28,16 +26,16 @@ class CreateUser:
         encrypted_name = self.__encrytpion.encrypt(name)
         encrypted_email = self.__encrytpion.encrypt(email)
 
-        user = User(
+        user = entities.User(
             name=encrypted_name,
             email=encrypted_email,
             password=hashed_password,
             email_hash=hashed_email
         )
 
-        new_user: User = self.__repository.create(data=user)
+        new_user: entities.User = self.__repository.create(data=user)
 
-        user_public = UserPublic(
+        user_public = schemas.UserPublic(
             user_id=new_user.user_id,
             email=self.__encrytpion.decrypt(new_user.email),
             name=self.__encrytpion.decrypt(new_user.name),
