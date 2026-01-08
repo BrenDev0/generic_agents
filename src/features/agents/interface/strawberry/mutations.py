@@ -9,6 +9,7 @@ from src.features.agents.dependencies.use_cases import (
 )
 from src.app.interface.strawberry.middleware.user_auth import UserAuth
 from src.app.domain.exceptions import GraphQlException
+from src.app.interface.strawberry.decorators.req_validation import validate_input_to_model
 from src.security.domain.exceptions import PermissionsException
 from src.persistence.domain.exceptions import NotFoundException
 logger = logging.getLogger(__name__)
@@ -19,6 +20,7 @@ class AgentMutations:
         permission_classes=[UserAuth],
         description="Create agent profile"
     )
+    @validate_input_to_model
     def agent_create(
         self,
         info: strawberry.Info,
@@ -68,6 +70,7 @@ class AgentMutations:
         permission_classes=[UserAuth],
         description="Update agent profile"
     )
+    @validate_input_to_model
     def update_agent(
         self,
         info: strawberry.Info,
