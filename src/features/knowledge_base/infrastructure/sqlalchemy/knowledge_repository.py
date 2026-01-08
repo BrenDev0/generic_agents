@@ -20,7 +20,7 @@ class SqlAlchemyKnowledge(Base):
     is_embedded = Column(Boolean, nullable=False, default=False)
     created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
     
-    agent = relationship(SqlAlchemyAgent)
+    agent = relationship("SqlAlchemyAgent")
 
 class SqlAlchemyKnowledgeRepository(SqlAlchemyDataRepository[Knowledge, SqlAlchemyKnowledge]):
     def __init__(self):
@@ -51,5 +51,5 @@ class SqlAlchemyKnowledgeRepository(SqlAlchemyDataRepository[Knowledge, SqlAlche
         )
     
     def _to_model(self, entity: Knowledge):
-        data = entity.model_dump(exclude={"knowledge_id", "created_at"} if not entity.knowledge_id else set())
+        data = entity.model_dump(exclude={"knowledge_id", "created_at"} if not entity.knowledge_id else {"agent"})
         return SqlAlchemyKnowledge(**data)
