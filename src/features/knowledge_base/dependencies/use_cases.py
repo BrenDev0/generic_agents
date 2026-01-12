@@ -8,6 +8,7 @@ from src.features.knowledge_base.application.use_cases import (
     collection
 )
 from src.features.knowledge_base.dependencies.repositories import get_knowledge_data_repository, get_knowledge_file_repository
+from src.features.agents.dependencies.repositories import get_agents_repository
 logger = logging.getLogger(__name__)
 
 def get_upload_knowledge_use_case() -> upload.UploadKnowledge:
@@ -18,7 +19,8 @@ def get_upload_knowledge_use_case() -> upload.UploadKnowledge:
     except DependencyNotRegistered:
         use_case = upload.UploadKnowledge(
             data_repository=get_knowledge_data_repository(),
-            file_repository=get_knowledge_file_repository()
+            file_repository=get_knowledge_file_repository(),
+            agent_repository=get_agents_repository()
         )
         Container.register(instance_key, use_case)
         logger.debug(f"{instance_key} registered")
