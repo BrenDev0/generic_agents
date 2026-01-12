@@ -1,14 +1,18 @@
 from uuid import UUID
-from src.persistence.domain import data_repository, file_repository
+from src.persistence.domain import data_repository, file_repository, exceptions
 from src.features.knowledge_base.domain import entities, schemas
+from src.features.agents.domain.entities import Agent
+from src.security.domain.exceptions import PermissionsException
 class UploadKnowledge:
     def __init__(
         self,
         data_repository: data_repository.DataRepository,
-        file_repository: file_repository.FileRepository
+        file_repository: file_repository.FileRepository,
+        agent_repository: data_repository.DataRepository
     ):
         self.__data_repository = data_repository
         self.__file_repository = file_repository
+        self.__agent_repository = agent_repository
 
     def execute(
         self,
@@ -19,6 +23,18 @@ class UploadKnowledge:
         file_type: str,
         file_bytes: bytes
     ): 
+        agent: Agent = self.__agent_repository.get_one(
+            key="agent_id",
+            value=agent_id
+        ) 
+
+        if not agent:
+            raise exceptions.NotFoundException("Agent not found")
+        
+        if str(agent.user_id) != str(user_id):
+            raise PermissionsException()
+        
+        
         data = entities.Knowledge(
             **req_data.model_dump(),
             name=filename,

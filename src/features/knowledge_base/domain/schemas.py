@@ -17,7 +17,9 @@ class KnowledgePublic(KnowledgeConfig):
     knowledge_id: UUID
     agent_id: UUID
     type: str
+    name: str
     description: str
+    url: str
     is_embedded: bool
     created_at: datetime
 
