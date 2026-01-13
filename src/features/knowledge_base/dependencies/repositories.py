@@ -31,7 +31,7 @@ def get_knowledge_file_repository() -> file_repository.FileRepository:
         region_name=os.getenv('AWS_REGION', 'us-east-1')
         
         if not bucket_name or not aws_access_key_id or not aws_secret_access_key:
-            raise ValueError("Boto3 file reposotpry variablenot configured")
+            raise ValueError("Boto3 file reposotory variable not configured")
         
         repository = Boto3FileRepository(
             aws_secret_access_key=aws_secret_access_key,
