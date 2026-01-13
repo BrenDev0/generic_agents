@@ -29,9 +29,10 @@ class KnowledgeBaseMutaions:
         user_id = info.context.get("user_id")
         is_supported_file_type = business_rules.get_supported_file_type_rule()
         use_case = use_cases.get_upload_knowledge_use_case()
+
         if not file:
             raise GraphQlException("File required for upload")
-        
+        print(f"::::::::{file}::::::")
         try:
             filename = file["filename"]
             if not filename:
