@@ -7,6 +7,7 @@ from src.features.agents.dependencies.use_cases import (
     get_delete_agent_profile_use_case,
     get_update_agent_profile_use_case
 )
+from src.features.knowledge_base.dependencies.use_cases import get_delete_knowledge_by_agent_use_case
 from src.app.interface.strawberry.middleware.user_auth import UserAuth
 from src.app.domain.exceptions import GraphQlException
 from src.app.interface.strawberry.decorators.req_validation import validate_input_to_model
@@ -52,7 +53,12 @@ class AgentMutations:
         try:
             use_case = get_delete_agent_profile_use_case()
             user_id = info.context.get("user_id")
+            delete_uploads_use_case = get_delete_knowledge_by_agent_use_case()
 
+            delete_uploads_use_case.execute(
+                agent_id=agent_id,
+                user_id=user_id
+            )
             return use_case.execute(
                 user_id=user_id,
                 agent_id=agent_id

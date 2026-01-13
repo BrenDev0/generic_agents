@@ -31,7 +31,7 @@ class DeleteKnowledge:
         if knowledge.type != "web":
             key = f"{user_id}/knowledge_base/{knowledge.agent_id}/{knowledge.knowledge_id}"
 
-            self.__file_repository.delete(key=key)
+            self.__file_repository.delete(keys=[key])
 
         deleted_knoldege: entities.Knowledge = self.__data_repository.delete(
             key="knowledge_id",
