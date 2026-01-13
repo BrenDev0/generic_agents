@@ -1,6 +1,7 @@
 import strawberry
 import logging
 from uuid import UUID
+from typing import List
 from src.features.knowledge_base.dependencies.use_cases import get_knowledge_collection_use_case
 from src.features.knowledge_base.interface.strawberry import types
 from src.app.domain.exceptions import GraphQlException
@@ -18,7 +19,7 @@ class KnowledgeQueries:
         self,
         agent_id: UUID,
         info: strawberry.Info
-    ) -> types.KnowledgeType:
+    ) -> List[types.KnowledgeType]:
         try:
             user_id = info.context.get("user_id")
             use_case = get_knowledge_collection_use_case()
