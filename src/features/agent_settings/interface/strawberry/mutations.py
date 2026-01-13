@@ -29,10 +29,11 @@ class AgentSettingsMutations:
         agent_id: UUID,
         input: inputs.CreateAgentSettingsInput
     )-> types.AgentSettingsType:
-        user_id = info.context.get("user_id")
-        use_case = get_agent_settings_create_use_case()
-
         try:
+            user_id = info.context.get("user_id")
+            use_case = get_agent_settings_create_use_case()
+
+        
             return use_case.execute(
                 user_id=user_id,
                 agent_id=agent_id,
@@ -58,10 +59,11 @@ class AgentSettingsMutations:
         settings_id: UUID,
         input: inputs.UpdateAgentSettingsInput
     )-> types.AgentSettingsType:
-        user_id = info.context.get("user_id")
-        use_case = get_agent_settings_update_use_case()
-
         try:
+            user_id = info.context.get("user_id")
+            use_case = get_agent_settings_update_use_case()
+
+        
             return use_case.execute(
                 user_id=user_id,
                 settings_id=settings_id,
@@ -85,10 +87,10 @@ class AgentSettingsMutations:
         info: strawberry.Info,
         setting_id: UUID
     )-> types.AgentSettingsType:
-        user_id = info.context.get("user_id")
-        use_case = get_agent_settings_delete_use_case()
-
         try:
+            user_id = info.context.get("user_id")
+            use_case = get_agent_settings_delete_use_case()
+
             return use_case.execute(
                 user_id=user_id,
                 setting_id=setting_id

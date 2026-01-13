@@ -21,9 +21,10 @@ class AgentQueries:
         info: strawberry.Info,
         agent_id: UUID
     ) -> AgentType:
-        use_case = get_agent_by_id_use_case()
-        user_id = info.context.get("user_id")
         try:
+            use_case = get_agent_by_id_use_case()
+            user_id = info.context.get("user_id")
+            
             return use_case.execute(
                 user_id=user_id,
                 agent_id=agent_id
@@ -38,15 +39,16 @@ class AgentQueries:
         
     @strawberry.field(
         permission_classes=[UserAuth],
-        description="Get all agents for user in auth beaerer"
+        description="Get all agents for user in auth bearer"
     )
     def agent_collection(
         self,
         info: strawberry.Info
     ) -> List[AgentType]:
-        use_case = get_agents_by_user_use_case()
-        user_id = info.context.get("user_id")
         try:
+            use_case = get_agents_by_user_use_case()
+            user_id = info.context.get("user_id")
+        
             return use_case.execute(
                 user_id=user_id
             )

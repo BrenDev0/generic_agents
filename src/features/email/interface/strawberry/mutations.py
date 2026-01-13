@@ -21,9 +21,10 @@ class EmailMutations:
         self,
         input: VerifyEmailType
     ) -> VerificationTokenType:
-        use_case = get_verification_email_use_case()
-        rule = get_unique_email_rule()
-        try: 
+        try:
+            use_case = get_verification_email_use_case()
+            rule = get_unique_email_rule()
+        
             rule.validate(
                 email=input.email
             )

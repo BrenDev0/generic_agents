@@ -24,10 +24,10 @@ class UserMutations:
         info: strawberry.Info,
         input: inputs.CreateUserInput
     ) -> types.UserWithTokenType:
-        use_case = use_cases.get_create_user_use_case()
-        web_token_service = get_web_token_service()
-
         try:
+            use_case = use_cases.get_create_user_use_case()
+            web_token_service = get_web_token_service()
+
             verification_code = info.context.get("verification_code")
             if int(input.code) != int(verification_code):
                 raise GraphQlException("Unauthorized")
@@ -66,8 +66,9 @@ class UserMutations:
         info: strawberry.Info,
         input: inputs.UpdateUserInput
     ) -> types.UserType:
-        use_case = use_cases.get_update_user_use_case()
         try:
+            use_case = use_cases.get_update_user_use_case()
+        
             user_id = info.context.get("user_id")
             changes = {}
        
@@ -112,10 +113,10 @@ class UserMutations:
         self,
         input: inputs.LoginInput
     ) -> types.UserWithTokenType:
-        use_case = use_case.get_login_use_case()
-        web_token_service = get_web_token_service()
-
         try:
+            use_case = use_case.get_login_use_case()
+            web_token_service = get_web_token_service()
+
             user = use_case.execute(
                 email=input.email,
                 password=input.password
@@ -150,8 +151,9 @@ class UserMutations:
         self,
         info: strawberry.Info
     ) -> types.UserType:
-        use_case = use_cases.get_delete_user_use_case()
         try:
+            use_case = use_cases.get_delete_user_use_case()
+        
             user_id = info.context.get("user_id")
 
             return use_case.execute(

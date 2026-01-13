@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from src.app.interface.strawberry.router import get_strawberry_graphql_router
 from src.app.interface.fastapi.middleware.hmac import verify_hmac
 from src.security.domain.exceptions import HMACException
+from src.app.domain.exceptions import GraphQlException
 
 
 def create_fastapi_app():
@@ -24,6 +25,8 @@ def create_fastapi_app():
             status_code=401,
             content={"errors": [exc.detail]}
         )
+
+
 
     @app.get("/", tags=["Internal"])
     async def health():

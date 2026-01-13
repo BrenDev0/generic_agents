@@ -19,10 +19,10 @@ class KnowledgeQueries:
         agent_id: UUID,
         info: strawberry.Info
     ) -> types.KnowledgeType:
-        user_id = info.context.get("user_id")
-        use_case = get_knowledge_collection_use_case()
+        try:
+            user_id = info.context.get("user_id")
+            use_case = get_knowledge_collection_use_case()
 
-        try: 
             return use_case.execute(
                 user_id=user_id,
                 agent_id=agent_id

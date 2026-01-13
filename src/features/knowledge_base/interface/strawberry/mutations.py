@@ -26,14 +26,15 @@ class KnowledgeBaseMutaions:
         input: inputs.CreateKnowledgeInput,
         file: Upload 
     ) -> types.KnowledgeType:
-        user_id = info.context.get("user_id")
-        is_supported_file_type = business_rules.get_supported_file_type_rule()
-        use_case = use_cases.get_upload_knowledge_use_case()
-
-        if not file:
-            raise GraphQlException("File required for upload")
-        print(f"::::::::{file}::::::")
         try:
+            user_id = info.context.get("user_id")
+            is_supported_file_type = business_rules.get_supported_file_type_rule()
+            use_case = use_cases.get_upload_knowledge_use_case()
+
+            if not file:
+                raise GraphQlException("File required for upload")
+            print(f"::::::::{file}::::::")
+        
             filename = file["filename"]
             if not filename:
                 raise GraphQlException("Filename is required")
@@ -75,10 +76,11 @@ class KnowledgeBaseMutaions:
         info: strawberry.Info,
         input: inputs.UpdateKnowledgeInput
     ) -> types.KnowledgeType:
-        user_id = info.context.get("user_id")
-        use_case = use_cases.get_update_knowledge_use_case()
+        try:
+            user_id = info.context.get("user_id")
+            use_case = use_cases.get_update_knowledge_use_case()
 
-        try: 
+        
             return use_case.execute(
                 user_id=user_id,
                 knowledge_id=knowledge_id,
@@ -102,10 +104,11 @@ class KnowledgeBaseMutaions:
         knowledge_id: UUID,
         info: strawberry.Info
     ) -> types.KnowledgeType:
-        user_id = info.context.get(user_id)
-        use_case = use_cases.get_delete_knowledge_use_case()
-
         try:
+            user_id = info.context.get(user_id)
+            use_case = use_cases.get_delete_knowledge_use_case()
+
+        
             return use_case.execute(
                 knowledge_id=knowledge_id,
                 user_id=user_id
