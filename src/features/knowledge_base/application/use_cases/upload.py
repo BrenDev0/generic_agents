@@ -51,7 +51,8 @@ class UploadKnowledge:
         try:
             url  = self.__file_repository.upload(
                 key=key,
-                file_bytes=file_bytes
+                file_bytes=file_bytes,
+                content_type=new_knowledge.type
             )
 
         except Exception:
