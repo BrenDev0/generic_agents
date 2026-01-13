@@ -22,10 +22,10 @@ class AgentSettingsQueries:
         agent_id: UUID,
         info: strawberry.Info
     ) -> AgentSettingsType:
-        user_id = info.context.get("user_id")
-        use_case = get_settings_by_id_use_case()
+        try:        
+            user_id = info.context.get("user_id")
+            use_case = get_settings_by_id_use_case()
 
-        try:
             return use_case.execute(
                 user_id=user_id,
                 agent_id=agent_id

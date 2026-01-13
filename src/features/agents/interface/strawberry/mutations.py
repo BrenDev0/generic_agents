@@ -26,10 +26,10 @@ class AgentMutations:
         info: strawberry.Info,
         input: inputs.CreateAgentProfileInput
     ) -> types.AgentType: 
-        use_case = get_create_agent_profile_use_case()
-        user_id = info.context.get("user_id")
-
         try:
+            use_case = get_create_agent_profile_use_case()
+            user_id = info.context.get("user_id")
+
             return use_case.execute(
                 user_id=user_id,
                 profile=input.to_pydantic()
@@ -49,10 +49,10 @@ class AgentMutations:
         info: strawberry.Info,
         agent_id: UUID
     ) -> types.AgentType: 
-        use_case = get_delete_agent_profile_use_case()
-        user_id = info.context.get("user_id")
-
         try:
+            use_case = get_delete_agent_profile_use_case()
+            user_id = info.context.get("user_id")
+
             return use_case.execute(
                 user_id=user_id,
                 agent_id=agent_id
@@ -77,10 +77,10 @@ class AgentMutations:
         input: inputs.UpdateAgentProfileInput,
         agent_id: UUID
     ) -> types.AgentType:
-        use_case = get_update_agent_profile_use_case()
-        user_id = info.context.get("user_id")
-
         try:
+            use_case = get_update_agent_profile_use_case()
+            user_id = info.context.get("user_id")
+
             return use_case.execute(
                 user_id=user_id,
                 agent_id=agent_id,
