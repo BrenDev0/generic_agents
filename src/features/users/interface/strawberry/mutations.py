@@ -114,7 +114,7 @@ class UserMutations:
         input: inputs.LoginInput
     ) -> types.UserWithTokenType:
         try:
-            use_case = use_case.get_login_use_case()
+            use_case = use_cases.get_login_use_case()
             web_token_service = get_web_token_service()
 
             user = use_case.execute(
