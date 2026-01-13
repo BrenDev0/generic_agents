@@ -38,7 +38,7 @@ class UploadKnowledge:
         data = entities.Knowledge(
             **req_data.model_dump(),
             name=filename,
-            agent_id=agent_id,
+            agent_id=agent.agent_id,
             type=file_type
         )
 
@@ -55,6 +55,7 @@ class UploadKnowledge:
             )
 
         except Exception:
+
             self.__data_repository.delete(
                 key="knowledge_id",
                 value=new_knowledge.knowledge_id

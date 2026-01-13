@@ -41,7 +41,7 @@ async def file_upload(
         data = schemas.CreateKnowledgeRequest(
             description=description
         )
-        
+            
         return use_case.execute(
             req_data=data,
             user_id=user_id,
