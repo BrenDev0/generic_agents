@@ -11,13 +11,15 @@ from src.features.knowledge_base.dependencies import business_rules, use_cases
 from src.features.knowledge_base.domain import exceptions, schemas
 logger = logging.getLogger(__name__)
 
+
+MAX_FILE_SIZE = 10 * 1024 * 1024
 security = HTTPBearer()
 router = APIRouter(
     prefix="/knowledge-base",
     dependencies=[Depends(security), Depends(hmac.verify_hmac)] 
 )
 
-@router.post(path="upload", status_code=201, response_model=schemas.KnowledgePublic)
+@router.post(path="/upload", status_code=201, response_model=schemas.KnowledgePublic)
 async def file_upload(
     req: Request,
     agent_id: UUID,
@@ -38,6 +40,9 @@ async def file_upload(
         )
 
         file_bytes = await file.read()
+        if len(file_bytes) > MAX_FILE_SIZE:
+            raise HTTPException(status_code=413, detail="File too large. Max size is 10MB.")
+
         data = schemas.CreateKnowledgeRequest(
             description=description
         )
