@@ -1,14 +1,12 @@
 import logging
 import strawberry
 from uuid import UUID
-from strawberry.file_uploads import Upload
 from src.app.interface.strawberry.decorators.req_validation import validate_input_to_model
 from src.app.domain.exceptions import GraphQlException
 from src.app.interface.strawberry.middleware.user_auth import UserAuth
 from src.persistence.domain.exceptions import NotFoundException
 from src.security.domain.exceptions import PermissionsException
-from src.features.knowledge_base.domain.exceptions import UnsupportedFileType
-from src.features.knowledge_base.dependencies import business_rules, use_cases
+from src.features.knowledge_base.dependencies import use_cases
 from src.features.knowledge_base.interface.strawberry import types, inputs
 logger = logging.getLogger(__name__)
 
