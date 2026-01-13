@@ -54,7 +54,7 @@ class KnowledgeBaseMutaions:
         info: strawberry.Info
     ) -> types.KnowledgeType:
         try:
-            user_id = info.context.get(user_id)
+            user_id = info.context.get("user_id")
             use_case = use_cases.get_delete_knowledge_use_case()
 
         

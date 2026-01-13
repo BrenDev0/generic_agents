@@ -35,7 +35,8 @@ class SqlAlchemyKnowledgeRepository(SqlAlchemyDataRepository[Knowledge, SqlAlche
             description=model.description,
             url=model.url,
             is_embedded=model.is_embedded,
-            created_at=model.created_at
+            created_at=model.created_at,
+            agent=self._agent_to_entity(model.agent)
         )
 
     def _agent_to_entity(self, agent_model: SqlAlchemyAgent) -> Optional[Agent]:
