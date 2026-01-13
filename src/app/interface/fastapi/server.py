@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from src.app.interface.strawberry.router import get_strawberry_graphql_router
 from src.app.interface.fastapi.middleware.hmac import verify_hmac
 from src.security.domain.exceptions import HMACException
-from src.app.domain.exceptions import GraphQlException
+from src.features.knowledge_base.interface.fastapi import routes as knowledge_base_routes
 
 
 def create_fastapi_app():
@@ -36,6 +36,7 @@ def create_fastapi_app():
         """
         return {"status": "ConvertIA ok"}
     
+    app.include_router(knowledge_base_routes.router)
 
     graphql_router = get_strawberry_graphql_router()
     app.include_router(graphql_router, dependencies=[Depends(verify_hmac)])

@@ -16,57 +16,6 @@ logger = logging.getLogger(__name__)
 class KnowledgeBaseMutaions:
     @strawberry.mutation(
         permission_classes=[UserAuth],
-        description="Upload a document for an agents knowledgebase"
-    )
-    @validate_input_to_model
-    async def upload_knowledge(
-        self, 
-        info: strawberry.Info,
-        agent_id: UUID,
-        input: inputs.CreateKnowledgeInput,
-        file: Upload 
-    ) -> types.KnowledgeType:
-        try:
-            user_id = info.context.get("user_id")
-            is_supported_file_type = business_rules.get_supported_file_type_rule()
-            use_case = use_cases.get_upload_knowledge_use_case()
-
-            if not file:
-                raise GraphQlException("File required for upload")
-            print(f"::::::::{file}::::::")
-        
-            filename = file["filename"]
-            if not filename:
-                raise GraphQlException("Filename is required")
-            
-            file_type = file.content_type
-            if not file_type:
-                raise GraphQlException("File content type is required")
-
-            is_supported_file_type.validate(
-                file_type=file_type
-            )
-
-            data = await file.read()
-            
-            return use_case.execute(
-                req_data=input,
-                user_id=user_id,
-                agent_id=agent_id,
-                filename=filename,
-                file_bytes=data
-            )
-        
-        except UnsupportedFileType as e:
-            raise GraphQlException(str(e))
-
-        except Exception as e:
-            logger.error(str(e))
-            raise GraphQlException()
-        
-    
-    @strawberry.mutation(
-        permission_classes=[UserAuth],
         description="Update Knowledge resource"
     )
     @validate_input_to_model

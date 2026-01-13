@@ -51,5 +51,5 @@ class SqlAlchemyKnowledgeRepository(SqlAlchemyDataRepository[Knowledge, SqlAlche
         )
     
     def _to_model(self, entity: Knowledge):
-        data = entity.model_dump(exclude={"knowledge_id", "created_at"} if not entity.knowledge_id else {"agent"})
+        data = entity.model_dump(exclude={"knowledge_id", "created_at", "agent"} if not entity.knowledge_id else {"agent"})
         return SqlAlchemyKnowledge(**data)
