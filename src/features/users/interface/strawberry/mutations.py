@@ -9,7 +9,7 @@ from src.security.dependencies.services import get_web_token_service
 from src.features.users.interface.strawberry import inputs, types
 from src.features.users.domain.schemas import UpdateUserSchema
 from src.features.users.dependencies import use_cases, business_rules
-
+from src.features.knowledge_base.dependencies.use_cases import get_delete_knowledge_by_user_use_case
 logger = logging.getLogger(__name__)
 
 @strawberry.type
@@ -153,8 +153,12 @@ class UserMutations:
     ) -> types.UserType:
         try:
             use_case = use_cases.get_delete_user_use_case()
-        
             user_id = info.context.get("user_id")
+            delete_uploads_use_case = get_delete_knowledge_by_user_use_case()
+
+            delete_uploads_use_case.execute(
+                user_id=user_id
+            )
 
             return use_case.execute(
                 user_id=user_id
