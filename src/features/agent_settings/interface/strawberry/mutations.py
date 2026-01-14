@@ -37,7 +37,7 @@ class AgentSettingsMutations:
             return use_case.execute(
                 user_id=user_id,
                 agent_id=agent_id,
-                settings=input.to_pydantic()
+                settings=input
             )
             
         except (NotFoundException, PermissionsException, ExistingSettingsException) as e:
@@ -67,7 +67,7 @@ class AgentSettingsMutations:
             return use_case.execute(
                 user_id=user_id,
                 settings_id=settings_id,
-                changes=input.to_pydantic()
+                changes=input
             )
             
         except (NotFoundException, PermissionsException) as e:

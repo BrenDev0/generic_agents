@@ -33,6 +33,14 @@ class Boto3FileRepository(FileRepository):
 
         return file_url
     
-    def delete(self, key): 
-        self.__client.delete_object(Bucket=self.__bucket_name, Key=key)
+    def delete(self, keys): 
+        payload = {
+            "Objects": [
+                {
+                    "Key": key
+                } for key in keys
+            ] 
+        }
+
+        self.__client.delete_objects(Bucket=self.__bucket_name, Delete=payload)
         

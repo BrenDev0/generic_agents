@@ -5,7 +5,9 @@ from src.features.knowledge_base.application.use_cases import (
     upload,
     delete,
     update,
-    collection
+    collection,
+    delete_by_agent,
+    delete_by_user
 )
 from src.features.knowledge_base.dependencies.repositories import get_knowledge_data_repository, get_knowledge_file_repository
 from src.features.agents.dependencies.repositories import get_agents_repository
@@ -37,6 +39,37 @@ def get_delete_knowledge_use_case() -> delete.DeleteKnowledge:
         use_case = delete.DeleteKnowledge(
             data_repository=get_knowledge_data_repository(),
             file_repository=get_knowledge_file_repository()
+        )
+        Container.register(instance_key, use_case)
+        logger.debug(f"{instance_key} registered")
+    
+    return use_case
+
+def get_delete_knowledge_by_agent_use_case() -> delete_by_agent.DeleteAgentKnowledge:
+    try:
+        instance_key = "delete_knowledge_by_agent_use_case",
+        use_case = Container.resolve(instance_key)
+    
+    except DependencyNotRegistered:
+        use_case = delete_by_agent.DeleteAgentKnowledge(
+            data_repository=get_knowledge_data_repository(),
+            file_repository=get_knowledge_file_repository()
+        )
+        Container.register(instance_key, use_case)
+        logger.debug(f"{instance_key} registered")
+    
+    return use_case
+
+def get_delete_knowledge_by_user_use_case() -> delete_by_user.DeleteAllKnowledge:
+    try:
+        instance_key = "delete_knowledge_by_user_use_case",
+        use_case = Container.resolve(instance_key)
+    
+    except DependencyNotRegistered:
+        use_case = delete_by_user.DeleteAllKnowledge(
+            agent_repository=get_agents_repository(),
+            file_repository=get_knowledge_file_repository(),
+            knowledge_base_repository=get_knowledge_data_repository()
         )
         Container.register(instance_key, use_case)
         logger.debug(f"{instance_key} registered")
