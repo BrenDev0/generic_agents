@@ -33,7 +33,7 @@ class AgentMutations:
 
             return use_case.execute(
                 user_id=user_id,
-                profile=input.to_pydantic()
+                profile=input
             )
 
         except Exception as e:
@@ -90,7 +90,7 @@ class AgentMutations:
             return use_case.execute(
                 user_id=user_id,
                 agent_id=agent_id,
-                changes=input.to_pydantic()
+                changes=input
             )
         
         except (NotFoundException, PermissionsException) as e:
