@@ -47,5 +47,5 @@ class SqlAlchemyAgentSettingsRepository(SqlAlchemyDataRepository[AgentSettings, 
         )
     
     def _to_model(self, entity: AgentSettings):
-        data = entity.model_dump(exclude={"setting_id"} if not entity.setting_id else {"agent"})
+        data = entity.model_dump(exclude={"setting_id", "agent"} if not entity.setting_id else {"agent"})
         return SqlAlchemyAgentSettings(**data)
