@@ -21,7 +21,7 @@ class KnowledgeBaseMutaions:
         permission_classes=[UserAuth],
         description="Upload file"
     )
-    async def upload(
+    async def upload_knowledge(
         self,
         agent_id: UUID,
         info: strawberry.Info,
