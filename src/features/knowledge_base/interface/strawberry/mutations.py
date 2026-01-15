@@ -1,17 +1,67 @@
 import logging
 import strawberry
+from strawberry.file_uploads import Upload
 from uuid import UUID
 from src.app.interface.strawberry.decorators.req_validation import validate_input_to_model
 from src.app.domain.exceptions import GraphQlException
 from src.app.interface.strawberry.middleware.user_auth import UserAuth
 from src.persistence.domain.exceptions import NotFoundException
 from src.security.domain.exceptions import PermissionsException
-from src.features.knowledge_base.dependencies import use_cases
+from src.features.knowledge_base.dependencies import use_cases, business_rules
+from src.features.knowledge_base.domain.exceptions import UnsupportedFileType
 from src.features.knowledge_base.interface.strawberry import types, inputs
 logger = logging.getLogger(__name__)
 
+MAX_FILE_SIZE = 10 * 1024 * 1024
+
+
 @strawberry.type
 class KnowledgeBaseMutaions:
+    @strawberry.mutation(
+        permission_classes=[UserAuth],
+        description="Upload file"
+    )
+    async def upload(
+        self,
+        agent_id: UUID,
+        info: strawberry.Info,
+        file: Upload,
+        input: inputs.CreateKnowledgeInput
+    ) -> types.KnowledgeType:
+        try:
+            user_id = info.context.get("user_id")
+            use_case = use_cases.get_upload_knowledge_use_case()
+            is_supported_file_type = business_rules.get_supported_file_type_rule() 
+            
+            filename = file.filename.lower().replace(" ", "_")
+            content_type = file.content_type
+
+            is_supported_file_type.validate(
+                file_type=content_type
+            )
+
+            file_bytes = await file.read()
+            if len(file_bytes) > MAX_FILE_SIZE:
+                raise GraphQlException("File too large. Max size is 10MB.")
+
+
+            return use_case.execute(
+                req_data=input,
+                user_id=user_id,
+                agent_id=agent_id,
+                filename=filename,
+                file_type=content_type,
+                file_bytes=file_bytes
+            )
+        
+        except (NotFoundException, PermissionsException, UnsupportedFileType) as e:
+            raise GraphQlException(str(e))
+        
+        except Exception as e:
+            logger.error(str(e))
+            raise GraphQlException()
+    
+
     @strawberry.mutation(
         permission_classes=[UserAuth],
         description="Update Knowledge resource"
