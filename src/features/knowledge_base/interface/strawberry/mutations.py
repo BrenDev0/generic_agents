@@ -59,7 +59,6 @@ class KnowledgeBaseMutaions:
         
         except Exception as e:
             logger.error(str(e))
-            print(f":::::::::::::::{str(e)}:::::::::::::::::::::")
             raise GraphQlException()
     
 

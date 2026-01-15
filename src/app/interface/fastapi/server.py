@@ -27,6 +27,14 @@ def create_fastapi_app():
         )
 
 
+    @app.exception_handler(HMACException)
+    async def exception_handler(request, exc: Exception):
+        print(str(exc))
+        return JSONResponse(
+            status_code=400,
+            content={"errors": [exc.detail]}
+        )
+
 
     @app.get("/", tags=["Internal"])
     async def health():
