@@ -8,6 +8,7 @@ class Knowledge(BaseModel):
     knowledge_id: Optional[UUID] = None
     agent_id: UUID
     type: str
+    size: Optional[str] = None
     name: Optional[str] = None
     description: str
     url: Optional[str] = None

@@ -14,6 +14,7 @@ class SqlAlchemyKnowledge(Base):
     knowledge_id = Column(UUID(as_uuid=True), primary_key=True, nullable=False, default=uuid4)
     agent_id = Column(UUID(as_uuid=True), ForeignKey("agents.agent_id", ondelete="CASCADE"), nullable=False)
     type = Column(String, nullable=False)
+    size = Column(String, nullable=True)
     name = Column(String, nullable=True)
     description = Column(String,  nullable=False)
     url = Column(String, nullable=True)
@@ -31,6 +32,7 @@ class SqlAlchemyKnowledgeRepository(SqlAlchemyDataRepository[Knowledge, SqlAlche
             knowledge_id=model.knowledge_id,
             agent_id=model.agent_id,
             type=model.type,
+            size=model.size,
             name=model.name,
             description=model.description,
             url=model.url,
