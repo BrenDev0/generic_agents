@@ -1,6 +1,7 @@
 from uuid import UUID
 from src.persistence.domain import data_repository, file_repository, exceptions
 from src.features.knowledge_base.domain import entities, schemas
+from src.features.knowledge_base.utlis.file_size import format_file_size
 from src.features.agents.domain.entities import Agent
 from src.security.domain.exceptions import PermissionsException
 class UploadKnowledge:
@@ -34,12 +35,14 @@ class UploadKnowledge:
         if str(agent.user_id) != str(user_id):
             raise PermissionsException()
         
-        
+        file_size = format_file_size(len(file_bytes))
+
         data = entities.Knowledge(
             **req_data.model_dump(),
             name=filename,
             agent_id=agent.agent_id,
-            type=file_type
+            type=file_type,
+            size=file_size
         )
 
         new_knowledge: entities.Knowledge = self.__data_repository.create(

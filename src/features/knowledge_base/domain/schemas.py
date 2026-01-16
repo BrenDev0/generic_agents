@@ -17,6 +17,7 @@ class KnowledgePublic(KnowledgeConfig):
     knowledge_id: UUID
     agent_id: UUID
     type: str
+    size: str
     name: str
     description: str
     url: str
