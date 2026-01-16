@@ -28,14 +28,20 @@ def create_fastapi_app():
         try: 
             return await call_next(req)
         
-        except AttributeError as exc:
-            logger.error(str(exc))
-            logger.error(":::::::::::::::::::::::::::::in catch::::::::::::::::::::")
+        except (AttributeError, TypeError, KeyError ,ValueError) as exc:
+            logger.error(f"Request parsing error: {str(exc)}", exc_info=True)
             return JSONResponse(
-            status_code=400,
-            content={"errors": ["Request is malformated and invalid"]}
-        )
-
+                status_code=400,
+                content={
+                    "errors": [{
+                        "message": "Invalid multipart request format. Check that 'operations' and 'map' fields are correctly formatted.",
+                        "extensions": {
+                            "code": "INVALID_MULTIPART_REQUEST"
+                        }
+                    }]
+                }
+            )
+        
     @app.exception_handler(HMACException)
     async def hmac_exception_handler(request, exc: HMACException):
         return JSONResponse(
