@@ -1,11 +1,12 @@
-from fastapi import FastAPI, Depends
+import logging
+from fastapi import FastAPI, Depends, Request
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from src.app.interface.strawberry.router import get_strawberry_graphql_router
 from src.app.interface.fastapi.middleware.hmac import verify_hmac
 from src.security.domain.exceptions import HMACException
 from src.features.knowledge_base.interface.fastapi import routes as knowledge_base_routes
-
+logger = logging.getLogger(__name__)
 
 def create_fastapi_app():
     app = FastAPI()
@@ -19,6 +20,22 @@ def create_fastapi_app():
         allow_headers=["*"],
     )
 
+    @app.middleware("http")
+    async def catch_request_format_errors(
+        req: Request,
+        call_next
+    ):
+        try: 
+            return await call_next(req)
+        
+        except AttributeError as exc:
+            logger.error(str(exc))
+            logger.error(":::::::::::::::::::::::::::::in catch::::::::::::::::::::")
+            return JSONResponse(
+            status_code=400,
+            content={"errors": ["Request is malformated and invalid"]}
+        )
+
     @app.exception_handler(HMACException)
     async def hmac_exception_handler(request, exc: HMACException):
         return JSONResponse(
@@ -27,12 +44,12 @@ def create_fastapi_app():
         )
 
 
-    @app.exception_handler(HMACException)
+    @app.exception_handler(Exception)
     async def exception_handler(request, exc: Exception):
         print(str(exc))
         return JSONResponse(
-            status_code=400,
-            content={"errors": [exc.detail]}
+            status_code=500,
+            content={"errors": ["Unable to process request  at this time"]}
         )
 
 
