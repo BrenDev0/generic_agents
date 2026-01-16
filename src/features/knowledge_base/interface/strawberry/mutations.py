@@ -1,7 +1,9 @@
 import logging
 import strawberry
 from strawberry.file_uploads import Upload
+from starlette.datastructures import UploadFile
 from uuid import UUID
+from src.app.interface.strawberry.decorators.req_validation import validate_input_to_model
 from src.app.interface.strawberry.decorators.req_validation import validate_input_to_model
 from src.app.domain.exceptions import GraphQlException
 from src.app.interface.strawberry.middleware.user_auth import UserAuth
@@ -21,6 +23,7 @@ class KnowledgeBaseMutaions:
         permission_classes=[UserAuth],
         description="Upload file"
     )
+    @validate_input_to_model
     async def upload_knowledge(
         self,
         agent_id: UUID,
@@ -28,11 +31,16 @@ class KnowledgeBaseMutaions:
         file: Upload,
         input: inputs.CreateKnowledgeInput
     ) -> types.KnowledgeType:
+        if not isinstance(file, UploadFile):
+            raise GraphQlException(f"Type {type(file).__name__} invalid for vairable file, Expected type Upload!")
+        
         try:
             user_id = info.context.get("user_id")
             use_case = use_cases.get_upload_knowledge_use_case()
             is_supported_file_type = business_rules.get_supported_file_type_rule() 
+
             
+
             filename = file.filename.lower().replace(" ", "_")
             content_type = file.content_type
 
