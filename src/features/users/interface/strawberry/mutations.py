@@ -5,7 +5,7 @@ from src.app.domain.exceptions import GraphQlException
 from src.app.interface.strawberry.decorators.req_validation import validate_input_to_model
 from src.persistence.domain.exceptions import NotFoundException, UpdateFieldsException
 from src.security.domain.exceptions import IncorrectPassword
-from src.security.dependencies.services import get_web_token_service
+from src.security.dependencies.services import get_web_token_service, get_encrytpion_service
 from src.features.users.interface.strawberry import inputs, types
 from src.features.users.domain.schemas import UpdateUserSchema
 from src.features.users.dependencies import use_cases, business_rules
@@ -29,7 +29,9 @@ class UserMutations:
             web_token_service = get_web_token_service()
 
             verification_code = info.context.get("verification_code")
-            if int(input.code) != int(verification_code):
+            encryption = get_encrytpion_service()
+
+            if int(input.code) != int(encryption.decrypt(verification_code)):
                 raise GraphQlException("Unauthorized")
             
             new_user = use_case.execute(
@@ -122,14 +124,16 @@ class UserMutations:
             raise GraphQlException("Forbidden")
             
         verification_code = info.context.get("verification_code")
-        if int(input.code) != int(verification_code):
+        encryption = get_encrytpion_service()
+        
+        if int(input.code) != int(encryption.decrypt(verification_code)):
             raise GraphQlException("Unauthorized")
         
         if input.email and input.password:
             raise GraphQlException("Cannot update email and password simultaneously")
         
         try:    
-            use_case = use_case.get_update_user_use_case()
+            use_case = use_cases.get_update_user_use_case()
             if input.password:
                 rule = business_rules.get_update_password_rule()
 
