@@ -1,12 +1,12 @@
 from pathlib import Path
 import os
 from src.features.email.domain.entities import Email
-from src.features.email.application.use_cases.send_email import SendEmail
+from src.features.email.application.services.sender import Sender
 
 class VerificationEmail:
     def __init__(
         self,
-        sender: SendEmail
+        sender: Sender
     ):
         self.__from_addr = os.getenv("MAILER_USER")
         if not self.__from_addr:
