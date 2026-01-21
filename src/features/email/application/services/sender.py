@@ -1,9 +1,10 @@
 import os
 import smtplib
 from email.message import EmailMessage
-from src.features.email.domain import entities, exceptions
+from src.features.email.domain.entities import Email
+from src.features.email.domain.exceptions import EmailTransportException
 
-class SendEmail:
+class Sender:
     def __init__(self):
         self.host = os.getenv("MAILER_HOST")
         self.port = int(os.getenv("MAILER_PORT", 587))
@@ -12,9 +13,9 @@ class SendEmail:
         self.from_addr = os.getenv("MAILER_USER")
 
 
-    def execute(
+    def send(
         self,
-        email: entities.Email
+        email: Email
     ):
         msg = EmailMessage()
         msg["From"] = email.from_
@@ -30,4 +31,4 @@ class SendEmail:
                 server.send_message(msg)
                 
         except Exception:
-            raise exceptions.EmailTransportException()
+            raise EmailTransportException()

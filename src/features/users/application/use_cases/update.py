@@ -16,6 +16,8 @@ class UpdateUser:
 
     def execute(self, user_id: UUID, changes: schemas.UpdateUserSchema) -> schemas.UserPublic:
         cleaned_changes = changes.model_dump(exclude_unset=True)
+        if not cleaned_changes:
+            raise exceptions.UpdateFieldsException()
         
         processed_changes = {}
         
