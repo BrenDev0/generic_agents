@@ -14,6 +14,7 @@ logging.basicConfig(
 )
 logging.getLogger("httpx").setLevel(logging.WARNING)
 logging.getLogger("httpcore").setLevel(logging.WARNING)
+logging.getLogger("python_multipart").setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
 logger.debug("!!!!! LOGGER LEVEL SET TO DEBUG !!!!!")
 
