@@ -3,7 +3,7 @@ import strawberry
 from src.app.interface.strawberry.middleware import user_auth, user_verification
 from src.app.domain.exceptions import GraphQlException
 from src.app.interface.strawberry.decorators.req_validation import validate_input_to_model
-from src.persistence.domain.exceptions import NotFoundException
+from src.persistence.domain.exceptions import NotFoundException, UpdateFieldsException
 from src.security.domain.exceptions import IncorrectPassword
 from src.security.dependencies.services import get_web_token_service
 from src.features.users.interface.strawberry import inputs, types
@@ -79,7 +79,8 @@ class UserMutations:
                 rule = business_rules.get_update_password_rule()
                 rule.validate(
                     user_id=user_id,
-                    old_password=input.old_password
+                    old_password=input.old_password,
+                    current_password_check=True
                 )
 
                 changes["password"] = input.password
@@ -100,6 +101,55 @@ class UserMutations:
 
         except GraphQlException:
             raise
+
+        except Exception as e:
+            logger.error(str(e))
+            raise GraphQlException()
+        
+    
+    @strawberry.mutation(
+        description="Update email, or password for account recovery",
+        permission_classes=[user_verification.UserVerification]
+    )
+    @validate_input_to_model
+    def verified_update(
+        self,
+        info: strawberry.Info,
+        input: inputs.VerifiedUserUpdateInput
+    ) -> types.UserType:
+        user_id = info.context.get("user_id")
+        if not user_id:
+            raise GraphQlException("Forbidden")
+            
+        verification_code = info.context.get("verification_code")
+        if int(input.code) != int(verification_code):
+            raise GraphQlException("Unauthorized")
+        
+        if input.email and input.password:
+            raise GraphQlException("Cannot update email and password simultaneously")
+        
+        try:    
+            use_case = use_case.get_update_user_use_case()
+            if input.password:
+                rule = business_rules.get_update_password_rule()
+
+                rule.validate(
+                    user_id=user_id,
+                    new_password=input.password,
+                    current_password_check=False
+                )
+
+            changes = UpdateUserSchema(
+                **input.model_dump(exclude_none=True, exclude={"code"})
+            )
+
+            return use_case.execute(
+                user_id=user_id,
+                changes=changes
+            )
+        
+        except (NotFoundException, IncorrectPassword, UpdateFieldsException) as e:
+            raise GraphQlException(str(e))
 
         except Exception as e:
             logger.error(str(e))
