@@ -225,11 +225,11 @@ class UserMutations:
             logger.error(str(e))
             raise GraphQlException()
 
-    @validate_input_to_model
     @strawberry.mutation(
         permission_classes=[user_verification.UserVerification],
         description="login in with code from  email"
     )
+    @validate_input_to_model
     def verified_login(
         self,
         info: strawberry.Info,
@@ -238,7 +238,7 @@ class UserMutations:
         code = info.context.get("verification_code")
         user_id = info.context.get("user_id")
 
-        if int(input.code) != int(code):
+        if int(input.verification_code) != int(code):
             raise GraphQlException("Invalid token")
         
         if not user_id:
