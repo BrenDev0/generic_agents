@@ -18,6 +18,11 @@ class UserAuth(BasePermission):
             try:
                 payload = web_token_service.decode(token)
                 user_id = payload.get("user_id")
+                verification_code = payload.get("verification_code")
+
+                if verification_code:
+                    raise InvalidToken()
+                
                 if user_id:
                     info.context["user_id"] = user_id
                     return True

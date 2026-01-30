@@ -225,4 +225,44 @@ class UserMutations:
             logger.error(str(e))
             raise GraphQlException()
 
+    @strawberry.mutation(
+        permission_classes=[user_verification.UserVerification],
+        description="login in with code from  email"
+    )
+    @validate_input_to_model
+    def verified_login(
+        self,
+        info: strawberry.Info,
+        input: inputs.verified_login
+    ) -> types.TokenType:
+        user_id = info.context.get("user_id")
+        if not user_id:
+            
+            raise GraphQlException("Forbidden")
+            
+        verification_code = info.context.get("verification_code")
+        encryption = get_encrytpion_service()
+        
+        if int(input.verification_code) != int(encryption.decrypt(verification_code)):
+            raise GraphQlException("Unauthorized")
+        
+        try:
+            service = get_web_token_service()
+
+            token_payload = {
+                "user_id": str(user_id)
+            }
+
+            token = service.generate(payload=token_payload, expiration=900)
+
+            return types.TokenType(
+                token=token
+            )
+
+        except Exception as e: 
+            logger.error(str(e))
+            raise GraphQlException()    
+        
+
+            
 

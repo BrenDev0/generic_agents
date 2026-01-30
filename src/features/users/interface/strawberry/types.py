@@ -9,3 +9,7 @@ class UserType:
 class UserWithTokenType:
     user: UserType
     token: str
+
+@strawberry.type
+class TokenType:
+    token: str

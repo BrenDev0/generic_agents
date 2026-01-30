@@ -21,3 +21,7 @@ class UpdateUserInput:
 @strawberry.experimental.pydantic.input(model=VerifiedUserUpdateRequest, all_fields=True)
 class VerifiedUserUpdateInput:
     pass
+
+@strawberry.input
+class verified_login:
+    verification_code: int
