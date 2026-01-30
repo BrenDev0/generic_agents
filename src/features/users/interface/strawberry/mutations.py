@@ -235,14 +235,16 @@ class UserMutations:
         info: strawberry.Info,
         input: inputs.verified_login
     ) -> types.TokenType:
-        code = info.context.get("verification_code")
         user_id = info.context.get("user_id")
-
-        if int(input.verification_code) != int(code):
-            raise GraphQlException("Invalid token")
-        
         if not user_id:
-            raise GraphQlException("Invalid token")
+            
+            raise GraphQlException("Forbidden")
+            
+        verification_code = info.context.get("verification_code")
+        encryption = get_encrytpion_service()
+        
+        if int(input.verification_code) != int(encryption.decrypt(verification_code)):
+            raise GraphQlException("Unauthorized")
         
         try:
             service = get_web_token_service()
