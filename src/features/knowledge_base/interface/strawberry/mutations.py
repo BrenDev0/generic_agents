@@ -4,7 +4,6 @@ from strawberry.file_uploads import Upload
 from starlette.datastructures import UploadFile
 from uuid import UUID
 from src.app.interface.strawberry.decorators.req_validation import validate_input_to_model
-from src.app.interface.strawberry.decorators.req_validation import validate_input_to_model
 from src.app.domain.exceptions import GraphQlException
 from src.app.interface.strawberry.middleware.user_auth import UserAuth
 from src.persistence.domain.exceptions import NotFoundException
@@ -29,7 +28,8 @@ class KnowledgeBaseMutaions:
         agent_id: UUID,
         info: strawberry.Info,
         file: Upload,
-        input: inputs.CreateKnowledgeInput
+        input: inputs.CreateKnowledgeInput,
+        embed_document: bool = False
     ) -> types.KnowledgeType:
         if not isinstance(file, UploadFile):
             raise GraphQlException(f"Type {type(file).__name__} invalid for vairable file, Expected type Upload!")
@@ -38,8 +38,6 @@ class KnowledgeBaseMutaions:
             user_id = info.context.get("user_id")
             use_case = use_cases.get_upload_knowledge_use_case()
             is_supported_file_type = business_rules.get_supported_file_type_rule() 
-
-            
 
             filename = file.filename.lower().replace(" ", "_")
             content_type = file.content_type
@@ -53,7 +51,7 @@ class KnowledgeBaseMutaions:
                 raise GraphQlException("File too large. Max size is 10MB.")
 
 
-            return use_case.execute(
+            saved_doc = use_case.execute(
                 req_data=input,
                 user_id=user_id,
                 agent_id=agent_id,
@@ -61,6 +59,19 @@ class KnowledgeBaseMutaions:
                 file_type=content_type,
                 file_bytes=file_bytes
             )
+
+            if embed_document:
+                send_to_embed = use_cases.get_send_to_embed_use_case()
+                
+                await send_to_embed.execute(
+                    user_id=user_id,
+                    agent_id=saved_doc.agent_id,
+                    knowledge_id=saved_doc.knowledge_id,
+                    file_type=saved_doc.type,
+                    file_url=saved_doc.url
+                )
+
+            return saved_doc
         
         except (NotFoundException, PermissionsException, UnsupportedFileType) as e:
             raise GraphQlException(str(e))
