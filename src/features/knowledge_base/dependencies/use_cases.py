@@ -7,10 +7,13 @@ from src.features.knowledge_base.application.use_cases import (
     update,
     collection,
     delete_by_agent,
-    delete_by_user
+    delete_by_user,
+    send_to_embed
 )
 from src.features.knowledge_base.dependencies.repositories import get_knowledge_data_repository, get_knowledge_file_repository
 from src.features.agents.dependencies.repositories import get_agents_repository
+from src.features.http.dependencies.clients import get_async_http_client
+
 logger = logging.getLogger(__name__)
 
 def get_upload_knowledge_use_case() -> upload.UploadKnowledge:
@@ -98,6 +101,21 @@ def get_knowledge_collection_use_case() -> collection.GetKnowledgeCollection:
     except DependencyNotRegistered:
         use_case = collection.GetKnowledgeCollection(
             data_repository=get_knowledge_data_repository()
+        )
+        Container.register(instance_key, use_case)
+        logger.debug(f"{instance_key} registered")
+    
+    return use_case
+
+
+def get_send_to_embed_use_case() -> send_to_embed.SendToEmbed:
+    try:
+        instance_key = "send_to_embed_use_case",
+        use_case = Container.resolve(instance_key)
+    
+    except DependencyNotRegistered:
+        use_case = send_to_embed.SendToEmbed(
+            async_http_client=get_async_http_client()
         )
         Container.register(instance_key, use_case)
         logger.debug(f"{instance_key} registered")
