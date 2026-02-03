@@ -29,7 +29,7 @@ class KnowledgeBaseMutaions:
         info: strawberry.Info,
         file: Upload,
         input: inputs.CreateKnowledgeInput,
-        embed_document: bool
+        embed_document: bool = False
     ) -> types.KnowledgeType:
         if not isinstance(file, UploadFile):
             raise GraphQlException(f"Type {type(file).__name__} invalid for vairable file, Expected type Upload!")
