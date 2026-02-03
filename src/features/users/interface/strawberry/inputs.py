@@ -3,7 +3,8 @@ from src.features.users.domain.schemas import (
     CreateUserRequest, 
     LoginRequest, 
     UpdateUserRequest, 
-    VerifiedUserUpdateRequest
+    VerifiedUserUpdateRequest,
+    VerifiedLogin
 )
 
 @strawberry.experimental.pydantic.input(model=CreateUserRequest, all_fields=True)
@@ -22,6 +23,6 @@ class UpdateUserInput:
 class VerifiedUserUpdateInput:
     pass
 
-@strawberry.input
-class verified_login:
-    verification_code: int
+@strawberry.experimental.pydantic.input(model=VerifiedLogin, all_fields=True)
+class VerifiedLoginInput:
+    pass

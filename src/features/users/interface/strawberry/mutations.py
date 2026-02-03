@@ -233,7 +233,7 @@ class UserMutations:
     def verified_login(
         self,
         info: strawberry.Info,
-        input: inputs.verified_login
+        input: inputs.VerifiedLoginInput
     ) -> types.TokenType:
         user_id = info.context.get("user_id")
         if not user_id:
