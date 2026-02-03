@@ -45,3 +45,6 @@ class UpdateUserSchema(BaseModel):
     email: Optional[str] = None
     email_hash: Optional[str] = None
     password: Optional[str] = None
+
+class VerifiedLogin(UserShemaBase):
+    verification_code: int
