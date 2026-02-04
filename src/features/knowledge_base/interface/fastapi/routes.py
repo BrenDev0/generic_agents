@@ -12,7 +12,7 @@ router = APIRouter(
     dependencies=[Depends(verify_hmac)]
 )
 
-@router.patch(path="/ebedding-status/{knowledge_id}", status_code=200, response_model=KnowledgePublic)
+@router.patch(path="/embedding-status/{knowledge_id}", status_code=200, response_model=KnowledgePublic)
 def update_embedding_status(
     knowledge_id: UUID,
     data: InternalUpdateEmbeddingStatus = Body(...)
