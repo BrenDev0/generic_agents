@@ -8,6 +8,6 @@ from src.features.knowledge_base.domain.schemas import (
 class CreateKnowledgeInput:
     pass
 
-@strawberry.experimental.pydantic.input(UpdateKnowledgeRequest, all_fields=True)
+@strawberry.experimental.pydantic.input(UpdateKnowledgeRequest, fields=["name", "description"])
 class UpdateKnowledgeInput:
     pass
