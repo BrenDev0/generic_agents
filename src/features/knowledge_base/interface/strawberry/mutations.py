@@ -8,11 +8,11 @@ from src.app.interface.strawberry.decorators.req_validation import validate_inpu
 from src.app.domain.exceptions import GraphQlException
 from src.app.interface.strawberry.middleware.user_auth import UserAuth
 from src.persistence.domain.exceptions import NotFoundException
-from src.persistence.dependencies.repositories import get_session_repository
 from src.security.domain.exceptions import PermissionsException
 from src.features.knowledge_base.dependencies import use_cases, business_rules
 from src.features.knowledge_base.domain.exceptions import UnsupportedFileType
 from src.features.knowledge_base.interface.strawberry import types, inputs
+from src.features.sessions.dependencies.use_cases import get_update_embeddings_tracker_use_case
 logger = logging.getLogger(__name__)
 
 MAX_FILE_SIZE = 10 * 1024 * 1024
@@ -64,21 +64,18 @@ class KnowledgeBaseMutaions:
 
             if embed_document:
                 send_to_embed = use_cases.get_send_to_embed_use_case()
-                session_repository = get_session_repository()
-
-                key = f"{agent_id}_embeddings_tracker"
+                update_embedding_tracker = get_update_embeddings_tracker_use_case()
                 
-                embedding_tracker = {
-                    str(saved_doc.knowledge_id): {
-                        "stage": "Enviando documento...",
-                        "status": "Enviando",
-                        "progress": 50  
-                    }
+                embedding_status = {
+                    "stage": "Enviando documento...",
+                    "status": "Enviando",
+                    "progress": 50  
                 }
 
-                session_repository.set_session(
-                    key=key,
-                    value=json.dumps(embedding_tracker)
+                update_embedding_tracker.execute(
+                    agent_id=saved_doc.agent_id,
+                    knowledge_id=saved_doc.knowledge_id,
+                    update=embedding_status
                 )
 
                 await send_to_embed.execute(
@@ -87,6 +84,18 @@ class KnowledgeBaseMutaions:
                     knowledge_id=saved_doc.knowledge_id,
                     file_type=saved_doc.type,
                     file_url=saved_doc.url
+                )
+
+                embedding_status = {
+                    "stage": "Enviando documento...",
+                    "status": "Enviado",
+                    "progress": 100  
+                }
+
+                update_embedding_tracker.execute(
+                    agent_id=saved_doc.agent_id,
+                    knowledge_id=saved_doc.knowledge_id,
+                    update=embedding_status
                 )
 
             return saved_doc

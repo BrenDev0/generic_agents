@@ -1,9 +1,11 @@
 import typing
+import logging
 from strawberry.permission import BasePermission
 from strawberry.types import Info
 from src.security.dependencies.services import get_web_token_service
 from src.security.domain.exceptions import ExpiredToken, InvalidToken
 from src.app.domain.exceptions import GraphQlException
+logger = logging.getLogger(__name__)
 
 class UserAuth(BasePermission):
      message = "Unauthorized"
