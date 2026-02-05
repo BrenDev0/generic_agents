@@ -18,17 +18,20 @@ class SendToEmbed:
         file_type: str,
         file_url: str
     ):
-        endpoint = f"{os.getenv("LLM_SERVER")}/documents/knowlege-base/{agent_id}"
+        endpoint = f"{os.getenv("LLM_SERVER")}/documents/knowledge-base"
         
         body = {
             "user_id": str(user_id),
+            "agent_id": str(agent_id),
             "knowledge_id": str(knowledge_id),
+            "connection_id": str(user_id),
             "file_type": file_type,
             "file_url": file_url
         }
 
-        return await self.__async_http_client.post_request(
+        return await self.__async_http_client.request(
             endpoint=endpoint,
+            method="POST",
             headers=generate_hmac_headers(),
             req_body=body
         )
