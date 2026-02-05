@@ -12,7 +12,7 @@ from src.features.knowledge_base.application.use_cases import (
 )
 from src.features.knowledge_base.dependencies.repositories import get_knowledge_data_repository, get_knowledge_file_repository
 from src.features.agents.dependencies.repositories import get_agents_repository
-from src.features.http.dependencies.clients import get_async_http_client
+from src.http.dependencies.clients import get_async_http_client
 
 logger = logging.getLogger(__name__)
 
@@ -86,7 +86,7 @@ def get_update_knowledge_use_case() -> update.UpdateKnowledge:
     
     except DependencyNotRegistered:
         use_case = update.UpdateKnowledge(
-            data_repository=get_knowledge_data_repository()
+            repository=get_knowledge_data_repository()
         )
         Container.register(instance_key, use_case)
         logger.debug(f"{instance_key} registered")

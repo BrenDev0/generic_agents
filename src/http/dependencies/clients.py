@@ -1,8 +1,8 @@
 import logging
 from src.di.container import Container
 from src.di.domain.exceptions import DependencyNotRegistered
-from src.features.http.domain import async_http_client
-from src.features.http.infrastructure.httpx.async_http_client import HttpxAsyncHttpClient
+from src.http.domain import async_http_client
+from src.http.infrastructure.httpx.async_http_client import HttpxAsyncHttpClient
 
 logger = logging.getLogger(__name__)
 

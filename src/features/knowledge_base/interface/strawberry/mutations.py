@@ -1,5 +1,6 @@
 import logging
 import strawberry
+import json
 from strawberry.file_uploads import Upload
 from starlette.datastructures import UploadFile
 from uuid import UUID
@@ -7,6 +8,7 @@ from src.app.interface.strawberry.decorators.req_validation import validate_inpu
 from src.app.domain.exceptions import GraphQlException
 from src.app.interface.strawberry.middleware.user_auth import UserAuth
 from src.persistence.domain.exceptions import NotFoundException
+from src.persistence.dependencies.repositories import get_session_repository
 from src.security.domain.exceptions import PermissionsException
 from src.features.knowledge_base.dependencies import use_cases, business_rules
 from src.features.knowledge_base.domain.exceptions import UnsupportedFileType
@@ -62,7 +64,23 @@ class KnowledgeBaseMutaions:
 
             if embed_document:
                 send_to_embed = use_cases.get_send_to_embed_use_case()
+                session_repository = get_session_repository()
+
+                key = f"{agent_id}_embeddings_tracker"
                 
+                embedding_tracker = {
+                    str(saved_doc.knowledge_id): {
+                        "stage": "Enviando documento...",
+                        "status": "Enviando",
+                        "progress": 50  
+                    }
+                }
+
+                session_repository.set_session(
+                    key=key,
+                    value=json.dumps(embedding_tracker)
+                )
+
                 await send_to_embed.execute(
                     user_id=user_id,
                     agent_id=saved_doc.agent_id,
