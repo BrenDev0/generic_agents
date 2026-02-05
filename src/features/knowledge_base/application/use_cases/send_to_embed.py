@@ -1,14 +1,18 @@
 import os
+import json
 from uuid import UUID
 from src.http.domain.async_http_client import AsyncHttpClient
 from src.http.utils.hmac_headers import generate_hmac_headers
+from src.persistence.domain.session_repository import SessionRepository
 
 class SendToEmbed:
     def __init__(
         self,
-        async_http_client: AsyncHttpClient
+        async_http_client: AsyncHttpClient,
+        session_repository: SessionRepository
     ):
         self.__async_http_client = async_http_client
+        self.__session_repository = session_repository
 
     async def execute(
         self,
@@ -29,10 +33,26 @@ class SendToEmbed:
             "file_url": file_url
         }
 
-        return await self.__async_http_client.request(
+        await self.__async_http_client.request(
             endpoint=endpoint,
             method="POST",
             headers=generate_hmac_headers(),
             req_body=body
+        )
+
+
+
+        embedding_tracker = {
+            str(knowledge_id): {
+                "stage": "Enviando documento...",
+                "status": "Enviado",
+                "progress": 100
+            }
+        }
+        session_key = f"{agent_id}_embeddings_tracker"
+
+        self.__session_repository.set_session(
+            key=session_key,
+            value=json.dumps(embedding_tracker)
         )
 
