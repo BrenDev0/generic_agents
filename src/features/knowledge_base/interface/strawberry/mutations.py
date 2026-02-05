@@ -69,7 +69,7 @@ class KnowledgeBaseMutaions:
                 embedding_status = {
                     "stage": "Enviando documento...",
                     "status": "Enviando",
-                    "progress": 50  
+                    "progress": 10 # progress of the whole process, 5 parts of  20%
                 }
 
                 update_embedding_tracker.execute(
@@ -89,7 +89,7 @@ class KnowledgeBaseMutaions:
                 embedding_status = {
                     "stage": "Enviando documento...",
                     "status": "Enviado",
-                    "progress": 100  
+                    "progress": 20  
                 }
 
                 update_embedding_tracker.execute(
