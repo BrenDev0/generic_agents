@@ -34,4 +34,4 @@ class UpdateKnowledge:
             changes=changes.model_dump(exclude_none=True)
         )
 
-        return schemas.KnowledgePublic.model_validate(updated_knowledge, from_attributes=True)
+        return schemas.KnowledgePublic.model_validate(updated_knowledge, by_alias=False)
