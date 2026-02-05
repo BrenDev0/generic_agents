@@ -69,16 +69,18 @@ class KnowledgeBaseMutaions:
                 key = f"{agent_id}_embeddings_tracker"
                 
                 embedding_tracker = {
-                    "stage": "Enviando documento...",
-                    "status": "Enviando",
-                    "progress": 50  
+                    str(saved_doc.knowledge_id): {
+                        "stage": "Enviando documento...",
+                        "status": "Enviando",
+                        "progress": 50  
+                    }
                 }
 
                 session_repository.set_session(
                     key=key,
                     value=json.dumps(embedding_tracker)
                 )
-                
+
                 await send_to_embed.execute(
                     user_id=user_id,
                     agent_id=saved_doc.agent_id,
