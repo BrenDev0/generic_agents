@@ -1,6 +1,5 @@
 import logging
 import strawberry
-import json
 from strawberry.file_uploads import Upload
 from starlette.datastructures import UploadFile
 from uuid import UUID
@@ -15,7 +14,7 @@ from src.features.knowledge_base.interface.strawberry import types, inputs
 from src.features.sessions.dependencies.use_cases import get_update_embeddings_tracker_use_case
 logger = logging.getLogger(__name__)
 
-MAX_FILE_SIZE = 10 * 1024 * 1024
+MAX_FILE_SIZE = 50 * 1024 * 1024 
 
 
 @strawberry.type
