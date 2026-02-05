@@ -31,7 +31,7 @@ class UpdateKnowledge:
         updated_knowledge: entities.Knowledge = self.__repository.update(
             key="knowledge_id",
             value=knowledge.knowledge_id,
-            changes=changes.model_dump(exclude_none=True)
+            changes=changes.model_dump(exclude_none=True, by_alias=False)
         )
 
-        return schemas.KnowledgePublic.model_validate(updated_knowledge, by_alias=False)
+        return schemas.KnowledgePublic.model_validate(updated_knowledge, from_attributes=True)
