@@ -6,6 +6,8 @@ from src.app.interface.strawberry.router import get_strawberry_graphql_router
 from src.app.interface.fastapi.middleware.hmac import verify_hmac
 from src.security.domain.exceptions import HMACException
 from src.features.knowledge_base.interface.fastapi import routes as knowledge_base_routes
+from src.persistence.domain.exceptions import NotFoundException
+from src.security.domain.exceptions import PermissionsException
 
 logger = logging.getLogger(__name__)
 
@@ -54,9 +56,19 @@ def create_fastapi_app():
     @app.exception_handler(Exception)
     async def exception_handler(request, exc: Exception):
         print(str(exc))
+        status_code = 500
+        message = "Unable to process request  at this time"
+
+        if isinstance(exc, NotFoundException):
+            status_code = 404
+            message = str(exc)
+        
+        if isinstance(exc, PermissionError):
+            status_code=403
+            message = str(exc)
         return JSONResponse(
-            status_code=500,
-            content={"errors": ["Unable to process request  at this time"]}
+            status_code=status_code,
+            content={"errors": [message]}
         )
 
 
