@@ -16,6 +16,7 @@ class SendToEmbed:
         user_id: UUID,
         agent_id: UUID,
         knowledge_id: UUID,
+        connection_id: UUID,
         file_type: str,
         file_url: str
     ):
@@ -25,7 +26,7 @@ class SendToEmbed:
             "user_id": str(user_id),
             "agent_id": str(agent_id),
             "knowledge_id": str(knowledge_id),
-            "connection_id": str(user_id),
+            "connection_id": str(connection_id),
             "file_type": file_type,
             "file_url": file_url
         }
