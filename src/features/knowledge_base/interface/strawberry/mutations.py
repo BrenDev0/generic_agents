@@ -63,7 +63,7 @@ class KnowledgeBaseMutaions:
 
             if embed_document:
                 if not input.connection_id:
-                    raise PermissionError("Cannot embed document without connection id")
+                    raise PermissionsException("Cannot embed document without connection id")
                 
                 send_to_embed = use_cases.get_send_to_embed_use_case()
                 update_embedding_tracker = get_update_embeddings_tracker_use_case()
