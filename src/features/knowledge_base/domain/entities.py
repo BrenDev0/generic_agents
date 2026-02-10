@@ -12,6 +12,6 @@ class Knowledge(BaseModel):
     name: Optional[str] = None
     description: str
     url: Optional[str] = None
-    is_embedded: Optional[bool] = False
+    state: str
     created_at: Optional[datetime] = None
     agent: Optional[Agent] = None

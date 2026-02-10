@@ -20,7 +20,7 @@ def update_embedding_status(
     try:
         use_case = get_update_knowledge_use_case()
         changes = UpdateKnowledgeRequest(
-            is_embedded=data.status
+            state=data.status
         )
         return use_case.execute(
             user_id=data.user_id,

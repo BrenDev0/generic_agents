@@ -21,7 +21,7 @@ class KnowledgePublic(KnowledgeConfig):
     name: str
     description: str
     url: str
-    is_embedded: bool
+    state: str
     created_at: datetime
 
 class CreateKnowledgeRequest(KnowledgeConfig):
@@ -30,7 +30,7 @@ class CreateKnowledgeRequest(KnowledgeConfig):
 class UpdateKnowledgeRequest(KnowledgeConfig):
     name: Optional[str] = None
     description: Optional[str] = None
-    is_embedded: Optional[bool] = None
+    state: str
 
 class InternalUpdateEmbeddingStatus(BaseModel):
     user_id: UUID
