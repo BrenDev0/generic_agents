@@ -18,7 +18,7 @@ class SqlAlchemyKnowledge(Base):
     name = Column(String, nullable=True)
     description = Column(String,  nullable=False)
     url = Column(String, nullable=True)
-    state = Column(String, nullable=False, default="UNPROCESSED")
+    state = Column(String, nullable=False, default="NO PROCESADO")
     created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
     
     agent = relationship("SqlAlchemyAgent")
