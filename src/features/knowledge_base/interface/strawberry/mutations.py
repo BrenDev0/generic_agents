@@ -52,7 +52,7 @@ class KnowledgeBaseMutaions:
                 raise GraphQlException("File too large. Max size is 10MB.")
 
             if embed_document:
-                input.state = "PROCESSING"
+                input.state = "PROCESANDO"
 
             saved_doc = use_case.execute(
                 req_data=input,
