@@ -10,6 +10,7 @@ from src.persistence.domain.exceptions import NotFoundException
 from src.security.domain.exceptions import PermissionsException
 from src.features.knowledge_base.dependencies import use_cases, business_rules
 from src.features.knowledge_base.domain.exceptions import UnsupportedFileType
+from src.features.knowledge_base.domain.schemas import CreateKnowledgeRequest
 from src.features.knowledge_base.interface.strawberry import types, inputs
 from src.features.sessions.dependencies.use_cases import get_update_embeddings_tracker_use_case
 logger = logging.getLogger(__name__)
@@ -52,7 +53,10 @@ class KnowledgeBaseMutaions:
                 raise GraphQlException("File too large. Max size is 10MB.")
 
             if embed_document:
-                input.state = "PROCESANDO"
+                input = CreateKnowledgeRequest(
+                    **input.model_dump(),
+                    state="PROCESANDO"
+                )
 
             saved_doc = use_case.execute(
                 req_data=input,
@@ -167,3 +171,4 @@ class KnowledgeBaseMutaions:
         except Exception as e: 
             logger.error(str(e))
             raise GraphQlException()
+        
