@@ -36,4 +36,4 @@ class UpdateKnowledgeRequest(KnowledgeConfig):
 
 class InternalUpdateEmbeddingStatus(BaseModel):
     user_id: UUID
-    status: bool
+    status: str
