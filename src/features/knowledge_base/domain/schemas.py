@@ -26,6 +26,7 @@ class KnowledgePublic(KnowledgeConfig):
 
 class CreateKnowledgeRequest(KnowledgeConfig):
     description: str
+    state: Optional[str] = None
     connection_id: Optional[UUID] = None
 
 class UpdateKnowledgeRequest(KnowledgeConfig):
