@@ -51,6 +51,8 @@ class KnowledgeBaseMutaions:
             if len(file_bytes) > MAX_FILE_SIZE:
                 raise GraphQlException("File too large. Max size is 10MB.")
 
+            if embed_document:
+                input.state = "PROCESSING"
 
             saved_doc = use_case.execute(
                 req_data=input,
@@ -126,7 +128,6 @@ class KnowledgeBaseMutaions:
             user_id = info.context.get("user_id")
             use_case = use_cases.get_update_knowledge_use_case()
 
-        
             return use_case.execute(
                 user_id=user_id,
                 knowledge_id=knowledge_id,
