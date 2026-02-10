@@ -32,7 +32,7 @@ class CreateKnowledgeRequest(KnowledgeConfig):
 class UpdateKnowledgeRequest(KnowledgeConfig):
     name: Optional[str] = None
     description: Optional[str] = None
-    status: str
+    state: str
 
 class InternalUpdateEmbeddingStatus(BaseModel):
     user_id: UUID
