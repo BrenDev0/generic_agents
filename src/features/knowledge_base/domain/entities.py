@@ -12,6 +12,6 @@ class Knowledge(BaseModel):
     name: Optional[str] = None
     description: str
     url: Optional[str] = None
-    state: str
+    state: Optional[str] = None
     created_at: Optional[datetime] = None
     agent: Optional[Agent] = None
