@@ -18,7 +18,7 @@ class SqlAlchemyKnowledge(Base):
     name = Column(String, nullable=True)
     description = Column(String,  nullable=False)
     url = Column(String, nullable=True)
-    is_embedded = Column(Boolean, nullable=False, default=False)
+    state = Column(String, nullable=False, default="UNPROCESSED")
     created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
     
     agent = relationship("SqlAlchemyAgent")
@@ -36,7 +36,7 @@ class SqlAlchemyKnowledgeRepository(SqlAlchemyDataRepository[Knowledge, SqlAlche
             name=model.name,
             description=model.description,
             url=model.url,
-            is_embedded=model.is_embedded,
+            state=model.state,
             created_at=model.created_at,
             agent=self._agent_to_entity(model.agent)
         )
