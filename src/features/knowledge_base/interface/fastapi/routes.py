@@ -17,17 +17,13 @@ def update_embedding_status(
     knowledge_id: UUID,
     data: InternalUpdateEmbeddingStatus = Body(...)
 ):
-    try:
-        use_case = get_update_knowledge_use_case()
-        changes = UpdateKnowledgeRequest(
-            state=data.status
-        )
-        return use_case.execute(
-            user_id=data.user_id,
-            knowledge_id=knowledge_id,
-            changes=changes
-        )
+    use_case = get_update_knowledge_use_case()
+    changes = UpdateKnowledgeRequest(
+        is_embedded=data.status
+    )
+    return use_case.execute(
+        user_id=data.user_id,
+        knowledge_id=knowledge_id,
+        changes=changes
+    )
     
-    except Exception as e:
-        logger.error(str(e))
-        raise HTTPException(status_code=500, detail="Unable to proccess request at this time")
