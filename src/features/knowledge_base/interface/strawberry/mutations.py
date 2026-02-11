@@ -1,6 +1,5 @@
 import logging
 import strawberry
-import json
 from strawberry.file_uploads import Upload
 from starlette.datastructures import UploadFile
 from uuid import UUID
@@ -8,14 +7,15 @@ from src.app.interface.strawberry.decorators.req_validation import validate_inpu
 from src.app.domain.exceptions import GraphQlException
 from src.app.interface.strawberry.middleware.user_auth import UserAuth
 from src.persistence.domain.exceptions import NotFoundException
-from src.persistence.dependencies.repositories import get_session_repository
 from src.security.domain.exceptions import PermissionsException
 from src.features.knowledge_base.dependencies import use_cases, business_rules
 from src.features.knowledge_base.domain.exceptions import UnsupportedFileType
+from src.features.knowledge_base.domain.schemas import CreateKnowledgeRequest
 from src.features.knowledge_base.interface.strawberry import types, inputs
+from src.features.sessions.dependencies.use_cases import get_update_embeddings_tracker_use_case
 logger = logging.getLogger(__name__)
 
-MAX_FILE_SIZE = 10 * 1024 * 1024
+MAX_FILE_SIZE = 50 * 1024 * 1024 
 
 
 @strawberry.type
@@ -52,6 +52,8 @@ class KnowledgeBaseMutaions:
             if len(file_bytes) > MAX_FILE_SIZE:
                 raise GraphQlException("File too large. Max size is 10MB.")
 
+            if embed_document:
+                input.state = "PROCESANDO"
 
             saved_doc = use_case.execute(
                 req_data=input,
@@ -63,30 +65,43 @@ class KnowledgeBaseMutaions:
             )
 
             if embed_document:
-                send_to_embed = use_cases.get_send_to_embed_use_case()
-                session_repository = get_session_repository()
-
-                key = f"{agent_id}_embeddings_tracker"
+                if not input.connection_id:
+                    raise PermissionsException("Cannot embed document without connection id")
                 
-                embedding_tracker = {
-                    str(saved_doc.knowledge_id): {
-                        "stage": "Enviando documento...",
-                        "status": "Enviando",
-                        "progress": 50  
-                    }
+                send_to_embed = use_cases.get_send_to_embed_use_case()
+                update_embedding_tracker = get_update_embeddings_tracker_use_case()
+                
+                embedding_status = {
+                    "stage": "Enviando documento...",
+                    "status": "Enviando",
+                    "progress": 10 # progress of the whole process, 5 parts of  20%
                 }
 
-                session_repository.set_session(
-                    key=key,
-                    value=json.dumps(embedding_tracker)
+                update_embedding_tracker.execute(
+                    agent_id=saved_doc.agent_id,
+                    knowledge_id=saved_doc.knowledge_id,
+                    update=embedding_status
                 )
 
                 await send_to_embed.execute(
                     user_id=user_id,
                     agent_id=saved_doc.agent_id,
                     knowledge_id=saved_doc.knowledge_id,
+                    connection_id=input.connection_id,
                     file_type=saved_doc.type,
                     file_url=saved_doc.url
+                )
+
+                embedding_status = {
+                    "stage": "Enviando documento...",
+                    "status": "Enviado",
+                    "progress": 20  
+                }
+
+                update_embedding_tracker.execute(
+                    agent_id=saved_doc.agent_id,
+                    knowledge_id=saved_doc.knowledge_id,
+                    update=embedding_status
                 )
 
             return saved_doc
@@ -114,7 +129,6 @@ class KnowledgeBaseMutaions:
             user_id = info.context.get("user_id")
             use_case = use_cases.get_update_knowledge_use_case()
 
-        
             return use_case.execute(
                 user_id=user_id,
                 knowledge_id=knowledge_id,
@@ -154,3 +168,4 @@ class KnowledgeBaseMutaions:
         except Exception as e: 
             logger.error(str(e))
             raise GraphQlException()
+        

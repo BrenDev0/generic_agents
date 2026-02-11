@@ -9,8 +9,6 @@ class IsSupportedFileType:
             "application/pdf",           # .pdf
             "text/plain",                # .txt
             "text/markdown",             # .md
-            "application/msword",        # .doc
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"  # .docx
         ]
 
         if file_type not in supported:

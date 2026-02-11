@@ -23,7 +23,7 @@ class UpdateKnowledge:
         )
 
         if not knowledge:
-            raise NotFoundException("Knowledge resource not found")
+            raise exceptions.NotFoundException("Knowledge resource not found")
         
         if str(knowledge.agent.user_id) != str(user_id):
             raise PermissionsException()
