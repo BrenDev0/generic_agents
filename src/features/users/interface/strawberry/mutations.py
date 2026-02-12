@@ -201,7 +201,7 @@ class UserMutations:
         permission_classes=[user_auth.UserAuth],
         description="Delete user by id in auth token"
     )
-    def delete_user(
+    async def delete_user(
         self,
         info: strawberry.Info
     ) -> types.UserType:
@@ -210,7 +210,7 @@ class UserMutations:
             user_id = info.context.get("user_id")
             delete_uploads_use_case = get_delete_knowledge_by_user_use_case()
 
-            delete_uploads_use_case.execute(
+            await delete_uploads_use_case.execute(
                 user_id=user_id
             )
 
