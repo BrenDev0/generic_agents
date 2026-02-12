@@ -41,7 +41,8 @@ def get_delete_knowledge_use_case() -> delete.DeleteKnowledge:
     except DependencyNotRegistered:
         use_case = delete.DeleteKnowledge(
             data_repository=get_knowledge_data_repository(),
-            file_repository=get_knowledge_file_repository()
+            file_repository=get_knowledge_file_repository(),
+            async_http_client=get_async_http_client()
         )
         Container.register(instance_key, use_case)
         logger.debug(f"{instance_key} registered")
@@ -56,7 +57,8 @@ def get_delete_knowledge_by_agent_use_case() -> delete_by_agent.DeleteAgentKnowl
     except DependencyNotRegistered:
         use_case = delete_by_agent.DeleteAgentKnowledge(
             data_repository=get_knowledge_data_repository(),
-            file_repository=get_knowledge_file_repository()
+            file_repository=get_knowledge_file_repository(),
+            async_http_client=get_async_http_client()
         )
         Container.register(instance_key, use_case)
         logger.debug(f"{instance_key} registered")
@@ -72,7 +74,8 @@ def get_delete_knowledge_by_user_use_case() -> delete_by_user.DeleteAllKnowledge
         use_case = delete_by_user.DeleteAllKnowledge(
             agent_repository=get_agents_repository(),
             file_repository=get_knowledge_file_repository(),
-            knowledge_base_repository=get_knowledge_data_repository()
+            knowledge_base_repository=get_knowledge_data_repository(),
+            async_http_client=get_async_http_client()
         )
         Container.register(instance_key, use_case)
         logger.debug(f"{instance_key} registered")

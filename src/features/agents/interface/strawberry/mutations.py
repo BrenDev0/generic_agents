@@ -45,7 +45,7 @@ class AgentMutations:
         description="Delete agent profile",
         permission_classes=[UserAuth]
     )
-    def agent_delete(
+    async def agent_delete(
         self,
         info: strawberry.Info,
         agent_id: UUID
@@ -55,7 +55,7 @@ class AgentMutations:
             user_id = info.context.get("user_id")
             delete_uploads_use_case = get_delete_knowledge_by_agent_use_case()
 
-            delete_uploads_use_case.execute(
+            await delete_uploads_use_case.execute(
                 agent_id=agent_id,
                 user_id=user_id
             )

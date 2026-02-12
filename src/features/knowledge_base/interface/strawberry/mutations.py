@@ -147,7 +147,7 @@ class KnowledgeBaseMutaions:
         permission_classes=[UserAuth],
         description="Delete knowledge resource"
     )
-    def delete_knowledge(
+    async def delete_knowledge(
         self,
         knowledge_id: UUID,
         info: strawberry.Info
@@ -157,7 +157,7 @@ class KnowledgeBaseMutaions:
             use_case = use_cases.get_delete_knowledge_use_case()
 
         
-            return use_case.execute(
+            return await use_case.execute(
                 knowledge_id=knowledge_id,
                 user_id=user_id
             )
