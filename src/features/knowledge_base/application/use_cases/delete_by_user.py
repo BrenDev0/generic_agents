@@ -34,7 +34,7 @@ class DeleteAllKnowledge:
         
 
         ## delete from vector base
-        endpoint = f"{os.getenv("LLM_SERVER")}/embeddings/",
+        endpoint = f"{os.getenv("LLM_SERVER")}/embeddings/"
 
         req_body = {
             "key": "user_id",

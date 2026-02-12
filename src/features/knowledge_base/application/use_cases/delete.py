@@ -33,7 +33,7 @@ class DeleteKnowledge:
         if str(knowledge.agent.user_id) != str(user_id):
             raise PermissionsException()
         
-        endpoint = f"{os.getenv("LLM_SERVER")}/embeddings/",
+        endpoint = f"{os.getenv("LLM_SERVER")}/embeddings/"
 
         req_body = {
             "key": "knowledge_id",
