@@ -20,7 +20,7 @@ class SendToEmbed:
         file_type: str,
         file_url: str
     ):
-        endpoint = f"{os.getenv("LLM_SERVER")}/documents"
+        endpoint = f"{os.getenv("LLM_SERVER")}/documents/"
         
         body = {
             "user_id": str(user_id),

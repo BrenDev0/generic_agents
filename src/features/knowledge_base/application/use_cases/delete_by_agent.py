@@ -35,7 +35,7 @@ class DeleteAgentKnowledge:
             raise PermissionsException()
         
         ## delete from vector base
-        endpoint = f"{os.getenv("LLM_SERVER")}/embeddings",
+        endpoint = f"{os.getenv("LLM_SERVER")}/embeddings/",
 
         req_body = {
             "key": "agent_id",
