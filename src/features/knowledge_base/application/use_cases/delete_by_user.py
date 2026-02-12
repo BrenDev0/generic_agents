@@ -38,7 +38,7 @@ class DeleteAllKnowledge:
 
         req_body = {
             "key": "user_id",
-            "value": user_id
+            "value": str(user_id)
         }
 
         await self.__async_http_client.request(

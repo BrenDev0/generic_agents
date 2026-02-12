@@ -39,7 +39,7 @@ class DeleteAgentKnowledge:
 
         req_body = {
             "key": "agent_id",
-            "value": agent_id
+            "value": str(agent_id)
         }
 
         await self.__async_http_client.request(
