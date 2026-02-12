@@ -1,7 +1,7 @@
 import strawberry
 import logging
 from uuid import UUID
-from typing import List
+from typing import List, Optional
 from src.features.knowledge_base.dependencies.use_cases import get_knowledge_collection_use_case
 from src.features.knowledge_base.interface.strawberry import types
 from src.app.domain.exceptions import GraphQlException
@@ -18,7 +18,8 @@ class KnowledgeQueries:
     def knowledge_collection(
         self,
         agent_id: UUID,
-        info: strawberry.Info
+        info: strawberry.Info,
+        filter: Optional[str] = None
     ) -> List[types.KnowledgeType]:
         try:
             user_id = info.context.get("user_id")
@@ -26,7 +27,8 @@ class KnowledgeQueries:
 
             return use_case.execute(
                 user_id=user_id,
-                agent_id=agent_id
+                agent_id=agent_id,
+                filter=filter
             )
         
         except PermissionsException as e:

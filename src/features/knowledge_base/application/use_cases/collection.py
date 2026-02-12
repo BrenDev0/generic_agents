@@ -1,5 +1,5 @@
 from uuid import UUID
-from typing import List
+from typing import List, Optional
 from src.features.knowledge_base.domain import entities, schemas
 from src.persistence.domain.data_repository import DataRepository
 from src.security.domain.exceptions import PermissionsException
@@ -14,7 +14,8 @@ class GetKnowledgeCollection:
     def execute(
         self,
         user_id: UUID,
-        agent_id: UUID
+        agent_id: UUID,
+        filter: Optional[str] = None
     ): 
         collection: List[entities.Knowledge] = self.__data_repository.get_many(
             key="agent_id",
@@ -29,6 +30,8 @@ class GetKnowledgeCollection:
         
         return [
             schemas.KnowledgePublic.model_validate(knowledge, from_attributes=True) for knowledge in collection
+        ] if not filter else [
+            schemas.KnowledgePublic.model_validate(knowledge, from_attributes=True) for knowledge in collection if knowledge.state and knowledge.state.lower() == filter.lower()
         ]
     
     
