@@ -9,8 +9,7 @@ from src.app.interface.strawberry.middleware.user_auth import UserAuth
 from src.persistence.domain.exceptions import NotFoundException
 from src.security.domain.exceptions import PermissionsException
 from src.features.knowledge_base.dependencies import use_cases, business_rules
-from src.features.knowledge_base.domain.exceptions import UnsupportedFileType
-from src.features.knowledge_base.domain.schemas import CreateKnowledgeRequest
+from src.features.knowledge_base.domain import exceptions, schemas, entities
 from src.features.knowledge_base.interface.strawberry import types, inputs
 from src.features.sessions.dependencies.use_cases import get_update_embeddings_tracker_use_case
 logger = logging.getLogger(__name__)
@@ -106,13 +105,15 @@ class KnowledgeBaseMutaions:
 
             return saved_doc
         
-        except (NotFoundException, PermissionsException, UnsupportedFileType) as e:
+        except (NotFoundException, PermissionsException, exceptions.UnsupportedFileType) as e:
             raise GraphQlException(str(e))
         
         except Exception as e:
             logger.error(str(e))
             raise GraphQlException()
     
+
+
 
     @strawberry.mutation(
         permission_classes=[UserAuth],
@@ -143,6 +144,8 @@ class KnowledgeBaseMutaions:
             raise GraphQlException()
         
     
+
+
     @strawberry.mutation(
         permission_classes=[UserAuth],
         description="Delete knowledge resource"
@@ -168,4 +171,89 @@ class KnowledgeBaseMutaions:
         except Exception as e: 
             logger.error(str(e))
             raise GraphQlException()
+
+
+
+    @strawberry.mutation(
+        permission_classes=[UserAuth],
+        description="Delete from vector base"
+    )
+    async def delete_embeddings(
+        self,
+        knowledge_id: UUID,
+        info: strawberry.Info
+    ) -> types.KnowledgeType:
+        try:
+            user_id = info.context.get("user_id")
+            resource_use_case = use_cases.get_knowledge_resource_use_case()
+            
+            resource: entities.Knowledge = resource_use_case.execute(
+                user_id=user_id,
+                knowledge_id=knowledge_id
+            )
+
+            remove_embeddings_use_case = use_cases.get_delete_embeddings_use_case()
+
+            await remove_embeddings_use_case.execute(
+                knowledge_id=resource.knowledge_id
+            )
+
+            update_knowledge_use_case = use_cases.get_update_knowledge_use_case()
+            changes = schemas.UpdateKnowledgeRequest(
+                state="NO PROCESADO"
+            )
+            return update_knowledge_use_case.execute(
+                user_id=user_id,
+                knowledge_id=resource.knowledge_id,
+                changes=changes
+            )
+
+
+        except (NotFoundException, PermissionsException) as e:
+            raise GraphQlException(str(e))
         
+        except Exception as e: 
+            logger.error(str(e))
+            raise GraphQlException()
+        
+
+
+    
+    @strawberry.mutation(
+        permission_classes=[UserAuth],
+        description="create embeddings"
+    )
+    async def create_embeddings(
+        self,
+        knowledge_id: UUID,
+        connection_id: UUID,
+        info: strawberry.Info
+    ) -> types.KnowledgeType:
+        try:
+            user_id = info.context.get("user_id")
+            resource_use_case = use_cases.get_knowledge_resource_use_case()
+            
+            resource: entities.Knowledge = resource_use_case.execute(
+                user_id=user_id,
+                knowledge_id=knowledge_id
+            )
+
+            send_to_embed_use_case = use_cases.get_send_to_embed_use_case()
+            await send_to_embed_use_case.execute(
+                user_id=user_id,
+                agent_id=resource.agent_id,
+                knowledge_id=resource.knowledge_id,
+                connection_id=connection_id,
+                file_type=resource.type,
+                file_url=resource.url
+            )
+
+            return resource
+
+
+        except (NotFoundException, PermissionsException) as e:
+            raise GraphQlException(str(e))
+        
+        except Exception as e: 
+            logger.error(str(e))
+            raise GraphQlException()

@@ -25,7 +25,7 @@ class DeleteUser:
         if not deleted_user:
             raise exceptions.NotFoundException("User not found")
 
-        return entities.UserPublic(
+        return schemas.UserPublic(
             user_id=deleted_user.user_id,
             email=self.__encryption.decrypt(deleted_user.email),
             name=self.__encryption.decrypt(deleted_user.name),

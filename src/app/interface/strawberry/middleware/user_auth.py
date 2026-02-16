@@ -5,6 +5,7 @@ from strawberry.types import Info
 from src.security.dependencies.services import get_web_token_service
 from src.security.domain.exceptions import ExpiredToken, InvalidToken
 from src.app.domain.exceptions import GraphQlException
+from src.features.users.dependencies.repositories import get_users_repository
 logger = logging.getLogger(__name__)
 
 class UserAuth(BasePermission):
@@ -26,6 +27,16 @@ class UserAuth(BasePermission):
                     raise InvalidToken()
                 
                 if user_id:
+                    user_repository = get_users_repository()
+                    user_exists = user_repository.get_one(
+                        key="user_id",
+                        value=user_id
+                    )
+
+                    if not user_exists:
+                        raise InvalidToken("Token does not contain a valid user id")
+                    
+                    
                     info.context["user_id"] = user_id
                     return True
             
