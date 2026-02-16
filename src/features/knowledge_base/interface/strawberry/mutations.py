@@ -248,7 +248,17 @@ class KnowledgeBaseMutaions:
                 file_url=resource.url
             )
 
-            return resource
+            update_use_case = use_cases.get_update_knowledge_use_case()
+            changes = schemas.UpdateKnowledgeRequest(
+                state="PROCESANDO"
+            )
+            updated = update_use_case.execute(
+                user_id=user_id, 
+                knowledge_id=resource.knowledge_id,
+                changes=changes
+            )
+
+            return updated
 
 
         except (NotFoundException, PermissionsException) as e:
