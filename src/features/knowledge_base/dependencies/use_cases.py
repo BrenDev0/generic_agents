@@ -8,7 +8,9 @@ from src.features.knowledge_base.application.use_cases import (
     collection,
     delete_by_agent,
     delete_by_user,
-    send_to_embed
+    send_to_embed,
+    resource,
+    remove_embeddings
 )
 from src.features.knowledge_base.dependencies.repositories import get_knowledge_data_repository, get_knowledge_file_repository
 from src.features.agents.dependencies.repositories import get_agents_repository
@@ -124,6 +126,36 @@ def get_send_to_embed_use_case() -> send_to_embed.SendToEmbed:
         logger.debug(f"{instance_key} registered")
     
     return use_case
+
+def get_delete_embeddings_use_case() -> remove_embeddings.RemoveEmbeddings:
+    try:
+        instance_key = "delete_embeddings_use_case",
+        use_case = Container.resolve(instance_key)
+    
+    except DependencyNotRegistered:
+        use_case = remove_embeddings.RemoveEmbeddings(
+            async_http_client=get_async_http_client()
+        )
+        Container.register(instance_key, use_case)
+        logger.debug(f"{instance_key} registered")
+    
+    return use_case
+
+def get_knowledge_resource_use_case() -> resource.GetKnowledgeResource:
+    try:
+        instance_key = "knowledge_resource_use_case",
+        use_case = Container.resolve(instance_key)
+    
+    except DependencyNotRegistered:
+        use_case = resource.GetKnowledgeResource(
+            data_repository=get_knowledge_data_repository()
+        )
+        Container.register(instance_key, use_case)
+        logger.debug(f"{instance_key} registered")
+    
+    return use_case
+
+
 
 
 
