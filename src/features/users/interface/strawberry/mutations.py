@@ -81,6 +81,7 @@ class UserMutations:
                 rule = business_rules.get_update_password_rule()
                 rule.validate(
                     user_id=user_id,
+                    new_password=input.password,
                     old_password=input.old_password,
                     current_password_check=True
                 )
