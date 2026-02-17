@@ -1,6 +1,6 @@
 from uuid import UUID
-from src.persistence.domain import data_repository, exceptions
-from src.features.chats.domain import entities, schemas
+from src.persistence.domain import data_repository
+from ...domain import Chat, ChatPublic
 
 
 class CreateChat:
@@ -14,7 +14,7 @@ class CreateChat:
         self,
         agent_id: UUID
     ):
-        data = entities.Chat(
+        data = Chat(
             agent_id=agent_id
         )
 
@@ -22,4 +22,4 @@ class CreateChat:
             data=data
         )
 
-        return schemas.ChatPublic.model_validate(new_chat, from_attributes=True)
+        return ChatPublic.model_validate(new_chat, from_attributes=True)

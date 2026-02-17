@@ -1,7 +1,7 @@
 from sqlalchemy import Column, ForeignKey, String, DateTime, func
 from sqlalchemy.dialects.postgresql import UUID
 from uuid import uuid4
-from src.features.chats.domain.entities import Chat
+from ...domain import Chat
 from src.persistence.infrastructure.sqlAlchemy.data_repository import Base, SqlAlchemyDataRepository
 
 class SqlAlchemyChat(Base):
@@ -9,7 +9,6 @@ class SqlAlchemyChat(Base):
 
     chat_id=Column(UUID(as_uuid=True), primary_key=True, nullable=False, default=uuid4)
     agent_id=Column(UUID(as_uuid=True), ForeignKey("agents.agent_id", ondelete="CASCADE"), nullable=False)
-    title=Column(String, nullable=True)
     created_at=Column(DateTime(timezone=True), nullable=True, server_default=func.now())
 
 
@@ -21,7 +20,6 @@ class SqlAlchemyChatsRepository(SqlAlchemyDataRepository[Chat, SqlAlchemyChat]):
         return Chat(
             chat_id=model.chat_id,
             agent_id=model.agent_id,
-            title=model.title,
             created_at=model.created_at
         )
     
