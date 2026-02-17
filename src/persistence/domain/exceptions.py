@@ -1,5 +1,5 @@
 class NotFoundException(Exception):
-    def __init__(self, detail: str = "Resource not found"):
+    def __init__(self, detail: str = "404"):
         super().__init__(detail)
 
 

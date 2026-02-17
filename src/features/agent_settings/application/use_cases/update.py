@@ -23,7 +23,7 @@ class UpdateAgentSettings:
         )
 
         if not setting:
-            raise exceptions.NotFoundException("Settings not found")
+            raise exceptions.NotFoundException()
         
         if str(setting.agent.user_id) != str(user_id):
             raise PermissionsException()

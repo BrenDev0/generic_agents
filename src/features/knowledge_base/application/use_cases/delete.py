@@ -28,7 +28,7 @@ class DeleteKnowledge:
         )
 
         if not knowledge:
-            raise exceptions.NotFoundException("Knowledge resource not found")
+            raise exceptions.NotFoundException()
         
         if str(knowledge.agent.user_id) != str(user_id):
             raise PermissionsException()

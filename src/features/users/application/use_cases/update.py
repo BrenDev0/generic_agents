@@ -39,7 +39,7 @@ class UpdateUser:
         )
 
         if not updated_user:
-            raise exceptions.NotFoundException("User not found")
+            raise exceptions.NotFoundException()
         
         
         return schemas.UserPublic(

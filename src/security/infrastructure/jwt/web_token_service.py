@@ -18,12 +18,12 @@ class JwtWebTokenService(WebTokenService):
             return jwt.decode(token, self.__secret, algorithms=["HS256"])
         
         except jwt.ExpiredSignatureError:
-            logger.warning(f"Token expired ::: {token}")
-            raise ExpiredToken(f"Token expired ::: {token}")
+            logger.error(f"Token expired ::: {token}")
+            raise ExpiredToken()
             
         except jwt.InvalidTokenError:
-            logger.warning(f"Invalid token ::: {token}")
-            raise InvalidToken(f"Invalid token ::: {token}")
+            logger.error(f"Invalid token ::: {token}")
+            raise InvalidToken()
         
     
     def generate(self, payload: Dict[str, Any], expiration: int = 900):

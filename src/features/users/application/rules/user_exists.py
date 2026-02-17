@@ -23,7 +23,7 @@ class UserExists:
         )
 
         if not user_exists:
-            raise exceptions.NotFoundException("Incorrect email")
+            raise exceptions.NotFoundException()
         
 
         return user_exists

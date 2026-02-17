@@ -30,7 +30,7 @@ class UserLogin:
         )
 
         if not user_exists:
-            raise exceptions.NotFoundException("User not found")
+            raise exceptions.NotFoundException()
 
         self.__hashing.compare_password(
             password=password,

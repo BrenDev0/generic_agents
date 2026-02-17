@@ -27,7 +27,7 @@ class UpdatePasswordRule:
         )
 
         if not user:
-            raise exceptions.NotFoundException("User not found")
+            raise exceptions.NotFoundException()
         
         # check new and old password match
         is_current_password = self.__hashing.compare_password(
@@ -37,7 +37,7 @@ class UpdatePasswordRule:
         )
 
         if is_current_password:
-            raise IncorrectPassword("New password cannot be same as current password")
+            raise IncorrectPassword()
         
         if current_password_check:
             if not old_password:

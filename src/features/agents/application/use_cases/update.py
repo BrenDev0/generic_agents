@@ -24,7 +24,7 @@ class UpdateAgentProfile:
         )
 
         if not agent:
-            raise exceptions.NotFoundException("Agent not found")
+            raise exceptions.NotFoundException()
         
         if str(agent.user_id) != str(user_id):
             raise PermissionsException()

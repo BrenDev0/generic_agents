@@ -23,10 +23,10 @@ class GetKnowledgeResource:
         )
 
         if not knowledge:
-            raise NotFoundException("Knowledge not found")
+            raise NotFoundException()
 
         if str(knowledge.agent.user_id) != str(user_id):
-            raise PermissionsException("Forbidden")
+            raise PermissionsException()
         
         
         return schemas.KnowledgePublic.model_validate(knowledge, from_attributes=True)

@@ -22,7 +22,7 @@ class DeleteAgentProfile:
         )
 
         if not agent:
-            raise exceptions.NotFoundException("Agent not found")
+            raise exceptions.NotFoundException()
         
         if str(user_id) != str(agent.user_id):
             raise PermissionsException()

@@ -23,7 +23,7 @@ class DeleteUser:
         )
 
         if not deleted_user:
-            raise exceptions.NotFoundException("User not found")
+            raise exceptions.NotFoundException()
 
         return schemas.UserPublic(
             user_id=deleted_user.user_id,

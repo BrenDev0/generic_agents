@@ -34,7 +34,7 @@ class UserAuth(BasePermission):
                     )
 
                     if not user_exists:
-                        raise InvalidToken("Token does not contain a valid user id")
+                        raise InvalidToken()
                     
                     
                     info.context["user_id"] = user_id

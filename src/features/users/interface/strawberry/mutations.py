@@ -32,7 +32,7 @@ class UserMutations:
             encryption = get_encrytpion_service()
 
             if int(input.code) != int(encryption.decrypt(verification_code)):
-                raise GraphQlException("Unauthorized")
+                raise GraphQlException("401")
             
             new_user = use_case.execute(
                 name=input.name,
@@ -96,12 +96,9 @@ class UserMutations:
                 changes=UpdateUserSchema(**changes)
             )
             
-        except NotFoundException as e:
+        except (NotFoundException, IncorrectPassword) as e:
             raise GraphQlException(str(e))
-        
-        except IncorrectPassword as e:
-            raise GraphQlException(str(e))        
-
+           
         except GraphQlException:
             raise
 
@@ -122,13 +119,13 @@ class UserMutations:
     ) -> types.UserType:
         user_id = info.context.get("user_id")
         if not user_id:
-            raise GraphQlException("Forbidden")
+            raise GraphQlException("403")
             
         verification_code = info.context.get("verification_code")
         encryption = get_encrytpion_service()
         
         if int(input.code) != int(encryption.decrypt(verification_code)):
-            raise GraphQlException("Unauthorized")
+            raise GraphQlException("401")
         
         if input.email and input.password:
             raise GraphQlException("Cannot update email and password simultaneously")
@@ -191,7 +188,7 @@ class UserMutations:
             )
         
         except (NotFoundException, IncorrectPassword):
-            raise GraphQlException("Incorrect email or password")
+            raise GraphQlException("400")
 
         except Exception as e:
             logger.error(str(e))
@@ -239,13 +236,13 @@ class UserMutations:
         user_id = info.context.get("user_id")
         if not user_id:
             
-            raise GraphQlException("Forbidden")
+            raise GraphQlException("403")
             
         verification_code = info.context.get("verification_code")
         encryption = get_encrytpion_service()
         
         if int(input.verification_code) != int(encryption.decrypt(verification_code)):
-            raise GraphQlException("Unauthorized")
+            raise GraphQlException("401")
         
         try:
             service = get_web_token_service()
