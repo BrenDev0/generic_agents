@@ -9,7 +9,7 @@ from src.features.users.dependencies.repositories import get_users_repository
 logger = logging.getLogger(__name__)
 
 class UserAuth(BasePermission):
-     message = "Unauthorized"
+     message = "401"
      def has_permission(self, source: typing.Any, info: Info, **kwargs) -> bool:
         request = info.context["request"]
        

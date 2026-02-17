@@ -6,7 +6,7 @@ from src.security.domain.exceptions import ExpiredToken, InvalidToken
 from src.app.domain.exceptions import GraphQlException
 
 class UserVerification(BasePermission):
-     message = "Unverified"
+     message = "401"
      def has_permission(self, source: typing.Any, info: Info, **kwargs) -> bool:
         request = info.context["request"]
        
