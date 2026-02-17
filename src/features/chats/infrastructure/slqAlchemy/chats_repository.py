@@ -2,7 +2,7 @@ from sqlalchemy import Column, ForeignKey, String, DateTime, func
 from sqlalchemy.dialects.postgresql import UUID
 from uuid import uuid4
 from ...domain import Chat
-from src.persistence.infrastructure.sqlAlchemy.data_repository import Base, SqlAlchemyDataRepository
+from src.persistence import Base, SqlAlchemyDataRepository
 
 class SqlAlchemyChat(Base):
     __tablename__ = "chats"

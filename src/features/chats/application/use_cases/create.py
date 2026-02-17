@@ -1,12 +1,12 @@
 from uuid import UUID
-from src.persistence.domain import data_repository
+from src.persistence import DataRepository
 from ...domain import Chat, ChatPublic
 
 
 class CreateChat:
     def __init__(
         self,
-        repository: data_repository.DataRepository
+        repository: DataRepository
     ):
         self.__repository = repository
 
