@@ -33,7 +33,6 @@ def test_success(
     mock_repository.create.return_value = fake_chat
 
     result = use_case.execute(
-        chat_id=chat_id,
         agent_id=agent_id
     )
 
