@@ -6,7 +6,7 @@ from src.app.interface.strawberry.middleware.user_auth import UserAuth
 from src.app.interface.strawberry.decorators.req_validation import validate_input_to_model
 from src.security import PermissionsException
 from src.persistence import NotFoundException
-from src.features.knowledge_base.dependencies.use_cases import get_delete_knowledge_by_agent_use_case
+from src.features.knowledge_base import get_delete_knowledge_by_agent_use_case
 from .inputs import CreateAgentProfileInput, UpdateAgentProfileInput
 from .types import AgentType
 from ...dependencies import (

@@ -3,8 +3,7 @@ from uuid import UUID
 from typing import List
 from src.persistence import DataRepository, FileRepository
 from src.security import PermissionsException
-from src.http.utils.hmac_headers import generate_hmac_headers
-from src.http.domain.async_http_client import AsyncHttpClient
+from src.http import generate_hmac_headers, AsyncHttpClient
 from ...domain import Knowledge, KnowledgePublic
 
 class DeleteAgentKnowledge:

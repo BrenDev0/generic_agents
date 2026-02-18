@@ -8,7 +8,7 @@ from src.security import (
     InvalidToken
 )
 from src.app import GraphQlException
-from src.features.users.dependencies.repositories import get_users_repository
+from src.features.users import get_users_repository
 logger = logging.getLogger(__name__)
 
 class UserAuth(BasePermission):

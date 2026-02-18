@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 from src.persistence import DataRepository, NotFoundException
 from src.security import HashingService, EncryptionService
-from src.features.users.domain import entities, schemas
+from ...domain import User, UserPublic
 
 
 class UserLogin:
@@ -10,7 +10,7 @@ class UserLogin:
         repository: DataRepository,
         hashing: HashingService,
         encryption: EncryptionService
-    ) -> schemas.UserPublic:
+    ) -> UserPublic:
         self.__repository = repository
         self.__hashing = hashing
         self.__encrytpion = encryption
@@ -24,7 +24,7 @@ class UserLogin:
         
         hashed_email = self.__hashing.hash_for_search(email)
 
-        user_exists: entities.User = self.__repository.get_one(
+        user_exists: User = self.__repository.get_one(
             key="email_hash",
             value=hashed_email
         )
@@ -44,13 +44,13 @@ class UserLogin:
             "last_login": datetime.now(timezone.utc)
         }
 
-        updated_user: entities.User = self.__repository.update(
+        updated_user: User = self.__repository.update(
             key="user_id",
             value=user_exists.user_id,
             changes=changes
         )
 
-        user_public = schemas.UserPublic(
+        user_public = UserPublic(
             user_id=user_exists.user_id,
             email=self.__encrytpion.decrypt(updated_user.email),
             name=self.__encrytpion.decrypt(updated_user.name),

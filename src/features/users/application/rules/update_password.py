@@ -1,7 +1,7 @@
 from uuid import UUID
 from src.persistence import DataRepository, NotFoundException
 from src.security import HashingService, IncorrectPassword
-from src.features.users.domain.entities import User
+from ...domain import User
 
 
 class UpdatePasswordRule:

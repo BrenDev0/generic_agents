@@ -1,6 +1,7 @@
 import logging
 from src.di import DependencyNotRegistered, Container
-from src.http.dependencies.clients import get_async_http_client
+from src.http import get_async_http_client
+from src.features.agents import get_agents_repository
 from ..application import (
     GetKnowledgeCollection,
     UpdateKnowledge,
@@ -22,7 +23,6 @@ def get_upload_knowledge_use_case() -> UploadKnowledge:
         use_case = Container.resolve(instance_key)
     
     except DependencyNotRegistered:
-        from src.features.agents import get_agents_repository
         use_case = UploadKnowledge(
             data_repository=get_knowledge_data_repository(),
             file_repository=get_knowledge_file_repository(),

@@ -5,10 +5,12 @@ from src.app.domain import GraphQlException
 from src.app.interface.strawberry.decorators.req_validation import validate_input_to_model
 from src.persistence import NotFoundException, UpdateFieldsException
 from src.security import IncorrectPassword, get_web_token_service, get_encrytpion_service
-from src.features.users.interface.strawberry import inputs, types
-from src.features.users.domain.schemas import UpdateUserSchema
-from src.features.users.dependencies import use_cases, business_rules
 from src.features.knowledge_base import get_delete_knowledge_by_user_use_case
+from .inputs import CreateUserInput, UpdateUserInput, LoginInput, VerifiedLoginInput, VerifiedUserUpdateInput
+from .types import UserType, UserWithTokenType, TokenType
+from ...domain import UpdateUserSchema
+from ...dependencies import use_cases, business_rules
+
 logger = logging.getLogger(__name__)
 
 @strawberry.type
@@ -21,8 +23,8 @@ class UserMutations:
     def create_user(
         self,
         info: strawberry.Info,
-        input: inputs.CreateUserInput
-    ) -> types.UserWithTokenType:
+        input: CreateUserInput
+    ) -> UserWithTokenType:
         try:
             use_case = use_cases.get_create_user_use_case()
             web_token_service = get_web_token_service()
@@ -48,7 +50,7 @@ class UserMutations:
                 expiration=604800 # 7 days
             )
 
-            return types.UserWithTokenType(
+            return UserWithTokenType(
                 user=new_user,
                 token=token
             )
@@ -65,8 +67,8 @@ class UserMutations:
     def update_user(
         self,
         info: strawberry.Info,
-        input: inputs.UpdateUserInput
-    ) -> types.UserType:
+        input: UpdateUserInput
+    ) -> UserType:
         try:
             use_case = use_cases.get_update_user_use_case()
         
@@ -114,8 +116,8 @@ class UserMutations:
     def verified_update(
         self,
         info: strawberry.Info,
-        input: inputs.VerifiedUserUpdateInput
-    ) -> types.UserType:
+        input: VerifiedUserUpdateInput
+    ) -> UserType:
         user_id = info.context.get("user_id")
         if not user_id:
             raise GraphQlException("403")
@@ -162,8 +164,8 @@ class UserMutations:
     @validate_input_to_model
     def login(
         self,
-        input: inputs.LoginInput
-    ) -> types.UserWithTokenType:
+        input: LoginInput
+    ) -> UserWithTokenType:
         try:
             use_case = use_cases.get_login_use_case()
             web_token_service = get_web_token_service()
@@ -181,7 +183,7 @@ class UserMutations:
                 expiration=604800 # 7 days
             )
 
-            return types.UserWithTokenType(
+            return UserWithTokenType(
                 user=user,
                 token=token
             )
@@ -201,7 +203,7 @@ class UserMutations:
     async def delete_user(
         self,
         info: strawberry.Info
-    ) -> types.UserType:
+    ) -> UserType:
         try:
             use_case = use_cases.get_delete_user_use_case()
             user_id = info.context.get("user_id")
@@ -230,8 +232,8 @@ class UserMutations:
     def verified_login(
         self,
         info: strawberry.Info,
-        input: inputs.VerifiedLoginInput
-    ) -> types.TokenType:
+        input: VerifiedLoginInput
+    ) -> TokenType:
         user_id = info.context.get("user_id")
         if not user_id:
             
@@ -252,7 +254,7 @@ class UserMutations:
 
             token = service.generate(payload=token_payload, expiration=900)
 
-            return types.TokenType(
+            return TokenType(
                 token=token
             )
 

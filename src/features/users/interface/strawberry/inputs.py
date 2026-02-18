@@ -1,5 +1,5 @@
 import strawberry
-from src.features.users.domain.schemas import (
+from ...domain import (
     CreateUserRequest, 
     LoginRequest, 
     UpdateUserRequest, 

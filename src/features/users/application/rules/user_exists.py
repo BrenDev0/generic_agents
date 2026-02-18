@@ -1,6 +1,6 @@
 from src.persistence import NotFoundException, DataRepository
 from src.security import HashingService
-from src.features.users.domain import entities, schemas
+from ...domain import User
 
 class UserExists:
     def __init__(
@@ -17,7 +17,7 @@ class UserExists:
     ):
         hashed_email = self.__hashing.hash_for_search(data=email)
 
-        user_exists: entities.User = self.__user_repository.get_one(
+        user_exists: User = self.__user_repository.get_one(
             key="email_hash",
             value=hashed_email
         )

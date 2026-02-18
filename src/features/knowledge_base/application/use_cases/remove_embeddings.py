@@ -1,8 +1,7 @@
 import os
 import json
 from uuid import UUID
-from src.http.domain.async_http_client import AsyncHttpClient
-from src.http.utils.hmac_headers import generate_hmac_headers
+from src.http import generate_hmac_headers, AsyncHttpClient
 
 class RemoveEmbeddings:
     def __init__(

@@ -1,6 +1,6 @@
 from src.persistence import DataRepository
 from src.security import EncryptionService 
-from src.features.users.domain import entities, schemas
+from ...domain import User, UserPublic
 
 class GetUser:
     def __init__(
@@ -15,14 +15,14 @@ class GetUser:
         self,
         key: str,
         value: str
-    ) -> schemas.UserPublic | None:
-        user: entities.User = self.__repository.get_one(
+    ) -> UserPublic | None:
+        user: User = self.__repository.get_one(
             key=key,
             value=value
         )
 
         if user:
-            return schemas.UserPublic(
+            return UserPublic(
                 user_id=user.user_id,
                 email=self.__encryption.decrypt(user.email),
                 name=self.__encryption.decrypt(user.name),

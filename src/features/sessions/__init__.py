@@ -8,7 +8,7 @@ dependencies: Getter methods for singleton classes
 """
 __version__ = "1.0.0"
 __author__ = "Xplorers"
-__description__ = "knowledge package for app"
+__description__ = "Sessions package for app"
 
 from  .dependencies import (
     get_update_embeddings_tracker_use_case
@@ -16,4 +16,5 @@ from  .dependencies import (
 
 __all__ = [
     ### Dependencies ###
+    get_update_embeddings_tracker_use_case
 ]

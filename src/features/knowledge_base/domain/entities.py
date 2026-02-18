@@ -1,8 +1,8 @@
 from pydantic import BaseModel
-from typing import Optional, TYPE_CHECKING
+from typing import Optional
 from uuid import UUID
 from datetime import datetime
-from src.features.agents.domain.entities import Agent
+from src.features.agents import Agent
 
 class Knowledge(BaseModel):
     knowledge_id: Optional[UUID] = None

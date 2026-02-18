@@ -1,6 +1,6 @@
 import httpx
 from typing import Dict, Any, Optional
-from src.http.domain.async_http_client import AsyncHttpClient
+from ...domain import AsyncHttpClient
 
 
 class HttpxAsyncHttpClient(AsyncHttpClient):
