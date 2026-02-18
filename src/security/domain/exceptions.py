@@ -7,7 +7,7 @@ class InvalidToken(Exception):
         super().__init__(detail)
 
 class IncorrectPassword(Exception):
-    def __init__(self, detail: "400"):
+    def __init__(self, detail: str = "400"):
         super().__init__(detail)
 
 class PermissionsException(Exception):

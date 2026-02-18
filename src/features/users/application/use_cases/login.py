@@ -24,7 +24,7 @@ class UserLogin:
         
         hashed_email = self.__hashing.hash_for_search(email)
 
-        user_exists: User = self.__repository.get_one(
+        user_exists: User | None = self.__repository.get_one(
             key="email_hash",
             value=hashed_email
         )

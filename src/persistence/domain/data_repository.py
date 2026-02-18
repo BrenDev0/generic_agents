@@ -18,8 +18,8 @@ class DataRepository(ABC, Generic[T]):
         self,
         key: str, 
         value: str | uuid.UUID, 
-        limit: int = None, 
-        order_by=None, 
+        limit: Optional[int] = None, 
+        order_by: Optional[str] =None, 
         desc: bool = False
     ) -> List[T]:
         raise NotImplementedError
