@@ -1,10 +1,9 @@
 import logging
-from src.di.container import Container
-from src.di.domain.exceptions import DependencyNotRegistered
+from src.di import DependencyNotRegistered, Container
 from ..application import(
     CreateChat
 )
-from src.features.chats.dependencies.repositories import get_chats_repository
+from ..dependencies import get_chats_repository
 logger = logging.getLogger(__name__)
 
 def get_creat_chat_use_case() -> CreateChat:

@@ -1,14 +1,14 @@
 from uuid import UUID
 from src.features.users.domain import entities, schemas
-from src.security.domain.services import hashing, encryption
-from src.persistence.domain import data_repository, exceptions
+from src.security import HashingService, EncryptionService
+from src.persistence import DataRepository, NotFoundException, UpdateFieldsException
 
 class UpdateUser:
     def __init__(
         self, 
-        repository: data_repository.DataRepository,
-        encryption: encryption.EncryptionService,
-        hashing: hashing.HashingService
+        repository: DataRepository,
+        encryption: EncryptionService,
+        hashing: HashingService
     ):
         self.__repository = repository
         self.__encryption = encryption
@@ -17,7 +17,7 @@ class UpdateUser:
     def execute(self, user_id: UUID, changes: schemas.UpdateUserSchema) -> schemas.UserPublic:
         cleaned_changes = changes.model_dump(exclude_unset=True)
         if not cleaned_changes:
-            raise exceptions.UpdateFieldsException()
+            raise UpdateFieldsException()
         
         processed_changes = {}
         
@@ -39,7 +39,7 @@ class UpdateUser:
         )
 
         if not updated_user:
-            raise exceptions.NotFoundException()
+            raise NotFoundException()
         
         
         return schemas.UserPublic(

@@ -1,15 +1,17 @@
 from uuid import UUID
-from src.persistence.domain import data_repository, file_repository, exceptions
-from src.features.knowledge_base.domain import entities, schemas
-from src.features.knowledge_base.utlis.file_size import format_file_size
-from src.features.agents.domain.entities import Agent
-from src.security.domain.exceptions import PermissionsException
+from src.persistence import DataRepository, FileRepository, NotFoundException
+from src.features.agents import Agent
+from src.security import PermissionsException
+from ...domain import Knowledge, KnowledgePublic, CreateKnowledgeRequest
+from ...utlis import format_file_size
+
+
 class UploadKnowledge:
     def __init__(
         self,
-        data_repository: data_repository.DataRepository,
-        file_repository: file_repository.FileRepository,
-        agent_repository: data_repository.DataRepository
+        data_repository: DataRepository,
+        file_repository: FileRepository,
+        agent_repository: DataRepository
     ):
         self.__data_repository = data_repository
         self.__file_repository = file_repository
@@ -17,7 +19,7 @@ class UploadKnowledge:
 
     def execute(
         self,
-        req_data: schemas.CreateKnowledgeRequest,
+        req_data: CreateKnowledgeRequest,
         user_id: UUID,
         agent_id: UUID,
         filename: str,
@@ -30,14 +32,14 @@ class UploadKnowledge:
         ) 
 
         if not agent:
-            raise exceptions.NotFoundException()
+            raise NotFoundException()
         
         if str(agent.user_id) != str(user_id):
             raise PermissionsException()
         
         file_size = format_file_size(len(file_bytes))
 
-        data = entities.Knowledge(
+        data = Knowledge(
             **req_data.model_dump(),
             name=filename,
             agent_id=agent.agent_id,
@@ -45,7 +47,7 @@ class UploadKnowledge:
             size=file_size
         )
 
-        new_knowledge: entities.Knowledge = self.__data_repository.create(
+        new_knowledge: Knowledge = self.__data_repository.create(
             data=data
         ) 
 
@@ -71,7 +73,7 @@ class UploadKnowledge:
         }
 
         try:
-            updated_knowledge: entities.Knowledge = self.__data_repository.update(
+            updated_knowledge: Knowledge = self.__data_repository.update(
                 key="knowledge_id",
                 value=new_knowledge.knowledge_id,
                 changes=changes
@@ -88,4 +90,4 @@ class UploadKnowledge:
             )
             raise
 
-        return schemas.KnowledgePublic.model_validate(updated_knowledge, from_attributes=True)
+        return KnowledgePublic.model_validate(updated_knowledge, from_attributes=True)

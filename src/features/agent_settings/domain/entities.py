@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from uuid import UUID
 from typing import Optional
-from src.features.agents.domain.entities import Agent
+from src.features.agents import Agent
 
 class AgentSettings(BaseModel):
     setting_id: Optional[UUID] = None

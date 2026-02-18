@@ -1,12 +1,12 @@
-from src.persistence.domain import exceptions, data_repository
-from src.security.domain.services import hashing
+from src.persistence import NotFoundException, DataRepository
+from src.security import HashingService
 from src.features.users.domain import entities, schemas
 
 class UserExists:
     def __init__(
         self,
-        repository: data_repository.DataRepository,
-        hashing: hashing.HashingService
+        repository: DataRepository,
+        hashing: HashingService
     ):
         self.__user_repository = repository
         self.__hashing = hashing
@@ -23,7 +23,7 @@ class UserExists:
         )
 
         if not user_exists:
-            raise exceptions.NotFoundException()
+            raise NotFoundException()
         
 
         return user_exists

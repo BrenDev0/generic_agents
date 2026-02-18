@@ -1,15 +1,15 @@
 from datetime import datetime, timezone
-from src.persistence.domain import data_repository, exceptions
-from src.security.domain.services import hashing, encryption
+from src.persistence import DataRepository, NotFoundException
+from src.security import HashingService, EncryptionService
 from src.features.users.domain import entities, schemas
 
 
 class UserLogin:
     def __init__(
         self,
-        repository: data_repository.DataRepository,
-        hashing: hashing.HashingService,
-        encryption: encryption.EncryptionService
+        repository: DataRepository,
+        hashing: HashingService,
+        encryption: EncryptionService
     ) -> schemas.UserPublic:
         self.__repository = repository
         self.__hashing = hashing
@@ -30,7 +30,7 @@ class UserLogin:
         )
 
         if not user_exists:
-            raise exceptions.NotFoundException()
+            raise NotFoundException()
 
         self.__hashing.compare_password(
             password=password,

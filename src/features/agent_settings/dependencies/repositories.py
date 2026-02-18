@@ -1,8 +1,7 @@
 import logging
-from src.di.domain.exceptions import DependencyNotRegistered
-from src.di.container import Container
-from src.persistence.domain.data_repository import DataRepository
-from src.features.agent_settings.infrastructure.sqlAlechemy.agent_settings_repository import SqlAlchemyAgentSettingsRepository
+from src.di import Container, DependencyNotRegistered
+from src.persistence import DataRepository
+from ..infrastructure import SqlAlchemyAgentSettingsRepository
 logger = logging.getLogger(__name__)
 
 

@@ -1,18 +1,18 @@
 import os
 from uuid import UUID
 from typing import List
-from src.persistence.domain import data_repository, file_repository
-from src.features.agents.domain.entities import Agent
-from  src.features.knowledge_base.domain.entities import Knowledge
+from src.persistence import DataRepository, FileRepository
+from src.features.agents import Agent
 from src.http.domain.async_http_client import AsyncHttpClient
 from src.http.utils.hmac_headers import generate_hmac_headers
+from ...domain import Knowledge
 
 class DeleteAllKnowledge:
     def __init__(
         self,
-        agent_repository: data_repository.DataRepository,
-        file_repository: file_repository.FileRepository,
-        knowledge_base_repository: data_repository.DataRepository,
+        agent_repository: DataRepository,
+        file_repository: FileRepository,
+        knowledge_base_repository: DataRepository,
         async_http_client: AsyncHttpClient
     ):
         self.__agent_repository = agent_repository

@@ -3,10 +3,9 @@ from uuid import uuid4
 from typing import Optional
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
-from src.features.agent_settings.domain.entities import AgentSettings
-from src.features.agents.domain.entities import Agent
-from src.persistence.infrastructure.sqlAlchemy.data_repository import Base, SqlAlchemyDataRepository
-from src.features.agents.infrastructure.sqlAlchemy.agents_repository import SqlAlchemyAgent
+from src.persistence import Base, SqlAlchemyDataRepository
+from src.features.agents import Agent, SqlAlchemyAgent
+from ...domain import AgentSettings
 
 class SqlAlchemyAgentSettings(Base):
     __tablename__ = "agent_settings"

@@ -1,15 +1,14 @@
 import logging
 import strawberry
 from src.app.interface.strawberry.middleware import user_auth, user_verification
-from src.app.domain.exceptions import GraphQlException
+from src.app.domain import GraphQlException
 from src.app.interface.strawberry.decorators.req_validation import validate_input_to_model
-from src.persistence.domain.exceptions import NotFoundException, UpdateFieldsException
-from src.security.domain.exceptions import IncorrectPassword
-from src.security.dependencies.services import get_web_token_service, get_encrytpion_service
+from src.persistence import NotFoundException, UpdateFieldsException
+from src.security import IncorrectPassword, get_web_token_service, get_encrytpion_service
 from src.features.users.interface.strawberry import inputs, types
 from src.features.users.domain.schemas import UpdateUserSchema
 from src.features.users.dependencies import use_cases, business_rules
-from src.features.knowledge_base.dependencies.use_cases import get_delete_knowledge_by_user_use_case
+from src.features.knowledge_base import get_delete_knowledge_by_user_use_case
 logger = logging.getLogger(__name__)
 
 @strawberry.type

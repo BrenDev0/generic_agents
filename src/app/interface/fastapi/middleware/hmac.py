@@ -4,7 +4,7 @@ import hmac
 import hashlib
 import time
 from fastapi import Request
-from src.security.domain.exceptions import HMACException
+from src.security import HMACException
 logger = logging.getLogger(__name__)
 
 EXCLUDED_PATHS = [

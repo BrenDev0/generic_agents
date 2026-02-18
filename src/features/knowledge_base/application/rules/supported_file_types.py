@@ -1,4 +1,4 @@
-from src.features.knowledge_base.domain.exceptions import UnsupportedFileType
+from ...domain import UnsupportedFileType
 
 class IsSupportedFileType:
     def validate(

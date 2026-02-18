@@ -1,5 +1,5 @@
 import strawberry
-from src.features.agents.domain.schemas import (
+from ...domain import (
     CreateAgentProfileRequest,
     UpdatAgentProfileRequest
 )

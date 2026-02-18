@@ -1,12 +1,13 @@
 """
 Stucture:
 domain: Abstacts, entites, and models ect..
-appliccation: The application of domain objects, use cases, rules, services ect...
+application: The application of domain objects, use cases, rules, services ect...
 infrastructure: Framework implementations
 dependencies: Getter methods for singleton classes
 interface: Access to app
 """
 
+__version__ = "1.0.0"
 __author__ = "Xplorers"
 __description__ = "Crud operations for chats"
 

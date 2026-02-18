@@ -1,5 +1,5 @@
-from src.persistence.domain.data_repository import DataRepository
-from src.security.domain.services.encryption import EncryptionService
+from src.persistence import DataRepository
+from src.security import EncryptionService 
 from src.features.users.domain import entities, schemas
 
 class GetUser:

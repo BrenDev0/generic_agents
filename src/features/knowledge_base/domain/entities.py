@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 from uuid import UUID
 from datetime import datetime
 from src.features.agents.domain.entities import Agent

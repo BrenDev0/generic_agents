@@ -3,9 +3,12 @@ from starlette.datastructures import UploadFile
 from strawberry.file_uploads import Upload
 from src.features.users.interface.strawberry import queries as user_queries, mutations as user_mutations
 from src.features.email.interface.strawberry.mutations import EmailMutations
-from src.features.agents.interface.strawberry import queries as agent_queries, mutations as agent_mutations
-from src.features.agent_settings.interface.strawberry import queries as agent_settings_queries, mutations as agent_settings_mutations
-from src.features.knowledge_base.interface.strawberry import queries as knowledge_base_queries, mutations as knowledge_base_mutations
+from src.features.agents.interface.strawberry.mutations import AgentMutations
+from src.features.agents.interface.strawberry.queries import AgentQueries
+from src.features.agent_settings.interface.strawberry.mutations import AgentSettingsMutations
+from src.features.agent_settings.interface.strawberry.queries import AgentSettingsQueries
+from src.features.knowledge_base.interface.strawberry.mutations import KnowledgeBaseMutaions
+from src.features.knowledge_base.interface.strawberry.queries import KnowledgeQueries
 
 @strawberry.type
 class Query():
@@ -14,16 +17,16 @@ class Query():
         return user_queries.UserQueries()
     
     @strawberry.field
-    def agents(self) -> agent_queries.AgentQueries:
-        return agent_queries.AgentQueries()
+    def agents(self) -> AgentQueries:
+        return AgentQueries()
     
     @strawberry.field
-    def agent_settings(self) -> agent_settings_queries.AgentSettingsQueries:
-        return agent_settings_queries.AgentSettingsQueries()
+    def agent_settings(self) -> AgentSettingsQueries:
+        return AgentSettingsQueries()
     
     @strawberry.field
-    def knowledge_base(self) -> knowledge_base_queries.KnowledgeQueries:
-        return knowledge_base_queries.KnowledgeQueries()
+    def knowledge_base(self) -> KnowledgeQueries:
+        return KnowledgeQueries()
 
 
 @strawberry.type
@@ -37,16 +40,16 @@ class Mutation():
         return user_mutations.UserMutations()
     
     @strawberry.field
-    def agents(self) -> agent_mutations.AgentMutations:
-        return agent_mutations.AgentMutations()
+    def agents(self) -> AgentMutations:
+        return AgentMutations()
     
     @strawberry.field
-    def agent_settings(self) -> agent_settings_mutations.AgentSettingsMutations:
-        return agent_settings_mutations.AgentSettingsMutations()
+    def agent_settings(self) -> AgentSettingsMutations:
+        return AgentSettingsMutations()
     
     @strawberry.field
-    def knowledge_base(self) -> knowledge_base_mutations.KnowledgeBaseMutaions:
-        return knowledge_base_mutations.KnowledgeBaseMutaions()
+    def knowledge_base(self) -> KnowledgeBaseMutaions:
+        return KnowledgeBaseMutaions()
 
 schema = strawberry.Schema(
     query=Query, 

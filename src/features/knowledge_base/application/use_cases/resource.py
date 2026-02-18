@@ -1,9 +1,7 @@
 from uuid import UUID
-from typing import List, Optional
-from src.features.knowledge_base.domain import entities, schemas
-from src.persistence.domain.data_repository import DataRepository
-from src.security.domain.exceptions import PermissionsException
-from src.persistence.domain.exceptions import NotFoundException
+from src.security import PermissionsException
+from src.persistence import NotFoundException, DataRepository
+from ...domain import Knowledge, KnowledgePublic
 
 class GetKnowledgeResource:
     def __init__(
@@ -17,7 +15,7 @@ class GetKnowledgeResource:
         user_id: UUID,
         knowledge_id: UUID
     ): 
-        knowledge: entities.Knowledge = self.__data_repository.get_one(
+        knowledge: Knowledge = self.__data_repository.get_one(
             key="knowledge_id",
             value=knowledge_id
         )
@@ -29,7 +27,7 @@ class GetKnowledgeResource:
             raise PermissionsException()
         
         
-        return schemas.KnowledgePublic.model_validate(knowledge, from_attributes=True)
+        return KnowledgePublic.model_validate(knowledge, from_attributes=True)
     
     
 

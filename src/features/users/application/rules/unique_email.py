@@ -1,5 +1,5 @@
-from src.persistence.domain.data_repository import DataRepository
-from src.security.domain.services.hashing import HashingService
+from src.persistence import DataRepository
+from src.security import HashingService
 from src.features.users.domain.exceptions import EmailInUseException
 
 class UniqueEmailRule:

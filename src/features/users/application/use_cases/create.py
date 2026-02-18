@@ -1,13 +1,13 @@
-from src.persistence.domain.data_repository import DataRepository
-from src.security.domain.services import encryption, hashing
+from src.persistence import DataRepository
+from src.security import EncryptionService, HashingService
 from src.features.users.domain import entities, schemas
 
 class CreateUser:
     def __init__(
         self,
         repository: DataRepository,
-        hashing: hashing.HashingService,
-        encryption: encryption.EncryptionService
+        hashing: HashingService,
+        encryption: EncryptionService
     ):
         self.__repository = repository
         self.__hashing = hashing

@@ -4,10 +4,9 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from src.app.interface.strawberry.router import get_strawberry_graphql_router
 from src.app.interface.fastapi.middleware.hmac import verify_hmac
-from src.security.domain.exceptions import HMACException
+from src.security import HMACException, PermissionsException
 from src.features.knowledge_base.interface.fastapi import routes as knowledge_base_routes
-from src.persistence.domain.exceptions import NotFoundException
-from src.security.domain.exceptions import PermissionsException
+from src.persistence import NotFoundException
 
 logger = logging.getLogger(__name__)
 

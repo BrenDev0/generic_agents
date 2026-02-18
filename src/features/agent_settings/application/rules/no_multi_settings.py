@@ -1,6 +1,6 @@
 from uuid import UUID
-from src.persistence.domain.data_repository import DataRepository
-from src.features.agent_settings.domain.exceptions import ExistingSettingsException
+from src.persistence import DataRepository
+from ...domain import ExistingSettingsException
 
 class NoMultiSettings:
     def __init__(

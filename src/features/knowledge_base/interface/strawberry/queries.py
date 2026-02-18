@@ -2,11 +2,11 @@ import strawberry
 import logging
 from uuid import UUID
 from typing import List, Optional
-from src.features.knowledge_base.dependencies.use_cases import get_knowledge_collection_use_case
-from src.features.knowledge_base.interface.strawberry import types
-from src.app.domain.exceptions import GraphQlException
+from src.app.domain import GraphQlException
 from src.app.interface.strawberry.middleware.user_auth import UserAuth
-from src.security.domain.exceptions import PermissionsException
+from src.security import PermissionsException
+from ...dependencies import get_knowledge_collection_use_case
+from .types import KnowledgeType
 logger = logging.getLogger(__name__)
 
 @strawberry.type
@@ -20,7 +20,7 @@ class KnowledgeQueries:
         agent_id: UUID,
         info: strawberry.Info,
         filter: Optional[str] = None
-    ) -> List[types.KnowledgeType]:
+    ) -> List[KnowledgeType]:
         try:
             user_id = info.context.get("user_id")
             use_case = get_knowledge_collection_use_case()

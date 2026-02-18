@@ -1,6 +1,6 @@
 from uuid import UUID
-from src.persistence.domain.data_repository import DataRepository
-from src.features.agents.domain.schemas import AgentPublic
+from src.persistence import DataRepository
+from ...domain import AgentPublic
 
 class GetAgentsByUser:
     def __init__(

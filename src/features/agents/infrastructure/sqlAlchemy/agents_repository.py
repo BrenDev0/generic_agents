@@ -2,7 +2,7 @@ from sqlalchemy import Column, ForeignKey, String, DateTime, func, Boolean
 from uuid import uuid4
 from sqlalchemy.dialects.postgresql import UUID
 from src.persistence.infrastructure.sqlAlchemy.data_repository import SqlAlchemyDataRepository, Base
-from src.features.agents.domain.entities import Agent
+from ...domain import Agent
 
 class SqlAlchemyAgent(Base):
     __tablename__ ="agents"

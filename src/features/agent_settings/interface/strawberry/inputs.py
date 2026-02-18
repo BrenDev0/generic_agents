@@ -1,5 +1,5 @@
 import strawberry
-from src.features.agent_settings.domain.schemas import CreateSettingsRequest, UpdateSettingsRequest
+from ...domain import CreateSettingsRequest, UpdateSettingsRequest
 
 @strawberry.experimental.pydantic.input(model=CreateSettingsRequest, all_fields=True)
 class CreateAgentSettingsInput:

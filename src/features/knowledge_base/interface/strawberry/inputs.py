@@ -1,5 +1,5 @@
 import strawberry
-from src.features.knowledge_base.domain.schemas import (
+from ...domain import (
     CreateKnowledgeRequest,
     UpdateKnowledgeRequest
 )

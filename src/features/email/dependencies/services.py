@@ -1,17 +1,16 @@
 import logging
-from src.di.domain.exceptions import DependencyNotRegistered
-from src.di.container import Container
-from src.features.email.application.services import sender
+from src.di import DependencyNotRegistered, Container
+from ..application import Sender
 logger = logging.getLogger(__name__)
 
 
-def get_sender() -> sender.Sender:
+def get_sender() -> Sender:
     try:
         instance_key = "email_sender"
         service = Container.resolve(instance_key)
     
     except DependencyNotRegistered:
-        service = sender.Sender()
+        service = Sender()
         Container.register(instance_key, service)
         logger.debug(f"{instance_key} registered")
     

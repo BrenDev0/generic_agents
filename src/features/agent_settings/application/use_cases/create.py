@@ -1,15 +1,16 @@
 from uuid import UUID 
-from src.persistence.domain import data_repository, exceptions
-from src.security.domain.exceptions import PermissionsException
-from src.features.agent_settings.domain import schemas, entities
-from src.features.agent_settings.application.rules.no_multi_settings import NoMultiSettings
-from src.features.agents.domain.entities import Agent
+from src.persistence import DataRepository, NotFoundException
+from src.security import PermissionsException
+from src.features.agents import Agent
+from ...domain import AgentSettings, AgentSettingsPublic, CreateSettingsRequest
+from ...application import NoMultiSettings
+
 
 class CreateAgentSettings:
     def __init__(
         self,
-        settings_repository: data_repository.DataRepository,
-        agents_repository: data_repository.DataRepository,
+        settings_repository: DataRepository,
+        agents_repository: DataRepository,
         multi_settings_rule: NoMultiSettings
     ):
         self.__settings_repository = settings_repository
@@ -20,7 +21,7 @@ class CreateAgentSettings:
         self,
         user_id: UUID,
         agent_id: UUID,
-        settings: schemas.CreateSettingsRequest
+        settings: CreateSettingsRequest
     ):
         self.__multi_settings_rule.validate(
             agent_id=agent_id
@@ -32,12 +33,12 @@ class CreateAgentSettings:
         ) 
 
         if not agent: 
-            raise exceptions.NotFoundException()
+            raise NotFoundException()
         
         if str(agent.user_id) != str(user_id):
             raise PermissionsException()
         
-        data = entities.AgentSettings(
+        data = AgentSettings(
             agent_id=agent.agent_id,
             **settings.model_dump(by_alias=False)
         )
@@ -46,4 +47,4 @@ class CreateAgentSettings:
             data=data
         )
 
-        return schemas.AgentSettingsPublic.model_validate(new_settings, from_attributes=True)
+        return AgentSettingsPublic.model_validate(new_settings, from_attributes=True)

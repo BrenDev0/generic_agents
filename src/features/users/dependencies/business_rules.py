@@ -1,9 +1,8 @@
 import logging
-from src.di.domain.exceptions import DependencyNotRegistered
-from src.di.container import Container
+from src.di import DependencyNotRegistered, Container
 from src.features.users.application.rules import unique_email, update_password, user_exists
 from src.features.users.dependencies.repositories import get_users_repository
-from src.security.dependencies.services import get_hashing_service
+from src.security import get_hashing_service
 logger = logging.getLogger(__name__)
 
 def get_update_password_rule() -> update_password.UpdatePasswordRule:

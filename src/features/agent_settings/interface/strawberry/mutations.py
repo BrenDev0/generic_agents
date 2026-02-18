@@ -1,14 +1,15 @@
 import logging
 import strawberry
 from uuid import UUID
-from src.persistence.domain.exceptions import NotFoundException
-from src.security.domain.exceptions import PermissionsException
-from src.app.domain.exceptions import GraphQlException
+from src.persistence import NotFoundException
+from src.security import PermissionsException
+from src.app import GraphQlException
 from src.app.interface.strawberry.decorators.req_validation import validate_input_to_model
 from src.app.interface.strawberry.middleware.user_auth import UserAuth
-from src.features.agent_settings.interface.strawberry import inputs, types
-from src.features.agent_settings.domain.exceptions import ExistingSettingsException
-from src.features.agent_settings.dependencies.use_cases import (
+from .inputs import CreateAgentSettingsInput, UpdateAgentSettingsInput
+from .types import AgentSettingsType
+from ...domain import ExistingSettingsException
+from ...dependencies import (
     get_agent_settings_create_use_case,
     get_agent_settings_delete_use_case,
     get_agent_settings_update_use_case
@@ -27,8 +28,8 @@ class AgentSettingsMutations:
         self,
         info: strawberry.Info,
         agent_id: UUID,
-        input: inputs.CreateAgentSettingsInput
-    )-> types.AgentSettingsType:
+        input: CreateAgentSettingsInput
+    )-> AgentSettingsType:
         try:
             user_id = info.context.get("user_id")
             use_case = get_agent_settings_create_use_case()
@@ -57,8 +58,8 @@ class AgentSettingsMutations:
         self,
         info: strawberry.Info,
         settings_id: UUID,
-        input: inputs.UpdateAgentSettingsInput
-    )-> types.AgentSettingsType:
+        input: UpdateAgentSettingsInput
+    )-> AgentSettingsType:
         try:
             user_id = info.context.get("user_id")
             use_case = get_agent_settings_update_use_case()
@@ -86,7 +87,7 @@ class AgentSettingsMutations:
         self,
         info: strawberry.Info,
         setting_id: UUID
-    )-> types.AgentSettingsType:
+    )-> AgentSettingsType:
         try:
             user_id = info.context.get("user_id")
             use_case = get_agent_settings_delete_use_case()

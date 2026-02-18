@@ -1,6 +1,6 @@
 from functools import wraps
 from pydantic import ValidationError
-from src.app.domain.exceptions import GraphQlException
+from src.app import GraphQlException
 
 def validate_input_to_model(fn):
     @wraps(fn)
