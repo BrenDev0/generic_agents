@@ -1,6 +1,6 @@
 import pytest
 from uuid import uuid4
-from unittest.mock import Mock
+from unittest.mock import Mock, AsyncMock, patch
 from datetime import datetime
 from src.persistence.domain.exceptions import NotFoundException
 from src.security.domain.exceptions import PermissionsException
@@ -17,17 +17,33 @@ def mock_file_repository():
     return Mock()
 
 @pytest.fixture
+def mock_http_client():
+    return AsyncMock()
+
+@pytest.fixture
 def use_case(
     mock_data_repository,
-    mock_file_repository
+    mock_file_repository,
+    mock_http_client
 ):
     return DeleteKnowledge(
         data_repository=mock_data_repository,
-        file_repository=mock_file_repository
+        file_repository=mock_file_repository,
+        async_http_client=mock_http_client
+
     )
 
-
-def test_success_file_type(
+@pytest.mark.asyncio
+@patch(
+    "src.features.knowledge_base.application.use_cases.delete.generate_hmac_headers",
+    return_value={
+        "x-signature": "fake_signature",
+        "x-payload": "fake_payload",
+        "Content-Type": "application/json",
+    },
+) # Mock generate_hmac_headers
+async def test_success_file_type(
+    mock_generate_hmac_headers,
     mock_data_repository,
     mock_file_repository,
     use_case: DeleteKnowledge
@@ -51,7 +67,7 @@ def test_success_file_type(
         name="test.pdf",
         description="test document",
         url="https://s3.amazonaws.com/bucket/file.pdf",
-        is_embedded=False,
+        state="test",
         created_at=datetime.now(),
         agent=fake_agent
     )
@@ -59,7 +75,7 @@ def test_success_file_type(
     mock_data_repository.get_one.return_value = fake_knowledge
     mock_data_repository.delete.return_value = fake_knowledge
 
-    result = use_case.execute(
+    result = await use_case.execute(
         knowledge_id=knowledge_id,
         user_id=user_id
     )
@@ -70,7 +86,7 @@ def test_success_file_type(
     )
 
     mock_file_repository.delete.assert_called_once_with(
-        key=f"{user_id}/knowledge_base/{agent_id}/{knowledge_id}"
+        keys=[f"{user_id}/knowledge_base/{agent_id}/{knowledge_id}"]
     )
 
     mock_data_repository.delete.assert_called_once_with(
@@ -81,8 +97,17 @@ def test_success_file_type(
     assert result.knowledge_id == knowledge_id
     assert result.agent_id == agent_id
 
-
-def test_success_web_type(
+@pytest.mark.asyncio
+@patch(
+    "src.features.knowledge_base.application.use_cases.delete.generate_hmac_headers",
+    return_value={
+        "x-signature": "fake_signature",
+        "x-payload": "fake_payload",
+        "Content-Type": "application/json",
+    },
+)  # Mock generate_hmac_headers
+async def test_success_web_type(
+    mock_generate_hmac_headers,
     mock_data_repository,
     mock_file_repository,
     use_case: DeleteKnowledge
@@ -106,7 +131,7 @@ def test_success_web_type(
         name="website",
         description="test website",
         url="https://example.com",
-        is_embedded=False,
+        state="test",
         created_at=datetime.now(),
         agent=fake_agent
     )
@@ -114,7 +139,7 @@ def test_success_web_type(
     mock_data_repository.get_one.return_value = fake_knowledge
     mock_data_repository.delete.return_value = fake_knowledge
 
-    result = use_case.execute(
+    result = await use_case.execute(
         knowledge_id=knowledge_id,
         user_id=user_id
     )
@@ -134,8 +159,17 @@ def test_success_web_type(
     assert result.knowledge_id == knowledge_id
     assert result.agent_id == agent_id
 
-
-def test_not_found(
+@pytest.mark.asyncio
+@patch(
+    "src.features.knowledge_base.application.use_cases.delete.generate_hmac_headers",
+    return_value={
+        "x-signature": "fake_signature",
+        "x-payload": "fake_payload",
+        "Content-Type": "application/json",
+    },
+) # Mock generate_hmac_headers
+async def test_not_found(
+    mock_generate_hmac_headers,
     mock_data_repository,
     mock_file_repository,
     use_case: DeleteKnowledge
@@ -146,7 +180,7 @@ def test_not_found(
     mock_data_repository.get_one.return_value = None
 
     with pytest.raises(NotFoundException) as exc_info:
-        use_case.execute(
+        await use_case.execute(
             knowledge_id=knowledge_id,
             user_id=user_id
         )
@@ -158,10 +192,19 @@ def test_not_found(
 
     mock_file_repository.delete.assert_not_called()
     mock_data_repository.delete.assert_not_called()
-    assert "Knowledge resource not found" in str(exc_info)
+    assert "404" in str(exc_info)
 
-
-def test_permission_error(
+@pytest.mark.asyncio
+@patch(
+    "src.features.knowledge_base.application.use_cases.delete.generate_hmac_headers",
+    return_value={
+        "x-signature": "fake_signature",
+        "x-payload": "fake_payload",
+        "Content-Type": "application/json",
+    },
+) # Mock generate_hmac_headers
+async def test_permission_error(
+    mock_generate_hmac_headers,
     mock_data_repository,
     mock_file_repository,
     use_case: DeleteKnowledge
@@ -185,7 +228,7 @@ def test_permission_error(
         name="test.pdf",
         description="test document",
         url="https://s3.amazonaws.com/bucket/file.pdf",
-        is_embedded=False,
+        state="test",
         created_at=datetime.now(),
         agent=fake_agent
     )
@@ -193,7 +236,7 @@ def test_permission_error(
     mock_data_repository.get_one.return_value = fake_knowledge
 
     with pytest.raises(PermissionsException) as exc_info:
-        use_case.execute(
+        await use_case.execute(
             knowledge_id=knowledge_id,
             user_id=user_id
         )
@@ -205,4 +248,4 @@ def test_permission_error(
 
     mock_file_repository.delete.assert_not_called()
     mock_data_repository.delete.assert_not_called()
-    assert "Forbidden" in str(exc_info)
+    assert "403" in str(exc_info)

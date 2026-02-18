@@ -76,7 +76,7 @@ def test_not_found(
         )
 
     
-    assert "Settings not found" in str(exc_info)
+    assert "404" in str(exc_info)
 
 
 def test_permissions_error(
@@ -111,4 +111,4 @@ def test_permissions_error(
             agent_id=agent_id
         )
 
-    assert "Forbidden" in str(exc_info)
+    assert "403" in str(exc_info)

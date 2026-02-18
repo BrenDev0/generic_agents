@@ -4,6 +4,7 @@ domain: Abstacts, entites, and models ect..
 application: The application of domain objects, use cases, rules, services ect...
 infrastructure: Framework implementations
 dependencies: Getter methods for singleton classes
+interface: access point
 utils: reusable functions
 """
 __version__ = "1.0.0"
@@ -38,6 +39,13 @@ from .utils import (
     get_random_code
 )
 
+from .interface import (
+    fastapi_hmac_verification,
+    fastapi_user_authentication,
+    StrawberryUserAuth,
+    StrawberryUserVerification
+)
+
 __all__ = [
     #### Domain ####
     "EncryptionService",
@@ -60,5 +68,11 @@ __all__ = [
     "get_web_token_service",
 
     #### utils ####
-    "get_random_code"
+    "get_random_code",
+
+    #### Interface ####
+    "fastapi_hmac_verification",
+    "fastapi_user_authentication",
+    "StrawberryUserAuth",
+    "StrawberryUserVerification"
 ]

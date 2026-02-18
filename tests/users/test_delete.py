@@ -82,6 +82,6 @@ def test_delete_not_found(
         key="user_id",
         value=user_id
     )
-    assert "User not found" in str(exc_info)
+    assert "404" in str(exc_info)
     
 

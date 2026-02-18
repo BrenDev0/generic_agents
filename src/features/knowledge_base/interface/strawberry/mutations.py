@@ -3,11 +3,9 @@ import strawberry
 from strawberry.file_uploads import Upload
 from starlette.datastructures import UploadFile
 from uuid import UUID
-from src.app.interface.strawberry.decorators.req_validation import validate_input_to_model
-from src.app.domain import GraphQlException
-from src.app.interface.strawberry.middleware.user_auth import UserAuth
+from src.app import GraphQlException, validate_input_to_model
 from src.persistence import NotFoundException
-from src.security import PermissionsException
+from src.security import PermissionsException, StrawberryUserAuth
 from src.features.sessions import get_update_embeddings_tracker_use_case
 from ...dependencies import (
     get_delete_embeddings_use_case,
@@ -33,7 +31,7 @@ MAX_FILE_SIZE = 50 * 1024 * 1024
 @strawberry.type
 class KnowledgeBaseMutaions:
     @strawberry.mutation(
-        permission_classes=[UserAuth],
+        permission_classes=[StrawberryUserAuth],
         description="Upload file"
     )
     @validate_input_to_model
@@ -129,7 +127,7 @@ class KnowledgeBaseMutaions:
 
 
     @strawberry.mutation(
-        permission_classes=[UserAuth],
+        permission_classes=[StrawberryUserAuth],
         description="Update Knowledge resource"
     )
     @validate_input_to_model
@@ -160,7 +158,7 @@ class KnowledgeBaseMutaions:
 
 
     @strawberry.mutation(
-        permission_classes=[UserAuth],
+        permission_classes=[StrawberryUserAuth],
         description="Delete knowledge resource"
     )
     async def delete_knowledge(
@@ -188,7 +186,7 @@ class KnowledgeBaseMutaions:
 
 
     @strawberry.mutation(
-        permission_classes=[UserAuth],
+        permission_classes=[StrawberryUserAuth],
         description="Delete from vector base"
     )
     async def delete_embeddings(
@@ -233,7 +231,7 @@ class KnowledgeBaseMutaions:
 
     
     @strawberry.mutation(
-        permission_classes=[UserAuth],
+        permission_classes=[StrawberryUserAuth],
         description="create embeddings"
     )
     async def create_embeddings(

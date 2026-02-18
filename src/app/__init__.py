@@ -10,7 +10,13 @@ __description__ = "Api package for app"
 
 
 from .domain import GraphQlException
+from .interface import validate_input_to_model, inject_strawberry_context
 
 __all__ = [
-    "GraphQlException"
+    #### Domain ####
+    "GraphQlException",
+
+    #### Interface ####
+    "validate_input_to_model",
+    "inject_strawberry_context"
 ]

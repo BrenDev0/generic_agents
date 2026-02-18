@@ -1,7 +1,7 @@
 import logging
 import strawberry
 from src.app.domain import GraphQlException
-from src.app.interface.strawberry.middleware.user_auth import UserAuth
+from src.security import StrawberryUserAuth
 from ...dependencies import get_user_use_case
 from .types import UserType
 logger = logging.getLogger(__name__)
@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 @strawberry.type
 class UserQueries:
     @strawberry.field(
-        permission_classes=[UserAuth],
+        permission_classes=[StrawberryUserAuth],
         description="Get User from id in Auth token"
     )
     def get_me(

@@ -3,24 +3,19 @@ import logging
 import hmac
 import hashlib
 import time
-from fastapi import Request
-from src.security import HMACException
+from fastapi import Request, HTTPException
 logger = logging.getLogger(__name__)
 
-EXCLUDED_PATHS = [
-    "/graphql",  # GraphQL IDE/playground
-]
-
-async def verify_hmac(request: Request) -> bool:
+def verify_hmac(request: Request) -> bool:
     """
     Verify HMAC signature for incoming requests
-    Use with Depends() on specific routes that need HMAC verification
+    Use with fastapi Depends() on specific routes that need HMAC verification
     """
 
     ## disactivate for development
     project_enviornment = os.getenv("ENVIRONMENT")
     if project_enviornment != "PRODUCTION":
-        return
+        return True
 
     ## 
     
@@ -28,31 +23,28 @@ async def verify_hmac(request: Request) -> bool:
     if not secret:
         raise ValueError("Missing HMAC_SECRET environment variable")
     
-    ## Skip HMAC for GET requests to /graphql (GraphQL IDE)
-    if request.url.path == "/graphql" and request.method == "GET":
-        return True
     
     logger.debug(f"Headers: {request.headers}")
     signature = request.headers.get('x-signature')
     payload = request.headers.get('x-payload')
     
     if not signature or not payload:
-        logger.debug(f"Missing signature or payload, ::: signature: {signature} ::: payload: {payload}")
-        raise HMACException(detail="HMAC verification failed")
+        logger.error(f"Missing signature or payload, ::: signature: {signature} ::: payload: {payload}")
+        raise HTTPException(status_code=403, detail="Forbidden")
     
     # Validate timestamp
     try:
         timestamp = int(payload)
     except ValueError:
-        logger.debug(f"Invalid timestamp ::: timestamp: {timestamp}")
-        raise HMACException(detail="HMAC verification failed")
+        logger.error(f"Invalid timestamp ::: timestamp: {timestamp}")
+        raise HTTPException(status_code=403, detail="Forbidden")
     
     current_time = int(time.time() * 1000)  # Current time in milliseconds
     allowed_drift = 60_000  # 60 seconds
     
     if abs(current_time - timestamp) > allowed_drift:
-        logger.debug(f"Expired ::: timestamp: {timestamp}, ::: current_time: {current_time}")
-        raise HMACException(detail="HMAC verification failed")
+        logger.error(f"Expired ::: timestamp: {timestamp}, ::: current_time: {current_time}")
+        raise HTTPException(status_code=403, detail="Forbidden")
     
     # Generate expected signature
     expected = hmac.new(
@@ -63,7 +55,7 @@ async def verify_hmac(request: Request) -> bool:
     
     # Compare signatures using constant-time comparison
     if not hmac.compare_digest(signature, expected):
-        logger.debug(f"Comparison failed ::: expected: {expected} ::: received: {signature}")
-        raise HMACException(detail="HMAC verification failed")
+        logger.error(f"Comparison failed ::: expected: {expected} ::: received: {signature}")
+        raise HTTPException(status_code=403, detail="Forbidden")
     
     return True

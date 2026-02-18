@@ -112,7 +112,7 @@ def test_login_user_not_found(
         value="hashed_email"
     )
     
-    assert "User not found" in str(exc_info)
+    assert "404" in str(exc_info)
 
 
 def test_login_incorrect_password(

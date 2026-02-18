@@ -14,17 +14,18 @@ def use_case(
     mock_repository
 ):
     return CreateChat(
-        repository=mock_repository
+        chat_repository=mock_repository
     )
 
 
 def test_success(
     mock_repository,
     use_case: CreateChat
-):
+):  
+    chat_id = uuid4()
     agent_id = uuid4()
     fake_chat = Chat(
-        chat_id=uuid4(),
+        chat_id=chat_id,
         agent_id=agent_id,
         created_at=datetime.now()
     )
@@ -32,6 +33,7 @@ def test_success(
     mock_repository.create.return_value = fake_chat
 
     result = use_case.execute(
+        chat_id=chat_id,
         agent_id=agent_id
     )
 

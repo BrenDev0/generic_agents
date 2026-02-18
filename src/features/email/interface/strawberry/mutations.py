@@ -1,7 +1,6 @@
 import logging
 import strawberry
-from src.app import GraphQlException
-from src.app.interface.strawberry.decorators import req_validation, context_injection
+from src.app import GraphQlException, inject_strawberry_context, validate_input_to_model
 from src.persistence import NotFoundException
 from src.security import (
     get_web_token_service, 
@@ -24,8 +23,8 @@ class EmailMutations:
     @strawberry.mutation(
         description="Send verification code to users email. Will receive a token that can be used for verified requests. This endpoint can also be used with an Auth header to recieve token needed for verifed update to users email"
     )
-    @req_validation.validate_input_to_model
-    @context_injection.inject_strawberry_context
+    @validate_input_to_model
+    @inject_strawberry_context
     def verify_email(
         self,
         info: strawberry.Info,
@@ -76,7 +75,7 @@ class EmailMutations:
     @strawberry.mutation(
         description="Searches for user in db and sends email verification email, token recieved must be used for verified update to users password"
     )
-    @req_validation.validate_input_to_model
+    @validate_input_to_model
     def public_account_recovery(
         self,
         input: VerifyEmailType

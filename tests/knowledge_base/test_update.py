@@ -49,7 +49,7 @@ def test_success(
         name="test.pdf",
         description="original description",
         url="https://s3.amazonaws.com/bucket/file.pdf",
-        is_embedded=False,
+        state="test",
         created_at=datetime.now(),
         agent=fake_agent
     )
@@ -61,7 +61,7 @@ def test_success(
         name="test.pdf",
         description="updated description",
         url="https://s3.amazonaws.com/bucket/file.pdf",
-        is_embedded=False,
+        state="test",
         created_at=datetime.now(),
         agent=fake_agent
     )
@@ -116,7 +116,7 @@ def test_not_found(
     )
 
     mock_repository.update.assert_not_called()
-    assert "Knowledge resource not found" in str(exc_info)
+    assert "404" in str(exc_info)
 
 
 def test_permissions_error(
@@ -146,7 +146,7 @@ def test_permissions_error(
         name="test.pdf",
         description="original description",
         url="https://s3.amazonaws.com/bucket/file.pdf",
-        is_embedded=False,
+        state="test",
         created_at=datetime.now(),
         agent=fake_agent
     )
@@ -166,4 +166,4 @@ def test_permissions_error(
     )
 
     mock_repository.update.assert_not_called()
-    assert "Forbidden" in str(exc_info)
+    assert "403" in str(exc_info)

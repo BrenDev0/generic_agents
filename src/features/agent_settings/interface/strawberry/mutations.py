@@ -2,10 +2,8 @@ import logging
 import strawberry
 from uuid import UUID
 from src.persistence import NotFoundException
-from src.security import PermissionsException
-from src.app import GraphQlException
-from src.app.interface.strawberry.decorators.req_validation import validate_input_to_model
-from src.app.interface.strawberry.middleware.user_auth import UserAuth
+from src.security import PermissionsException, StrawberryUserAuth
+from src.app import GraphQlException, validate_input_to_model
 from .inputs import CreateAgentSettingsInput, UpdateAgentSettingsInput
 from .types import AgentSettingsType
 from ...domain import ExistingSettingsException
@@ -21,7 +19,7 @@ logger = logging.getLogger(__name__)
 class AgentSettingsMutations:
     @strawberry.field(
         description="Create settings for an agent",
-        permission_classes=[UserAuth]
+        permission_classes=[StrawberryUserAuth]
     )
     @validate_input_to_model
     def create_agent_settings(
@@ -51,7 +49,7 @@ class AgentSettingsMutations:
     
     @strawberry.field(
         description="Update settings for an agent",
-        permission_classes=[UserAuth]
+        permission_classes=[StrawberryUserAuth]
     )
     @validate_input_to_model
     def update_agent_settings(
@@ -81,7 +79,7 @@ class AgentSettingsMutations:
     
     @strawberry.field(
         description="Delete settings for an agent",
-        permission_classes=[UserAuth]
+        permission_classes=[StrawberryUserAuth]
     )
     def delete_agent_settings(
         self,

@@ -16,3 +16,7 @@ class ChatPublic(ChatBase):
     chat_id: UUID
     agent_id: UUID
     created_at: datetime
+
+class CreateChatRequest(ChatBase):
+    agent_id: UUID
+    chat_id: UUID

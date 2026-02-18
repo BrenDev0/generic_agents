@@ -3,8 +3,7 @@ import logging
 from uuid import UUID
 from typing import List, Optional
 from src.app.domain import GraphQlException
-from src.app.interface.strawberry.middleware.user_auth import UserAuth
-from src.security import PermissionsException
+from src.security import PermissionsException, StrawberryUserAuth
 from ...dependencies import get_knowledge_collection_use_case
 from .types import KnowledgeType
 logger = logging.getLogger(__name__)
@@ -12,7 +11,7 @@ logger = logging.getLogger(__name__)
 @strawberry.type
 class KnowledgeQueries:
     @strawberry.field(
-        permission_classes=[UserAuth],
+        permission_classes=[StrawberryUserAuth],
         description="Get knowledge base by agent id"
     )
     def knowledge_collection(

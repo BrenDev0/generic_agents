@@ -7,10 +7,13 @@ from src.security import (
 )
 
 
-def auth_middleware(
+def user_authenication(
     request: Request,
     web_token_service: WebTokenService = Depends(get_web_token_service)
 ):
+    """
+    For use in fastapi Depends 
+    """
     auth_header = request.headers.get("Authorization", None)
     if not auth_header or not auth_header.startswith("Bearer "):
         raise HTTPException(status_code=401, detail="Unautrhorized, Missing required auth headers")

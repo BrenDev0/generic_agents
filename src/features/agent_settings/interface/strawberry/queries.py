@@ -2,8 +2,7 @@ import strawberry
 import logging
 from uuid import UUID
 from src.app import GraphQlException
-from src.app.interface.strawberry.middleware.user_auth import UserAuth 
-from src.security import PermissionsException
+from src.security import PermissionsException, StrawberryUserAuth
 from src.persistence import NotFoundException
 from ...dependencies import get_settings_by_id_use_case
 from .types import AgentSettingsType
@@ -15,7 +14,7 @@ logger = logging.getLogger(__name__)
 class AgentSettingsQueries:
     @strawberry.field(
         description="Get agents Settings by agent id",
-        permission_classes=[UserAuth]
+        permission_classes=[StrawberryUserAuth]
     )
     def agent_settings_resource(
         self,

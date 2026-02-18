@@ -66,7 +66,7 @@ def test_not_found(
             agent_id=agent_id
         )
 
-    assert "Agent not found" in str(exc_info)
+    assert "404" in str(exc_info)
 
 
 
@@ -94,5 +94,5 @@ def test_wrong_permissions(
         )
 
     
-    assert "Forbidden" in str(exc_info)
+    assert "403" in str(exc_info)
 

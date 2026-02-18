@@ -78,7 +78,7 @@ def test_not_found(
     )
 
     mock_repository.delete.assert_not_called()
-    assert "Agent not found" in str(exc_info)
+    assert "404" in str(exc_info)
 
 
 def test_permission_error(
@@ -110,4 +110,4 @@ def test_permission_error(
     )
 
     mock_repository.delete.assert_not_called()
-    assert "Forbidden" in str(exc_info)
+    assert "403" in str(exc_info)
