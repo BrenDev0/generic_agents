@@ -100,7 +100,7 @@ def test_update_user_not_found(
     mock_repository.update.return_value = None
     mock_hashing.hash_for_search.return_value = "hashed_for_search"
     with pytest.raises(NotFoundException) as exc_info:
-        result = use_case.execute(
+        use_case.execute(
             user_id=user_id,
             changes=changes
         )

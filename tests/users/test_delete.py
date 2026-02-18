@@ -74,7 +74,7 @@ def test_delete_not_found(
     mock_repository.delete.return_value = None
 
     with pytest.raises(NotFoundException) as exc_info:
-        result = use_case.execute(
+        use_case.execute(
             user_id=user_id
         )
 
