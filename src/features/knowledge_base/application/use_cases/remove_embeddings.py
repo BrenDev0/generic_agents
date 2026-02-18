@@ -1,5 +1,4 @@
 import os
-import json
 from uuid import UUID
 from src.http import generate_hmac_headers, AsyncHttpClient
 

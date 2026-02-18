@@ -123,7 +123,7 @@ def test_wrong_permissions(
     mock_repository.get_many.return_value = mock_collection
 
     with pytest.raises(PermissionsException) as exc_info:
-        result = use_case.execute(
+        use_case.execute(
             user_id=user_id,
             agent_id=agent_id
         )

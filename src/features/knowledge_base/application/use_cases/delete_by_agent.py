@@ -4,7 +4,7 @@ from typing import List
 from src.persistence import DataRepository, FileRepository
 from src.security import PermissionsException
 from src.http import generate_hmac_headers, AsyncHttpClient
-from ...domain import Knowledge, KnowledgePublic
+from ...domain import Knowledge
 
 class DeleteAgentKnowledge:
     def __init__(

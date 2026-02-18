@@ -1,9 +1,9 @@
-from dotenv import load_dotenv
-load_dotenv()
 import os
 import logging
+from dotenv import load_dotenv
 from src.app.interface.fastapi.server import create_fastapi_app
 from src.app.setup.db.tables import create_tables
+load_dotenv()
 
 
 level = os.getenv("LOGGER_LEVEL", logging.INFO)

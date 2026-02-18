@@ -1,5 +1,5 @@
 import logging
-from fastapi import APIRouter, Depends, Body, HTTPException
+from fastapi import APIRouter, Depends, Body
 from uuid import UUID
 from src.security import fastapi_hmac_verification
 from ...domain import UpdateKnowledgeRequest, InternalUpdateEmbeddingStatus, KnowledgePublic

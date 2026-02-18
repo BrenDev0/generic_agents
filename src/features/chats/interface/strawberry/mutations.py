@@ -1,4 +1,5 @@
 import strawberry
+import logging
 from uuid import UUID
 from src.app import GraphQlException, validate_input_to_model
 from src.security import StrawberryUserAuth, PermissionsException
@@ -6,6 +7,7 @@ from src.persistence import NotFoundException
 from ...dependencies import (
     get_delete_chat_use_case
 )
+logger = logging.getLogger(__name__)
 
 @strawberry.type
 class ChatMutations:
@@ -32,4 +34,5 @@ class ChatMutations:
             raise GraphQlException(str(e))
 
         except Exception as e:
+            logger.error(str(e))
             raise GraphQlException()

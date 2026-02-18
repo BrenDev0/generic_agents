@@ -92,21 +92,6 @@ def test_permissions_error(
 ):
     user_id = uuid4()
     setting_id = uuid4()
-    agent_id = uuid4()
-    fake_setting = AgentSettings(
-        setting_id=setting_id,
-        agent_id=agent_id,
-        system_prompt="...",
-        temperature=0.5,
-        transcripts=True,
-        agent=Agent(
-            agent_id=agent_id,
-            user_id=uuid4(),
-            name="...",
-            description="...",
-            created_at=datetime.now()
-        )
-    )
 
     with pytest.raises(PermissionsException) as exc_info:
         use_case.execute(
