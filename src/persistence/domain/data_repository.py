@@ -1,6 +1,6 @@
 from abc  import ABC, abstractmethod
 import uuid
-from typing  import List, Optional, TypeVar, Generic
+from typing  import List, Optional, TypeVar, Generic, Union
 
 T = TypeVar('T')
 
@@ -17,9 +17,12 @@ class DataRepository(ABC, Generic[T]):
     def get_many(
         self,
         key: str, 
-        value: str | uuid.UUID, 
-        limit: Optional[int] = None, 
-        order_by: Optional[str] =None, 
+        value: Union[str, uuid.UUID, List[Union[str, uuid.UUID]]],
+        secondary_key: str = None,
+        secondary_value: Union[str, uuid.UUID, int, bool]= None, 
+        limit: int = None, 
+        offset: int = 0,
+        order_by: str =None, 
         desc: bool = False
     ) -> List[T]:
         raise NotImplementedError

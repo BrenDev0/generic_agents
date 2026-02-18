@@ -5,7 +5,7 @@ from ...application import CreateChat
 from ...dependencies import get_create_chat_use_case
 
 router = APIRouter(
-    "/chats",
+    prefix="/chats",
     dependencies=[Depends(fastapi_hmac_verification)]
 )
 

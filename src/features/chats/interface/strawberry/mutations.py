@@ -7,6 +7,7 @@ from src.persistence import NotFoundException
 from ...dependencies import (
     get_delete_chat_use_case
 )
+from .types import ChatType
 logger = logging.getLogger(__name__)
 
 @strawberry.type
@@ -20,7 +21,7 @@ class ChatMutations:
         self, 
         chat_id: UUID,
         info: strawberry.Info,
-    ):
+    ) -> ChatType:
         try:
             user_id = info.context.get("user_id")   
             use_case = get_delete_chat_use_case()
