@@ -1,16 +1,15 @@
 import os
 from uuid import UUID
-from src.persistence.domain import data_repository, file_repository, exceptions
-from src.features.knowledge_base.domain import entities, schemas
-from src.security.domain.exceptions import PermissionsException
-from src.http.domain.async_http_client import AsyncHttpClient
-from src.http.utils.hmac_headers import generate_hmac_headers
+from src.persistence import DataRepository, FileRepository, NotFoundException
+from src.security import PermissionsException
+from src.http import generate_hmac_headers, AsyncHttpClient
+from ...domain import Knowledge, KnowledgePublic
 
 class DeleteKnowledge:
     def __init__(
         self,
-        data_repository: data_repository.DataRepository,
-        file_repository: file_repository.FileRepository,
+        data_repository: DataRepository,
+        file_repository: FileRepository,
         async_http_client: AsyncHttpClient
     ):
         self.__data_repository = data_repository
@@ -22,13 +21,13 @@ class DeleteKnowledge:
         knowledge_id: UUID,
         user_id: UUID
     ): 
-        knowledge: entities.Knowledge = self.__data_repository.get_one(
+        knowledge: Knowledge = self.__data_repository.get_one(
             key="knowledge_id",
             value=knowledge_id
         )
 
         if not knowledge:
-            raise exceptions.NotFoundException("Knowledge resource not found")
+            raise NotFoundException()
         
         if str(knowledge.agent.user_id) != str(user_id):
             raise PermissionsException()
@@ -52,10 +51,10 @@ class DeleteKnowledge:
 
             self.__file_repository.delete(keys=[key])
 
-        deleted_knoldege: entities.Knowledge = self.__data_repository.delete(
+        deleted_knoldege: Knowledge = self.__data_repository.delete(
             key="knowledge_id",
             value=knowledge.knowledge_id
         )
 
-        return schemas.KnowledgePublic.model_validate(deleted_knoldege, from_attributes=True)
+        return KnowledgePublic.model_validate(deleted_knoldege, from_attributes=True)
 

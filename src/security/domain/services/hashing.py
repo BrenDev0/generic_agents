@@ -11,6 +11,7 @@ class HashingService(ABC):
 
     @abstractmethod
     def compare_password(
+        self,
         password: str, 
         hashed_password: str, 
         detail: str = "Incorrect password", 

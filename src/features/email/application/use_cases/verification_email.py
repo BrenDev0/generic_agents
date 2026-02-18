@@ -1,7 +1,7 @@
 from pathlib import Path
 import os
-from src.features.email.domain.entities import Email
-from src.features.email.application.services.sender import Sender
+from ...domain import Email
+from ...application import Sender
 
 class VerificationEmail:
     def __init__(

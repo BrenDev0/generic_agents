@@ -41,7 +41,7 @@ def test_success(
             name="document_1.pdf",
             description="test document 1",
             url="https://s3.amazonaws.com/bucket/file1.pdf",
-            is_embedded=True,
+            state="test",
             created_at=datetime.now(),
             agent=fake_agent
         ),
@@ -52,7 +52,7 @@ def test_success(
             name="website",
             description="test website",
             url="https://example.com",
-            is_embedded=False,
+            state="test",
             created_at=datetime.now(),
             agent=fake_agent
         )
@@ -114,7 +114,7 @@ def test_wrong_permissions(
             name="document_1.pdf",
             description="test document 1",
             url="https://s3.amazonaws.com/bucket/file1.pdf",
-            is_embedded=True,
+            state="test",
             created_at=datetime.now(),
             agent=fake_agent
         )
@@ -123,9 +123,9 @@ def test_wrong_permissions(
     mock_repository.get_many.return_value = mock_collection
 
     with pytest.raises(PermissionsException) as exc_info:
-        result = use_case.execute(
+        use_case.execute(
             user_id=user_id,
             agent_id=agent_id
         )
 
-    assert "Forbidden" in str(exc_info)
+    assert "403" in str(exc_info)

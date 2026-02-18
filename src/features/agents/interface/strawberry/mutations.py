@@ -1,32 +1,32 @@
 import logging
 import strawberry
 from uuid import UUID
-from src.features.agents.interface.strawberry import types, inputs
-from src.features.agents.dependencies.use_cases import (
+from src.app import GraphQlException, validate_input_to_model
+from src.security import PermissionsException, StrawberryUserAuth
+from src.persistence import NotFoundException
+from src.features.knowledge_base import get_delete_knowledge_by_agent_use_case
+from .inputs import CreateAgentProfileInput, UpdateAgentProfileInput
+from .types import AgentType
+from ...dependencies import (
     get_create_agent_profile_use_case, 
     get_delete_agent_profile_use_case,
     get_update_agent_profile_use_case
 )
-from src.features.knowledge_base.dependencies.use_cases import get_delete_knowledge_by_agent_use_case
-from src.app.interface.strawberry.middleware.user_auth import UserAuth
-from src.app.domain.exceptions import GraphQlException
-from src.app.interface.strawberry.decorators.req_validation import validate_input_to_model
-from src.security.domain.exceptions import PermissionsException
-from src.persistence.domain.exceptions import NotFoundException
+
 logger = logging.getLogger(__name__)
 
 @strawberry.type
 class AgentMutations:
     @strawberry.mutation(
-        permission_classes=[UserAuth],
+        permission_classes=[StrawberryUserAuth],
         description="Create agent profile"
     )
     @validate_input_to_model
     def agent_create(
         self,
         info: strawberry.Info,
-        input: inputs.CreateAgentProfileInput
-    ) -> types.AgentType: 
+        input: CreateAgentProfileInput
+    ) -> AgentType: 
         try:
             use_case = get_create_agent_profile_use_case()
             user_id = info.context.get("user_id")
@@ -43,13 +43,13 @@ class AgentMutations:
     
     @strawberry.mutation(
         description="Delete agent profile",
-        permission_classes=[UserAuth]
+        permission_classes=[StrawberryUserAuth]
     )
     async def agent_delete(
         self,
         info: strawberry.Info,
         agent_id: UUID
-    ) -> types.AgentType: 
+    ) -> AgentType: 
         try:
             use_case = get_delete_agent_profile_use_case()
             user_id = info.context.get("user_id")
@@ -73,16 +73,16 @@ class AgentMutations:
         
     
     @strawberry.mutation(
-        permission_classes=[UserAuth],
+        permission_classes=[StrawberryUserAuth],
         description="Update agent profile"
     )
     @validate_input_to_model
     def update_agent(
         self,
         info: strawberry.Info,
-        input: inputs.UpdateAgentProfileInput,
+        input: UpdateAgentProfileInput,
         agent_id: UUID
-    ) -> types.AgentType:
+    ) -> AgentType:
         try:
             use_case = get_update_agent_profile_use_case()
             user_id = info.context.get("user_id")

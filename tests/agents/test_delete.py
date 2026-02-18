@@ -67,7 +67,7 @@ def test_not_found(
     mock_repository.get_one.return_value = None
 
     with pytest.raises(NotFoundException) as exc_info:
-        result = use_case.execute(
+        use_case.execute(
             user_id=user_id,
             agent_id=agent_id
         )
@@ -78,7 +78,7 @@ def test_not_found(
     )
 
     mock_repository.delete.assert_not_called()
-    assert "Agent not found" in str(exc_info)
+    assert "404" in str(exc_info)
 
 
 def test_permission_error(
@@ -99,7 +99,7 @@ def test_permission_error(
     mock_repository.get_one.return_value = fake_agent
 
     with pytest.raises(PermissionsException) as exc_info:
-        result = use_case.execute(
+        use_case.execute(
             user_id=user_id,
             agent_id=agent_id
         )
@@ -110,4 +110,4 @@ def test_permission_error(
     )
 
     mock_repository.delete.assert_not_called()
-    assert "Forbidden" in str(exc_info)
+    assert "403" in str(exc_info)

@@ -1,14 +1,14 @@
 from uuid import UUID
-from src.security.domain.services.encryption import EncryptionService
-from src.features.users.domain import schemas, entities
-from src.persistence.domain import data_repository, exceptions
+from src.security import EncryptionService
+from src.persistence import DataRepository, NotFoundException
+from ...domain import User, UserPublic
 
 class DeleteUser:
     def __init__(
        self,
-        repository: data_repository.DataRepository,
+        repository: DataRepository,
         encryption: EncryptionService
-    ) -> schemas.UserPublic:
+    ) -> UserPublic:
         self.__repository = repository
         self.__encryption = encryption
 
@@ -17,15 +17,15 @@ class DeleteUser:
         self,
         user_id: UUID
     ):
-        deleted_user: entities.User =  self.__repository.delete(
+        deleted_user: User =  self.__repository.delete(
             key="user_id",
             value=user_id
         )
 
         if not deleted_user:
-            raise exceptions.NotFoundException("User not found")
+            raise NotFoundException()
 
-        return schemas.UserPublic(
+        return UserPublic(
             user_id=deleted_user.user_id,
             email=self.__encryption.decrypt(deleted_user.email),
             name=self.__encryption.decrypt(deleted_user.name),

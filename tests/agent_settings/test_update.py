@@ -108,7 +108,7 @@ def test_not_found(
         )
 
     mock_repository.update.assert_not_called()
-    assert "Settings not found" in str(exc_info)
+    assert "404" in str(exc_info)
 
 
 def test_permissions_error(
@@ -147,4 +147,4 @@ def test_permissions_error(
         )
     
     mock_repository.update.assert_not_called()
-    assert "Forbidden" in str(exc_info)
+    assert "403" in str(exc_info)

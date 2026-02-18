@@ -1,23 +1,23 @@
 from uuid import UUID
-from src.features.users.domain import entities, schemas
-from src.security.domain.services import hashing, encryption
-from src.persistence.domain import data_repository, exceptions
+from src.security import HashingService, EncryptionService
+from src.persistence import DataRepository, NotFoundException, UpdateFieldsException
+from ...domain import User, UserPublic, UpdateUserSchema
 
 class UpdateUser:
     def __init__(
         self, 
-        repository: data_repository.DataRepository,
-        encryption: encryption.EncryptionService,
-        hashing: hashing.HashingService
+        repository: DataRepository,
+        encryption: EncryptionService,
+        hashing: HashingService
     ):
         self.__repository = repository
         self.__encryption = encryption
         self.__hashing = hashing
 
-    def execute(self, user_id: UUID, changes: schemas.UpdateUserSchema) -> schemas.UserPublic:
+    def execute(self, user_id: UUID, changes: UpdateUserSchema) -> UserPublic:
         cleaned_changes = changes.model_dump(exclude_unset=True)
         if not cleaned_changes:
-            raise exceptions.UpdateFieldsException()
+            raise UpdateFieldsException()
         
         processed_changes = {}
         
@@ -32,17 +32,17 @@ class UpdateUser:
             else:
                 processed_changes[key] = value
         
-        updated_user: entities.User = self.__repository.update(
+        updated_user: User = self.__repository.update(
             key="user_id",
             value=user_id,
             changes=processed_changes
         )
 
         if not updated_user:
-            raise exceptions.NotFoundException("User not found")
+            raise NotFoundException()
         
         
-        return schemas.UserPublic(
+        return UserPublic(
             user_id=updated_user.user_id,
             email=self.__encryption.decrypt(updated_user.email),
             name=self.__encryption.decrypt(updated_user.name),

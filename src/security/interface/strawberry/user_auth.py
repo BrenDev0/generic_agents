@@ -2,14 +2,17 @@ import typing
 import logging
 from strawberry.permission import BasePermission
 from strawberry.types import Info
-from src.security.dependencies.services import get_web_token_service
-from src.security.domain.exceptions import ExpiredToken, InvalidToken
-from src.app.domain.exceptions import GraphQlException
-from src.features.users.dependencies.repositories import get_users_repository
+from src.security import (
+    get_web_token_service, 
+    ExpiredToken, 
+    InvalidToken
+)
+from src.app import GraphQlException
+from src.features.users import get_users_repository
 logger = logging.getLogger(__name__)
 
 class UserAuth(BasePermission):
-     message = "Unauthorized"
+     message = "401"
      def has_permission(self, source: typing.Any, info: Info, **kwargs) -> bool:
         request = info.context["request"]
        
@@ -34,7 +37,7 @@ class UserAuth(BasePermission):
                     )
 
                     if not user_exists:
-                        raise InvalidToken("Token does not contain a valid user id")
+                        raise InvalidToken()
                     
                     
                     info.context["user_id"] = user_id

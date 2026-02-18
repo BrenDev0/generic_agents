@@ -1,16 +1,16 @@
 from datetime import datetime, timezone
-from src.persistence.domain import data_repository, exceptions
-from src.security.domain.services import hashing, encryption
-from src.features.users.domain import entities, schemas
+from src.persistence import DataRepository, NotFoundException
+from src.security import HashingService, EncryptionService
+from ...domain import User, UserPublic
 
 
 class UserLogin:
     def __init__(
         self,
-        repository: data_repository.DataRepository,
-        hashing: hashing.HashingService,
-        encryption: encryption.EncryptionService
-    ) -> schemas.UserPublic:
+        repository: DataRepository,
+        hashing: HashingService,
+        encryption: EncryptionService
+    ) -> UserPublic:
         self.__repository = repository
         self.__hashing = hashing
         self.__encrytpion = encryption
@@ -24,13 +24,13 @@ class UserLogin:
         
         hashed_email = self.__hashing.hash_for_search(email)
 
-        user_exists: entities.User = self.__repository.get_one(
+        user_exists: User | None = self.__repository.get_one(
             key="email_hash",
             value=hashed_email
         )
 
         if not user_exists:
-            raise exceptions.NotFoundException("User not found")
+            raise NotFoundException()
 
         self.__hashing.compare_password(
             password=password,
@@ -44,13 +44,13 @@ class UserLogin:
             "last_login": datetime.now(timezone.utc)
         }
 
-        updated_user: entities.User = self.__repository.update(
+        updated_user: User = self.__repository.update(
             key="user_id",
             value=user_exists.user_id,
             changes=changes
         )
 
-        user_public = schemas.UserPublic(
+        user_public = UserPublic(
             user_id=user_exists.user_id,
             email=self.__encrytpion.decrypt(updated_user.email),
             name=self.__encrytpion.decrypt(updated_user.name),

@@ -1,7 +1,6 @@
 import logging
-from src.di.container import Container
-from src.di.domain.exceptions import DependencyNotRegistered
-from src.features.knowledge_base.application.rules.supported_file_types import IsSupportedFileType
+from src.di import DependencyNotRegistered, Container
+from ..application import IsSupportedFileType
 logger = logging.getLogger(__name__)
 
 def get_supported_file_type_rule() -> IsSupportedFileType:

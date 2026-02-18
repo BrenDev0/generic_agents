@@ -1,10 +1,8 @@
 from sqlalchemy import Column, String, DateTime, func
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
-from typing import List
-
-from src.features.users.domain.entities import User
-from src.persistence.infrastructure.sqlAlchemy.data_repository import SqlAlchemyDataRepository, Base
+from src.persistence import SqlAlchemyDataRepository, Base
+from ...domain import User
 
 class SqlAlchemyUser(Base):
     __tablename__ = "users"

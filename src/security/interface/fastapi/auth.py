@@ -1,12 +1,19 @@
 from fastapi import Request, HTTPException, Depends
-from src.security.domain.exceptions import ExpiredToken, InvalidToken
-from src.security.domain.services.web_token import WebTokenService
-from src.security.dependencies.services import get_web_token_service
+from src.security import (
+    ExpiredToken, 
+    InvalidToken, 
+    get_web_token_service, 
+    WebTokenService
+)
 
-def auth_middleware(
+
+def user_authenication(
     request: Request,
     web_token_service: WebTokenService = Depends(get_web_token_service)
 ):
+    """
+    For use in fastapi Depends 
+    """
     auth_header = request.headers.get("Authorization", None)
     if not auth_header or not auth_header.startswith("Bearer "):
         raise HTTPException(status_code=401, detail="Unautrhorized, Missing required auth headers")

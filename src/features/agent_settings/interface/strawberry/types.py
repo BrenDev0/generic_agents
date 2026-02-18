@@ -1,5 +1,5 @@
 import strawberry
-from src.features.agent_settings.domain.schemas  import AgentSettingsPublic
+from ...domain import AgentSettingsPublic
 
 @strawberry.experimental.pydantic.type(model=AgentSettingsPublic, all_fields=True)
 class AgentSettingsType:

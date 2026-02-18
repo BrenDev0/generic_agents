@@ -3,15 +3,26 @@ import strawberry
 from strawberry.file_uploads import Upload
 from starlette.datastructures import UploadFile
 from uuid import UUID
-from src.app.interface.strawberry.decorators.req_validation import validate_input_to_model
-from src.app.domain.exceptions import GraphQlException
-from src.app.interface.strawberry.middleware.user_auth import UserAuth
-from src.persistence.domain.exceptions import NotFoundException
-from src.security.domain.exceptions import PermissionsException
-from src.features.knowledge_base.dependencies import use_cases, business_rules
-from src.features.knowledge_base.domain import exceptions, schemas, entities
-from src.features.knowledge_base.interface.strawberry import types, inputs
-from src.features.sessions.dependencies.use_cases import get_update_embeddings_tracker_use_case
+from src.app import GraphQlException, validate_input_to_model
+from src.persistence import NotFoundException
+from src.security import PermissionsException, StrawberryUserAuth
+from src.features.sessions import get_update_embeddings_tracker_use_case
+from ...dependencies import (
+    get_delete_embeddings_use_case,
+    get_delete_knowledge_use_case,
+    get_send_to_embed_use_case,
+    get_update_knowledge_use_case,
+    get_upload_knowledge_use_case,
+    get_supported_file_type_rule,
+    get_knowledge_resource_use_case
+)
+from ...domain import (
+    UnsupportedFileType,
+    Knowledge,
+    UpdateKnowledgeRequest
+)
+from .inputs import CreateKnowledgeInput, UpdateKnowledgeInput
+from .types import KnowledgeType
 logger = logging.getLogger(__name__)
 
 MAX_FILE_SIZE = 50 * 1024 * 1024 
@@ -20,7 +31,7 @@ MAX_FILE_SIZE = 50 * 1024 * 1024
 @strawberry.type
 class KnowledgeBaseMutaions:
     @strawberry.mutation(
-        permission_classes=[UserAuth],
+        permission_classes=[StrawberryUserAuth],
         description="Upload file"
     )
     @validate_input_to_model
@@ -29,16 +40,16 @@ class KnowledgeBaseMutaions:
         agent_id: UUID,
         info: strawberry.Info,
         file: Upload,
-        input: inputs.CreateKnowledgeInput,
+        input: CreateKnowledgeInput,
         embed_document: bool = False
-    ) -> types.KnowledgeType:
+    ) -> KnowledgeType:
         if not isinstance(file, UploadFile):
             raise GraphQlException(f"Type {type(file).__name__} invalid for vairable file, Expected type Upload!")
         
         try:
             user_id = info.context.get("user_id")
-            use_case = use_cases.get_upload_knowledge_use_case()
-            is_supported_file_type = business_rules.get_supported_file_type_rule() 
+            use_case = get_upload_knowledge_use_case()
+            is_supported_file_type = get_supported_file_type_rule() 
 
             filename = file.filename.lower().replace(" ", "_")
             content_type = file.content_type
@@ -67,7 +78,7 @@ class KnowledgeBaseMutaions:
                 if not input.connection_id:
                     raise PermissionsException("Cannot embed document without connection id")
                 
-                send_to_embed = use_cases.get_send_to_embed_use_case()
+                send_to_embed = get_send_to_embed_use_case()
                 update_embedding_tracker = get_update_embeddings_tracker_use_case()
                 
                 embedding_status = {
@@ -105,7 +116,7 @@ class KnowledgeBaseMutaions:
 
             return saved_doc
         
-        except (NotFoundException, PermissionsException, exceptions.UnsupportedFileType) as e:
+        except (NotFoundException, PermissionsException, UnsupportedFileType) as e:
             raise GraphQlException(str(e))
         
         except Exception as e:
@@ -116,7 +127,7 @@ class KnowledgeBaseMutaions:
 
 
     @strawberry.mutation(
-        permission_classes=[UserAuth],
+        permission_classes=[StrawberryUserAuth],
         description="Update Knowledge resource"
     )
     @validate_input_to_model
@@ -124,11 +135,11 @@ class KnowledgeBaseMutaions:
         self,
         knowledge_id: UUID,
         info: strawberry.Info,
-        input: inputs.UpdateKnowledgeInput
-    ) -> types.KnowledgeType:
+        input: UpdateKnowledgeInput
+    ) -> KnowledgeType:
         try:
             user_id = info.context.get("user_id")
-            use_case = use_cases.get_update_knowledge_use_case()
+            use_case = get_update_knowledge_use_case()
 
             return use_case.execute(
                 user_id=user_id,
@@ -147,17 +158,17 @@ class KnowledgeBaseMutaions:
 
 
     @strawberry.mutation(
-        permission_classes=[UserAuth],
+        permission_classes=[StrawberryUserAuth],
         description="Delete knowledge resource"
     )
     async def delete_knowledge(
         self,
         knowledge_id: UUID,
         info: strawberry.Info
-    ) -> types.KnowledgeType:
+    ) -> KnowledgeType:
         try:
             user_id = info.context.get("user_id")
-            use_case = use_cases.get_delete_knowledge_use_case()
+            use_case = get_delete_knowledge_use_case()
 
         
             return await use_case.execute(
@@ -175,31 +186,31 @@ class KnowledgeBaseMutaions:
 
 
     @strawberry.mutation(
-        permission_classes=[UserAuth],
+        permission_classes=[StrawberryUserAuth],
         description="Delete from vector base"
     )
     async def delete_embeddings(
         self,
         knowledge_id: UUID,
         info: strawberry.Info
-    ) -> types.KnowledgeType:
+    ) -> KnowledgeType:
         try:
             user_id = info.context.get("user_id")
-            resource_use_case = use_cases.get_knowledge_resource_use_case()
+            resource_use_case = get_knowledge_resource_use_case()
             
-            resource: entities.Knowledge = resource_use_case.execute(
+            resource: Knowledge = resource_use_case.execute(
                 user_id=user_id,
                 knowledge_id=knowledge_id
             )
 
-            remove_embeddings_use_case = use_cases.get_delete_embeddings_use_case()
+            remove_embeddings_use_case = get_delete_embeddings_use_case()
 
             await remove_embeddings_use_case.execute(
                 knowledge_id=resource.knowledge_id
             )
 
-            update_knowledge_use_case = use_cases.get_update_knowledge_use_case()
-            changes = schemas.UpdateKnowledgeRequest(
+            update_knowledge_use_case = get_update_knowledge_use_case()
+            changes = UpdateKnowledgeRequest(
                 state="NO PROCESADO"
             )
             return update_knowledge_use_case.execute(
@@ -220,7 +231,7 @@ class KnowledgeBaseMutaions:
 
     
     @strawberry.mutation(
-        permission_classes=[UserAuth],
+        permission_classes=[StrawberryUserAuth],
         description="create embeddings"
     )
     async def create_embeddings(
@@ -228,17 +239,17 @@ class KnowledgeBaseMutaions:
         knowledge_id: UUID,
         connection_id: UUID,
         info: strawberry.Info
-    ) -> types.KnowledgeType:
+    ) -> KnowledgeType:
         try:
             user_id = info.context.get("user_id")
-            resource_use_case = use_cases.get_knowledge_resource_use_case()
+            resource_use_case = get_knowledge_resource_use_case()
             
-            resource: entities.Knowledge = resource_use_case.execute(
+            resource: Knowledge = resource_use_case.execute(
                 user_id=user_id,
                 knowledge_id=knowledge_id
             )
 
-            send_to_embed_use_case = use_cases.get_send_to_embed_use_case()
+            send_to_embed_use_case = get_send_to_embed_use_case()
             await send_to_embed_use_case.execute(
                 user_id=user_id,
                 agent_id=resource.agent_id,
@@ -248,7 +259,17 @@ class KnowledgeBaseMutaions:
                 file_url=resource.url
             )
 
-            return resource
+            update_use_case = get_update_knowledge_use_case()
+            changes = UpdateKnowledgeRequest(
+                state="PROCESANDO"
+            )
+            updated = update_use_case.execute(
+                user_id=user_id, 
+                knowledge_id=resource.knowledge_id,
+                changes=changes
+            )
+
+            return updated
 
 
         except (NotFoundException, PermissionsException) as e:

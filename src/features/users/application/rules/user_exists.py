@@ -1,12 +1,12 @@
-from src.persistence.domain import exceptions, data_repository
-from src.security.domain.services import hashing
-from src.features.users.domain import entities, schemas
+from src.persistence import NotFoundException, DataRepository
+from src.security import HashingService
+from ...domain import User
 
 class UserExists:
     def __init__(
         self,
-        repository: data_repository.DataRepository,
-        hashing: hashing.HashingService
+        repository: DataRepository,
+        hashing: HashingService
     ):
         self.__user_repository = repository
         self.__hashing = hashing
@@ -17,13 +17,13 @@ class UserExists:
     ):
         hashed_email = self.__hashing.hash_for_search(data=email)
 
-        user_exists: entities.User = self.__user_repository.get_one(
+        user_exists: User = self.__user_repository.get_one(
             key="email_hash",
             value=hashed_email
         )
 
         if not user_exists:
-            raise exceptions.NotFoundException("Incorrect email")
+            raise NotFoundException()
         
 
         return user_exists

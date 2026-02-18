@@ -1,12 +1,12 @@
 from uuid import UUID
-from src.persistence.domain import data_repository, exceptions
-from src.features.agents.domain import entities, schemas
-from src.security.domain.exceptions import PermissionsException
+from src.persistence import DataRepository, NotFoundException
+from src.security import PermissionsException
+from ...domain import Agent, AgentPublic
 
 class GetAgentById:
     def __init__(
         self,
-        repository: data_repository.DataRepository
+        repository: DataRepository
     ):
         self.__repository = repository
 
@@ -16,17 +16,17 @@ class GetAgentById:
         user_id: UUID,
         agent_id: UUID
     ):
-        agent: entities.Agent = self.__repository.get_one(
+        agent: Agent = self.__repository.get_one(
             key="agent_id",
             value=agent_id
         )
 
         if not agent:
-            raise exceptions.NotFoundException("Agent not found")
+            raise NotFoundException()
 
         if str(agent.user_id) != str(user_id):
             raise PermissionsException()
 
         
-        return schemas.AgentPublic.model_validate(agent, from_attributes=True)
+        return AgentPublic.model_validate(agent, from_attributes=True)
 

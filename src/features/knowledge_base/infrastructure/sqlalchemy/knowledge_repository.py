@@ -1,12 +1,11 @@
-from sqlalchemy import Column, String, DateTime, func, ForeignKey, Boolean
+from sqlalchemy import Column, String, DateTime, func, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
 from typing import Optional
 from sqlalchemy.orm import relationship
 from uuid import uuid4
 from src.persistence.infrastructure.sqlAlchemy.data_repository import SqlAlchemyDataRepository, Base
-from src.features.knowledge_base.domain.entities import Knowledge
-from src.features.agents.infrastructure.sqlAlchemy.agents_repository import SqlAlchemyAgent
-from src.features.agents.domain.entities import Agent
+from src.features.agents import SqlAlchemyAgent, Agent
+from ...domain import Knowledge
 
 class SqlAlchemyKnowledge(Base):
     __tablename__ = "knowledge"

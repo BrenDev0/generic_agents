@@ -102,7 +102,7 @@ def test_login_user_not_found(
     mock_hashing.hash_for_search.return_value = "hashed_email"
 
     with pytest.raises(NotFoundException) as exc_info:
-        result = use_case.execute(
+        use_case.execute(
             email="email",
             password="password"
         )
@@ -112,7 +112,7 @@ def test_login_user_not_found(
         value="hashed_email"
     )
     
-    assert "User not found" in str(exc_info)
+    assert "404" in str(exc_info)
 
 
 def test_login_incorrect_password(
@@ -138,7 +138,7 @@ def test_login_incorrect_password(
 
     
     with pytest.raises(IncorrectPassword) as exc_info:
-        result = use_case.execute(
+        use_case.execute(
             email="email",
             password="hashed_password"
         )

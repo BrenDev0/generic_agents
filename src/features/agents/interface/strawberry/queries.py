@@ -2,18 +2,17 @@ import logging
 import strawberry
 from typing import List
 from uuid import UUID
-from src.features.agents.dependencies.use_cases import get_agent_by_id_use_case, get_agents_by_user_use_case
-from src.features.agents.interface.strawberry.types import AgentType
-from src.app.interface.strawberry.middleware.user_auth import UserAuth
-from src.app.domain.exceptions import GraphQlException
-from src.security.domain.exceptions import PermissionsException
-from src.persistence.domain.exceptions import NotFoundException
+from src.app import GraphQlException
+from src.security import PermissionsException, StrawberryUserAuth
+from src.persistence import NotFoundException
+from ...dependencies import get_agent_by_id_use_case, get_agents_by_user_use_case
+from .types import AgentType
 logger = logging.getLogger(__name__)
 
 @strawberry.type
 class AgentQueries:
     @strawberry.field(
-        permission_classes=[UserAuth],
+        permission_classes=[StrawberryUserAuth],
         description="Get agent by id"
     )
     def agent_resource(
@@ -38,7 +37,7 @@ class AgentQueries:
             raise GraphQlException()
         
     @strawberry.field(
-        permission_classes=[UserAuth],
+        permission_classes=[StrawberryUserAuth],
         description="Get all agents for user in auth bearer"
     )
     def agent_collection(

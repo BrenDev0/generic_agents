@@ -1,12 +1,15 @@
 import typing
 from strawberry.permission import BasePermission
 from strawberry.types import Info
-from src.security.dependencies.services import get_web_token_service
-from src.security.domain.exceptions import ExpiredToken, InvalidToken
-from src.app.domain.exceptions import GraphQlException
+from src.security import (
+    get_web_token_service, 
+    ExpiredToken, 
+    InvalidToken
+)
+from src.app import GraphQlException
 
 class UserVerification(BasePermission):
-     message = "Unverified"
+     message = "401"
      def has_permission(self, source: typing.Any, info: Info, **kwargs) -> bool:
         request = info.context["request"]
        

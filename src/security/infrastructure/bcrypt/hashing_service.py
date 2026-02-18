@@ -1,7 +1,6 @@
 import bcrypt
 import hashlib
-from src.security.domain.services.hashing import HashingService
-from src.security.domain.exceptions import IncorrectPassword
+from ...domain import IncorrectPassword, HashingService
 
 class BcryptHashingService(HashingService):
     def hash_for_search(self, data: str) -> str:

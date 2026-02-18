@@ -1,5 +1,5 @@
 class GraphQlException(Exception):
-    def __init__(self, detail: str = "Unable to process request at this time"):
+    def __init__(self, detail: str = "500"):
         self.detail = detail
         super().__init__(detail)
 

@@ -1,8 +1,7 @@
 import logging
-from src.di.domain.exceptions import DependencyNotRegistered
-from src.di.container import Container
-from src.persistence.domain.data_repository import DataRepository
-from src.features.users.infrastructure.sqlAlchemy.users_repository import SqlAlchemyUsersRepository
+from src.di import DependencyNotRegistered, Container
+from src.persistence import DataRepository
+from ..infrastructure import SqlAlchemyUsersRepository
 logger = logging.getLogger(__name__)
 
 def get_users_repository() -> DataRepository:

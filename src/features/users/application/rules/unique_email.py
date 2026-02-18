@@ -1,6 +1,6 @@
-from src.persistence.domain.data_repository import DataRepository
-from src.security.domain.services.hashing import HashingService
-from src.features.users.domain.exceptions import EmailInUseException
+from src.persistence import DataRepository
+from src.security import HashingService
+from ...domain import EmailInUseException
 
 class UniqueEmailRule:
     def __init__(

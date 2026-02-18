@@ -1,18 +1,21 @@
 import logging
-from src.di.domain.exceptions import DependencyNotRegistered
-from src.di.container import Container
-from src.features.users.application.rules import unique_email, update_password, user_exists
-from src.features.users.dependencies.repositories import get_users_repository
-from src.security.dependencies.services import get_hashing_service
+from src.di import DependencyNotRegistered, Container
+from src.security import get_hashing_service
+from ..application import(
+    UniqueEmailRule,
+    UpdatePasswordRule,
+    UserExists
+)
+from ..dependencies import get_users_repository
 logger = logging.getLogger(__name__)
 
-def get_update_password_rule() -> update_password.UpdatePasswordRule:
+def get_update_password_rule() -> UpdatePasswordRule:
     try:
         instance_key = "update_password_rule"
         business_rule = Container.resolve(instance_key)
     
     except DependencyNotRegistered:
-        business_rule = update_password.UpdatePasswordRule(
+        business_rule = UpdatePasswordRule(
             repository=get_users_repository(),
             hashing=get_hashing_service()
         )
@@ -22,13 +25,13 @@ def get_update_password_rule() -> update_password.UpdatePasswordRule:
 
     return business_rule
 
-def get_unique_email_rule() -> unique_email.UniqueEmailRule:
+def get_unique_email_rule() -> UniqueEmailRule:
     try:
         instance_key = "unique_email_rule"
         business_rule = Container.resolve(instance_key)
     
     except DependencyNotRegistered:
-        business_rule = unique_email.UniqueEmailRule(
+        business_rule = UniqueEmailRule(
             repository=get_users_repository(),
             hashing=get_hashing_service()
         )
@@ -39,13 +42,13 @@ def get_unique_email_rule() -> unique_email.UniqueEmailRule:
     return business_rule
 
 
-def get_user_exists_rule() -> user_exists.UserExists:
+def get_user_exists_rule() -> UserExists:
     try:
         instance_key = "user_exists_rule"
         business_rule = Container.resolve(instance_key)
     
     except DependencyNotRegistered:
-        business_rule = user_exists.UserExists(
+        business_rule = UserExists(
             repository=get_users_repository(),
             hashing=get_hashing_service()
         )

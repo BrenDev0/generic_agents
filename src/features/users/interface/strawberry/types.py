@@ -1,5 +1,5 @@
 import strawberry
-from src.features.users.domain.schemas import UserPublic
+from ...domain import UserPublic
 
 @strawberry.experimental.pydantic.type(model=UserPublic, all_fields=True)
 class UserType:

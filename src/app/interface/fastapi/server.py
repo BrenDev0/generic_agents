@@ -3,11 +3,11 @@ from fastapi import FastAPI, Depends, Request
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from src.app.interface.strawberry.router import get_strawberry_graphql_router
-from src.app.interface.fastapi.middleware.hmac import verify_hmac
-from src.security.domain.exceptions import HMACException
+from src.security import HMACException, fastapi_hmac_verification
+from src.persistence import NotFoundException
 from src.features.knowledge_base.interface.fastapi import routes as knowledge_base_routes
-from src.persistence.domain.exceptions import NotFoundException
-from src.security.domain.exceptions import PermissionsException
+from src.features.chats.interface.fastapi import routes as chats_routes
+
 
 logger = logging.getLogger(__name__)
 
@@ -48,7 +48,7 @@ def create_fastapi_app():
     @app.exception_handler(HMACException)
     async def hmac_exception_handler(request, exc: HMACException):
         return JSONResponse(
-            status_code=401,
+            status_code=403,
             content={"errors": [exc.detail]}
         )
 
@@ -82,9 +82,10 @@ def create_fastapi_app():
     
 
     app.include_router(knowledge_base_routes.router)
+    app.include_router(chats_routes.router)
   
     graphql_router = get_strawberry_graphql_router()
-    app.include_router(graphql_router, dependencies=[Depends(verify_hmac)])
+    app.include_router(graphql_router, dependencies=[Depends(fastapi_hmac_verification)])
 
     return app
     

@@ -1,15 +1,15 @@
 import logging
-from fastapi import APIRouter, Depends, Body, HTTPException
+from fastapi import APIRouter, Depends, Body
 from uuid import UUID
-from src.app.interface.fastapi.middleware.hmac import verify_hmac
-from src.features.knowledge_base.domain.schemas import UpdateKnowledgeRequest, InternalUpdateEmbeddingStatus, KnowledgePublic
-from src.features.knowledge_base.dependencies.use_cases import get_update_knowledge_use_case
+from src.security import fastapi_hmac_verification
+from ...domain import UpdateKnowledgeRequest, InternalUpdateEmbeddingStatus, KnowledgePublic
+from ...dependencies import get_update_knowledge_use_case
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(
     prefix="/knowledge-base",
-    dependencies=[Depends(verify_hmac)]
+    dependencies=[Depends(fastapi_hmac_verification)]
 )
 
 @router.patch(path="/embedding-status/{knowledge_id}", status_code=200, response_model=KnowledgePublic)

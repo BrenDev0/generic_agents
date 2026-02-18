@@ -1,8 +1,11 @@
 from functools import wraps
 from strawberry.types import Info
-from src.security.dependencies.services import get_web_token_service
-from src.security.domain.exceptions import ExpiredToken, InvalidToken
-from src.app.domain.exceptions import GraphQlException
+from src.security import (
+    get_web_token_service, 
+    ExpiredToken, 
+    InvalidToken
+)
+from src.app import GraphQlException
 
 
 def inject_strawberry_context(resolver):

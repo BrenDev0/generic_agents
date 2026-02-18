@@ -3,8 +3,7 @@ import jwt
 import logging
 import time
 from typing import Dict, Any
-from src.security.domain.exceptions import ExpiredToken, InvalidToken
-from src.security.domain.services.web_token import WebTokenService
+from ...domain import WebTokenService, ExpiredToken, InvalidToken 
 logger = logging.getLogger(__name__)
 
 class JwtWebTokenService(WebTokenService):
@@ -18,12 +17,12 @@ class JwtWebTokenService(WebTokenService):
             return jwt.decode(token, self.__secret, algorithms=["HS256"])
         
         except jwt.ExpiredSignatureError:
-            logger.warning(f"Token expired ::: {token}")
-            raise ExpiredToken(f"Token expired ::: {token}")
+            logger.error(f"Token expired ::: {token}")
+            raise ExpiredToken()
             
         except jwt.InvalidTokenError:
-            logger.warning(f"Invalid token ::: {token}")
-            raise InvalidToken(f"Invalid token ::: {token}")
+            logger.error(f"Invalid token ::: {token}")
+            raise InvalidToken()
         
     
     def generate(self, payload: Dict[str, Any], expiration: int = 900):

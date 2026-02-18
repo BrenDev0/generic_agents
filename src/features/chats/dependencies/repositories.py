@@ -1,8 +1,7 @@
 import logging
-from src.di.container import Container
-from src.di.domain.exceptions import DependencyNotRegistered
-from src.persistence.domain.data_repository import DataRepository
-from src.features.chats.infrastructure.slqAlchemy.chats_repository import SqlAlchemyChatsRepository
+from src.di import DependencyNotRegistered, Container
+from src.persistence import DataRepository
+from ..infrastructure import SqlAlchemyChatsRepository
 logger = logging.getLogger(__name__)
 
 

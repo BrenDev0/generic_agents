@@ -6,6 +6,7 @@ from src.features.email.interface.strawberry.mutations import EmailMutations
 from src.features.agents.interface.strawberry import queries as agent_queries, mutations as agent_mutations
 from src.features.agent_settings.interface.strawberry import queries as agent_settings_queries, mutations as agent_settings_mutations
 from src.features.knowledge_base.interface.strawberry import queries as knowledge_base_queries, mutations as knowledge_base_mutations
+from src.features.chats.interface.strawberry import mutations as chat_mutations, queries as chat_queries
 
 @strawberry.type
 class Query():
@@ -24,6 +25,10 @@ class Query():
     @strawberry.field
     def knowledge_base(self) -> knowledge_base_queries.KnowledgeQueries:
         return knowledge_base_queries.KnowledgeQueries()
+    
+    @strawberry.field
+    def chats(self) -> chat_queries.ChatQueries:
+        return chat_queries.ChatQueries()
 
 
 @strawberry.type
@@ -47,6 +52,10 @@ class Mutation():
     @strawberry.field
     def knowledge_base(self) -> knowledge_base_mutations.KnowledgeBaseMutaions:
         return knowledge_base_mutations.KnowledgeBaseMutaions()
+    
+    @strawberry.field
+    def chats(self) -> chat_mutations.ChatMutations:
+        return chat_mutations.ChatMutations()
 
 schema = strawberry.Schema(
     query=Query, 

@@ -1,8 +1,7 @@
 import os
 import smtplib
 from email.message import EmailMessage
-from src.features.email.domain.entities import Email
-from src.features.email.domain.exceptions import EmailTransportException
+from ...domain import Email, EmailTransportException
 
 class Sender:
     def __init__(self):
