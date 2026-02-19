@@ -1,6 +1,6 @@
 """
 Stucture:
-domain: Abstacts, entites, and models ect..
+domain: Abstracts, entites, and models ect..
 application: The application of domain objects, use cases, rules, services ect...
 infrastructure: Framework implementations
 interface: access point
