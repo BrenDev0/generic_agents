@@ -85,7 +85,7 @@ class SqlAlchemyDataRepository(DataRepository[E], Generic[E, M]):
         offset: int = 0,
         order_by: int = None, 
         desc: bool = False
-    ) -> List[E]:
+    ) -> List[E] | None:
         if secondary_key:
             if secondary_value is None:
                 raise ValueError("Value for adn_key required")
@@ -114,7 +114,7 @@ class SqlAlchemyDataRepository(DataRepository[E], Generic[E, M]):
         
         with self._get_session() as db:
             results = db.execute(stmt).scalars().all()
-            return [self._to_entity(result) for result in results]
+            return [self._to_entity(result) for result in results] if results else None
     
     def get_all(self) -> List[E]:
         stmt = select(self.model)
