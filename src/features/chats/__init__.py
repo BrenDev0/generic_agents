@@ -12,8 +12,10 @@ __author__ = "Xplorers"
 __description__ = "Chat package for app"
 
 from .application import GetChatResource
+from .dependencies import get_chat_resource_use_case
 
 __all__ = [
-    "GetChatResource"
+    "GetChatResource",
+    "get_chat_resource_use_case"
 ]
 

@@ -2,7 +2,8 @@ from .repositories import get_message_repository
 from .services import get_message_service
 from .use_cases import (
     get_create_message_use_case,
-    get_messages_collection_use_case
+    get_messages_collection_use_case,
+    get_delete_messages_use_case
 )
 
 __all__ = [
@@ -11,5 +12,6 @@ __all__ = [
     "get_message_service",
 
     "get_create_message_use_case",
-    "get_messages_collection_use_case"
+    "get_messages_collection_use_case",
+    "get_delete_messages_use_case"
 ]

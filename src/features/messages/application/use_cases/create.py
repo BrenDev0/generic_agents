@@ -1,11 +1,10 @@
-from src.persistence import DataRepository
-from ...domain import CreateMessageRequest
+from ...domain import CreateMessageRequest, MessageRepository
 from ..service import MessageService
 
 class CreateMessage:
     def __init__(
         self,
-        message_repository: DataRepository,
+        message_repository: MessageRepository,
         message_service: MessageService
     ):
         self.__message_repository = message_repository
@@ -21,5 +20,6 @@ class CreateMessage:
 
         new_message = self.__message_repository.create(data=partial_entity)
 
-        return self.__message_service.get_public_schema(entity=new_message)
+        return self.__message_service.get_decrypted_entity(new_message)
+        
 

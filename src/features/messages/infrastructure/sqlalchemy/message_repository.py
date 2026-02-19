@@ -8,7 +8,7 @@ from ...domain import Message, MessageRepository
 class SqlAlchemyMessage(Base):
     __tablename__ = "Messages"
 
-    message_id = Column(UUID(as_uuid=True), primary_key=True, nullable=False, defualt=uuid.uuid4)
+    message_id = Column(UUID(as_uuid=True), primary_key=True, nullable=False, default=uuid.uuid4)
     chat_id = Column(UUID(as_uuid=True), ForeignKey("chats", ondelete="CASCADE"), nullable=False)
     type = Column(String, nullable=False)
     text = Column(String, nullable=False)

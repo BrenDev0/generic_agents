@@ -1,11 +1,11 @@
 from uuid import UUID
-from src.persistence import DataRepository
+from ...domain import MessageRepository
 from ..service import MessageService
 
 class GetMessageCollection:
     def __init__(
         self,
-        message_repository: DataRepository,
+        message_repository: MessageRepository,
         message_service: MessageService
     ):
         self.__message_repository = message_repository
