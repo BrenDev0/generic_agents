@@ -19,7 +19,7 @@ class MessageMutaions:
     @validate_input_to_model
     def delete_messages(
         self,
-        input: List[MessageType],
+        input: List[DeleteMessagesInput],
         info: strawberry.Info
     ) -> List[MessageType]:
         try:
