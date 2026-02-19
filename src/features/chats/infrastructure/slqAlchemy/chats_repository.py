@@ -41,5 +41,5 @@ class SqlAlchemyChatsRepository(SqlAlchemyDataRepository[Chat, SqlAlchemyChat]):
         )
     
     def _to_model(self, entity: Chat):
-        data = entity.model_dump(exclude={"created_at", "agent"} if not entity.created_at else set())
+        data = entity.model_dump(exclude={"created_at", "agent"} if not entity.created_at else {"agent"})
         return SqlAlchemyChat(**data)
