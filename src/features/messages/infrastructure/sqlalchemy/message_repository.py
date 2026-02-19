@@ -1,22 +1,43 @@
-from sqlalchemy import Column, String, DateTime, func, ForeignKey
+from sqlalchemy import Column, String, DateTime, func, ForeignKey, delete
 from sqlalchemy.dialects.postgresql import UUID
-from uuid import uuid4
+import uuid
+from typing import List, Union
 from src.persistence import SqlAlchemyDataRepository, Base
-from ...domain import Message
+from ...domain import Message, MessageRepository
 
 class SqlAlchemyMessage(Base):
     __tablename__ = "Messages"
 
-    message_id = Column(UUID(as_uuid=True), primary_key=True, nullable=False, defualt=uuid4)
+    message_id = Column(UUID(as_uuid=True), primary_key=True, nullable=False, default=uuid.uuid4)
     chat_id = Column(UUID(as_uuid=True), ForeignKey("chats", ondelete="CASCADE"), nullable=False)
     type = Column(String, nullable=False)
     text = Column(String, nullable=False)
     created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
 
 
-class SqlAlchemyMessageRepository(SqlAlchemyDataRepository[Message, SqlAlchemyMessage]):
+class SqlAlchemyMessageRepository(SqlAlchemyDataRepository[Message, SqlAlchemyMessage], MessageRepository):
     def __init__(self):
         super().__init__(SqlAlchemyMessage)
+
+
+    def delete_many(self, key: str, value: List[Union[str, uuid.UUID]]) -> List[Message]:
+        stmt = delete(self.model).where(
+            getattr(self.model, key).in_(value)
+        ).returning(*self.model.__table__.c)
+
+        with self._get_session() as db:
+            result = db.execute(stmt)
+            db.commit()
+            
+            deleted_rows = result.fetchall()
+            
+            if not deleted_rows:
+                return []
+        
+            return [
+                self._to_entity(self.model(**row._mapping)) 
+                for row in deleted_rows
+            ]
 
     def _to_entity(self, model):
         return Message(

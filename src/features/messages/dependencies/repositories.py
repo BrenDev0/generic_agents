@@ -1,13 +1,13 @@
 import logging
 from src.di import Container, DependencyNotRegistered
-from src.persistence import DataRepository
 from ..infrastructure import SqlAlchemyMessageRepository
+from ..domain import MessageRepository
 logger = logging.getLogger(__name__)
 
-def get_message_repository() -> DataRepository:
+def get_message_repository() -> MessageRepository:
     try:
         instance_key = "message_repository"
-        repository = Container.register(instance_key)
+        repository = Container.resolve(instance_key)
     
     except DependencyNotRegistered:
         repository = SqlAlchemyMessageRepository()

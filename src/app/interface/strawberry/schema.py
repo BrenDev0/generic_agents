@@ -7,6 +7,7 @@ from src.features.agents.interface.strawberry import queries as agent_queries, m
 from src.features.agent_settings.interface.strawberry import queries as agent_settings_queries, mutations as agent_settings_mutations
 from src.features.knowledge_base.interface.strawberry import queries as knowledge_base_queries, mutations as knowledge_base_mutations
 from src.features.chats.interface.strawberry import mutations as chat_mutations, queries as chat_queries
+from src.features.messages.interface.strawberry import mutations as message_mutations, queries as message_queries
 
 @strawberry.type
 class Query():
@@ -29,6 +30,10 @@ class Query():
     @strawberry.field
     def chats(self) -> chat_queries.ChatQueries:
         return chat_queries.ChatQueries()
+    
+    @strawberry.field
+    def messages(self) -> message_queries.MessageQueries:
+        return message_queries.MessageQueries()
 
 
 @strawberry.type
@@ -56,6 +61,10 @@ class Mutation():
     @strawberry.field
     def chats(self) -> chat_mutations.ChatMutations:
         return chat_mutations.ChatMutations()
+    
+    @strawberry.field
+    def messages(self) -> message_mutations.MessageMutaions:
+        return message_mutations.MessageMutaions()
 
 schema = strawberry.Schema(
     query=Query, 

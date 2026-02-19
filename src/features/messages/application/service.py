@@ -32,3 +32,11 @@ class MessageService:
             text=self.__encryption.decrypt(entity.text),
             created_at=entity.created_at
         )
+    
+    def get_decrypted_entity(
+        self,
+        entity: Message
+    ) -> Message:
+        entity.text = self.__encryption.decrypt(entity.text)
+
+        return entity

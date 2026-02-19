@@ -23,6 +23,8 @@ class ChatQueries:
         page_number: int,
         per_page: Optional[int] = 10
     ) -> List[ChatType]:
+        if page_number < 1:
+            raise GraphQlException("Page cannot be 0")
         try:
             user_id = info.context.get("user_id")
             use_case = get_chat_collection_use_case()

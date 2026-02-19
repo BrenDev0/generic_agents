@@ -24,7 +24,7 @@ class DataRepository(ABC, Generic[T]):
         offset: int = 0,
         order_by: str =None, 
         desc: bool = False
-    ) -> List[T]:
+    ) -> List[T] | None:
         raise NotImplementedError
     
     @abstractmethod

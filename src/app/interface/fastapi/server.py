@@ -7,6 +7,7 @@ from src.security import HMACException, fastapi_hmac_verification
 from src.persistence import NotFoundException
 from src.features.knowledge_base.interface.fastapi import routes as knowledge_base_routes
 from src.features.chats.interface.fastapi import routes as chats_routes
+from src.features.messages.interface.fastapi import routes as messages_routes
 
 
 logger = logging.getLogger(__name__)
@@ -83,6 +84,7 @@ def create_fastapi_app():
 
     app.include_router(knowledge_base_routes.router)
     app.include_router(chats_routes.router)
+    app.include_router(messages_routes.router)
   
     graphql_router = get_strawberry_graphql_router()
     app.include_router(graphql_router, dependencies=[Depends(fastapi_hmac_verification)])

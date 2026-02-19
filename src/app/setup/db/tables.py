@@ -4,6 +4,7 @@ from src.features.users.infrastructure.sqlAlchemy.users_repository import SqlAlc
 from src.features.agents.infrastructure.sqlAlchemy.agents_repository import SqlAlchemyAgent # noqa: F401
 from src.features.agent_settings.infrastructure.sqlAlechemy.agent_settings_repository import SqlAlchemyAgentSettings # noqa: F401
 from src.features.knowledge_base.infrastructure.sqlalchemy.knowledge_repository import SqlAlchemyKnowledge # noqa: F401
+from src.features.messages.infrastructure.sqlalchemy.message_repository import SqlAlchemyMessage # noqa: F401
 from src.persistence.infrastructure.sqlAlchemy.data_repository import Base
 logger = logging.getLogger(__name__)
 
