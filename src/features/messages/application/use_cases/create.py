@@ -1,6 +1,5 @@
-from uuid import UUID
 from src.persistence import DataRepository
-from ...domain import MessagePublic, Message, CreateMessageRequest
+from ...domain import CreateMessageRequest
 from ..service import MessageService
 
 class CreateMessage:

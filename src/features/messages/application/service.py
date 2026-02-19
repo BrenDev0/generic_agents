@@ -1,4 +1,3 @@
-from uuid import UUID
 from src.security import EncryptionService
 from ..domain import Message, MessagePublic, CreateMessageRequest
 
