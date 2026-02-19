@@ -11,3 +11,9 @@ __version__ = "1.0.0"
 __author__ = "Xplorers"
 __description__ = "Chat package for app"
 
+from .application import GetChatResource
+
+__all__ = [
+    "GetChatResource"
+]
+
