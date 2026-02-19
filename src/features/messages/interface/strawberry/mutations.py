@@ -7,6 +7,7 @@ from src.security import StrawberryUserAuth, PermissionsException
 from src.features.chats import get_chat_resource_use_case
 from ...dependencies import get_delete_messages_use_case
 from .types import MessageType
+from .inputs import DeleteMessagesInput
 logger = logging.getLogger(__name__)
 
 @strawberry.type
