@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 def get_message_repository() -> MessageRepository:
     try:
         instance_key = "message_repository"
-        repository = Container.register(instance_key)
+        repository = Container.resolve(instance_key)
     
     except DependencyNotRegistered:
         repository = SqlAlchemyMessageRepository()
